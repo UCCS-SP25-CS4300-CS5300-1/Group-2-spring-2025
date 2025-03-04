@@ -2,7 +2,7 @@
   "name": "cs4300_frontend",
   "private": true,
   "version": "0.0.0",
-  "homepage": "",
+  "homepage": "https://uccs-sp25-cs4300-cs5300-1.github.io/Group-2-spring-2025/",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^19.0.0",
