@@ -15,7 +15,7 @@ body {
   /* Header Section */
   .home-header {
     position: sticky;
-    top: 0;
+    top: 40px;
     z-index: 1000;
     background: linear-gradient(135deg, #003366, #0055a5);
     color: white;
