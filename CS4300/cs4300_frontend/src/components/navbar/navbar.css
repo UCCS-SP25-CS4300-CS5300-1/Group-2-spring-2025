@@ -1,8 +1,12 @@
 .navbar {
-    position: top;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background: #003366;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 12px 0;
+    z-index: 1000;
 }
 
 .navbar ul {
