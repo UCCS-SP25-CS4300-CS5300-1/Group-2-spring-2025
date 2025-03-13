@@ -34,3 +34,4 @@ jobs:
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         path: ./coverage.xml
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }
