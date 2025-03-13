@@ -9,6 +9,9 @@ on:
 jobs:
   coverage:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write  # Allow write access to pull requests
+      issues: read          # Read access to issues
 
     steps:
     - name: Checkout code
