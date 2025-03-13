@@ -33,19 +33,10 @@ jobs:
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
     - name: Run tests with coverage
-      run: pytest --cov=. --cov-report=term > coverage.txt
-
-    - name: Convert coverage to markdown
-      id: convert_to_markdown
-      run: |
-        echo "## Test Coverage Results" > coverage.md
-        echo "\n**Coverage Summary**" >> coverage.md
-        echo "\n\`\`\`text" >> coverage.md
-        cat coverage.txt >> coverage.md
-        echo "\`\`\`" >> coverage.md
+      run: pytest --cov=. --cov-report=md:coverage_report.md > result.log
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        path: ./coverage.md
+        path: ./coverage_report.md
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
