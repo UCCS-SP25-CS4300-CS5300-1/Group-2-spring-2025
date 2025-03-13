@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install openai github
+          pip install openai PyGithub
 
       - name: Run Custom Code Review
         run: |
