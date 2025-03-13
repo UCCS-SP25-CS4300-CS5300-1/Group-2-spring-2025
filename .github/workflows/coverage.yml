@@ -32,11 +32,11 @@ jobs:
     - name: Set DJANGO_SETTINGS_MODULE environment variable
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-    - name: Run tests with coverage
-      run: pytest --cov=. --cov-report=term-missing > pytest-coverage.txt
+    - name: Run tests with coverage (XML report)
+      run: pytest --cov=. --cov-report=xml:coverage.xml
 
     - name: Post coverage comment using pytest-coverage-comment
       uses: MishaKav/pytest-coverage-comment@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        pytest-coverage-path: coverage.txt
+        pytest-xml-coverage-path: coverage.xml
