@@ -25,8 +25,7 @@ jobs:
         pip install pytest pytest-cov django djangorestframework
 
     - name: Run tests with coverage
-      run: |
-        cd CS4300
+      run:
         pytest --cov=. --cov-report=xml
 
     - name: Post coverage comment
