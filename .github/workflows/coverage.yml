@@ -15,7 +15,6 @@ jobs:
       contents: read
       actions: write
 
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -34,10 +33,18 @@ jobs:
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
     - name: Run tests with coverage
-      run: pytest --cov=. --cov-report=term > coverage.txt
+      run: pytest --cov=. --cov-report=term-missing > coverage.txt
+
+    - name: Generate coverage comment in markdown
+      run: |
+        echo "### Coverage Report" > coverage.md
+        echo "" >> coverage.md
+        echo "| File | Statements | Missed | Coverage |" >> coverage.md
+        echo "|------|------------|--------|----------|" >> coverage.md
+        tail -n +4 coverage.txt | awk -F'|' '{print "| " $1 " | " $2 " | " $3 " | " $4 " |"}' >> coverage.md
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        path: ./coverage.txt
+        path: ./coverage.md
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
