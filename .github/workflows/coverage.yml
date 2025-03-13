@@ -27,30 +27,29 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov django djangorestframework pytest-django
+        pip install pytest pytest-cov django djangorestframework pytest-django jq
 
     - name: Set DJANGO_SETTINGS_MODULE environment variable
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-    - name: Run tests with coverage
-      run: |
-        pytest --cov=. --cov-report=term > coverage.txt
-        pytest --cov=. --cov-report=html
+    - name: Run tests with coverage and output in JSON format
+      run: pytest --cov=. --cov-report=term --cov-report=json:coverage.json
 
-    - name: Parse coverage report into markdown
+    - name: Parse JSON and extract coverage details
+      id: parse_coverage
       run: |
-        COVERAGE_SUMMARY=$(pytest --cov=. --cov-report=term | tail -n 20)
-        echo "Test Coverage Summary:" > coverage-summary.md
-        echo "$COVERAGE_SUMMARY" >> coverage-summary.md
-        cat coverage-summary.md
+        total_coverage=$(jq '.summary.total' coverage.json)
+        covered=$(echo $total_coverage | jq .covered)
+        missed=$(echo $total_coverage | jq .missed)
+        percentage=$(echo $total_coverage | jq .percent_covered)
+        echo "Coverage: $percentage% ($covered covered, $missed missed)" >> $GITHUB_ENV
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         message: |
-          ## Test Coverage Summary:
-          
-          ```text
-          $(cat coverage-summary.md)
-          ```
+          **Test Coverage Report**:
+          - Total Coverage: ${{ env.percentage }}%
+          - Covered: ${{ env.covered }}
+          - Missed: ${{ env.missed }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
