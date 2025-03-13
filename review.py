@@ -4,7 +4,7 @@ from github import Github
 
 # Initialize GitHub and OpenAI clients
 g = Github(os.getenv('GITHUB_TOKEN'))
-repo = g.get_repo('your-username/your-repository')  # Replace with your repo details
+repo = g.get_repo('GITHUB_REPOSITORY')  # Replace with your repo details
 
 pr_id = os.getenv('GITHUB_PR_ID')
 if pr_id is None:
