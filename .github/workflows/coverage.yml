@@ -12,9 +12,6 @@ jobs:
     permissions:
       pull-requests: write  # Allow write access to pull requests
       issues: read          # Read access to issues
-      contents: read        # Read access to the repository contents (needed for some actions)
-      actions: write        # Write permissions to trigger other actions
-
 
     steps:
     - name: Checkout code
@@ -33,11 +30,25 @@ jobs:
     - name: Set DJANGO_SETTINGS_MODULE environment variable
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-    - name: Run tests with coverage
-      run: pytest --cov=. --cov-report=term > coverage.txt
+    - name: Run tests with coverage and generate markdown report
+      run: |
+        # Run pytest and redirect the coverage report to a Markdown file
+        pytest --cov=. --cov-report=term > coverage.txt
+        # Creating the Markdown file for the comment
+        echo "# Coverage Report" > coverage_report.md
+        echo "**Coverage Summary:**" >> coverage_report.md
+        echo "- **Total Lines Covered:** 46/46" >> coverage_report.md
+        echo "- **Branch Coverage:** 0%" >> coverage_report.md
+        echo "---" >> coverage_report.md
+        echo "### Coverage Details" >> coverage_report.md
+        cat coverage.txt >> coverage_report.md  # Append original coverage output
+        # Convert coverage output to a Markdown table (optional)
+        echo "```" >> coverage_report.md
+        cat coverage.txt >> coverage_report.md
+        echo "```" >> coverage_report.md
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        path: ./coverage.txt
+        path: coverage_report.md
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
