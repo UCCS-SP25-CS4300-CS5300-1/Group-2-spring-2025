@@ -35,13 +35,15 @@ jobs:
     - name: Run tests with coverage
       run: pytest --cov=. --cov-report=term-missing > coverage.txt
 
-    - name: Generate coverage comment in markdown
+    - name: Generate summary report
       run: |
-        echo "### Coverage Report" > coverage.md
+        echo "### Coverage Summary" > coverage.md
         echo "" >> coverage.md
-        echo "| File | Statements | Missed | Coverage |" >> coverage.md
-        echo "|------|------------|--------|----------|" >> coverage.md
-        tail -n +4 coverage.txt | awk -F'|' '{print "| " $1 " | " $2 " | " $3 " | " $4 " |"}' >> coverage.md
+        echo "#### Total Coverage: $(tail -n 10 coverage.txt | head -n 1)" >> coverage.md
+        echo "" >> coverage.md
+        echo "#### Coverage Per File:" >> coverage.md
+        echo "" >> coverage.md
+        tail -n +4 coverage.txt | awk 'NR>1 {print "- " $1 ": " $4}' >> coverage.md
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
