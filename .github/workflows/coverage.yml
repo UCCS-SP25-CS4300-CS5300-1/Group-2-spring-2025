@@ -15,7 +15,6 @@ jobs:
       contents: read
       actions: write
 
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -34,10 +33,10 @@ jobs:
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
     - name: Run tests with coverage
-      run: pytest --cov=. --cov-report=term > coverage.txt --cov-report=xml > pytest.xml
+      run: pytest --cov=. --cov-report=term-missing > coverage.txt
 
-    - name: Pytest coverage comment
-      uses: MishaKav/pytest-coverage-comment@main
+    - name: Post coverage comment using pytest-coverage-comment
+      uses: MishaKav/pytest-coverage-comment@v1
       with:
-        pytest-coverage-path: ./coverage.txt
-        junitxml-path: ./pytest.xml
+        coverage_file: coverage.txt
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
