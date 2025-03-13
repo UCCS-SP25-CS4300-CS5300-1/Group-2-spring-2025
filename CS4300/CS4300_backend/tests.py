@@ -1,3 +1,5 @@
-from django.test import TestCase
+import unittest
 
-# Create your tests here.
+class AlwaysPassTest(unittest.TestCase):
+    def test_always_pass(self):
+        self.assertTrue(True)

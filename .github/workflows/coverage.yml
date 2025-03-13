@@ -1,0 +1,34 @@
+name: Code Coverage
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov
+
+    - name: Run tests with coverage
+      run: |
+        pytest --cov=./CS4300/CS4300_backend/tests.py --cov-report=xml
+
+    - name: Post coverage comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        path: ./coverage.xml
