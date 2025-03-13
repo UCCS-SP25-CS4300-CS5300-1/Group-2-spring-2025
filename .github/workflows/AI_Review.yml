@@ -14,49 +14,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - name: Run Code Review with ChatGPT
+      uses: MishaKav/code-review-with-chatgpt@v1
       with:
-        python-version: '3.9'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install openai requests
-
-    - name: Generate AI code review and post comment
-      run: |
-        # Get the changed files (you can modify this logic to suit your needs)
-        FILES=$(git diff --name-only $GITHUB_BASE_REF $GITHUB_SHA)
-        CHANGED_FILES=$(echo "$FILES" | grep -E '\.py$' | tr '\n' ' ')
-
-        if [ -z "$CHANGED_FILES" ]; then
-          echo "No Python files changed, skipping AI code review."
-          exit 0
-        fi
-
-        # Construct the review prompt for the AI
-        REVIEW_PROMPT="Please review the following Python code:\n\n$CHANGED_FILES"
-
-        # Generate AI code review using OpenAI API
-        REVIEW=$(python3 -c "
-        import openai
-        import os
-        
-        openai.api_key = os.getenv('OPENAI_API_KEY')
-        
-        response = openai.Completion.create(
-          model='text-davinci-003',
-          prompt='${REVIEW_PROMPT}',
-          max_tokens=500,
-          temperature=0.5
-        )
-        
-        print(response['choices'][0]['text'].strip())
-                ")
-        
-                # Post AI review as a comment on the pull request
-                curl -X POST \
-                  -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                  -d '{"body": "'"$REVIEW"'"}' \
-                  "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+        openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        comment_on_pr: true
+        pr_comment_title: "AI Code Review"
+        prompt: |
+          Review the following code changes in the pull request and provide suggestions and improvements.
+          Please focus on code quality, readability, and best practices.
