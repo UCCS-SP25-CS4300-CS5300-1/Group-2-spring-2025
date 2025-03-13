@@ -15,6 +15,7 @@ jobs:
       contents: read
       actions: write
 
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -32,35 +33,11 @@ jobs:
     - name: Set DJANGO_SETTINGS_MODULE environment variable
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-    - name: Run tests with coverage and generate JSON report
-      run: pytest --cov=. --cov-report=json:coverage.json
-
-    - name: Parse the coverage JSON and create summary
-      id: parse_coverage
-      run: |
-        import json
-
-        with open('coverage.json', 'r') as f:
-            data = json.load(f)
-
-        files = data.get('files', {})
-        coverage_summary = []
-
-        for file, file_data in files.items():
-            covered_lines = file_data['summary']['covered_lines']
-            total_lines = file_data['summary']['num_statements']
-            coverage_percentage = file_data['summary']['percent_covered']
-            
-            coverage_summary.append(f"{file}: {covered_lines}/{total_lines} lines covered ({coverage_percentage}%)")
-
-        summary_text = "\n".join(coverage_summary)
-
-        # Save the formatted coverage summary to a file
-        with open('formatted_coverage.txt', 'w') as f:
-            f.write(summary_text)
+    - name: Run tests with coverage
+      run: pytest --cov=. --cov-report=term > coverage.txt
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        path: ./formatted_coverage.txt
+        path: ./coverage.txt
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
