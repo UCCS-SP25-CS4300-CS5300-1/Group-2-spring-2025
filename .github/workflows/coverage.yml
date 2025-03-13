@@ -1,32 +1,43 @@
-name: Run Tests and Post Coverage Report
+name: Run Django Tests with Coverage
 
 on:
   pull_request:
     branches:
       - main
+      - develop
 
 jobs:
   coverage:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write  # Allow write access to pull requests
+      issues: read          # Read access to issues
+      contents: read        # Read access to the repository contents (needed for some actions)
+      actions: write        # Write permissions to trigger other actions
+
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
 
-      - name: Install dependencies
-        run: |
-          pip install pytest pytest-cov pytest-django
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov django djangorestframework pytest-django
 
-      - name: Run tests with coverage (JSON format)
-        run: pytest --cov=CS4300_django_server --cov-report=json:coverage.json
+    - name: Set DJANGO_SETTINGS_MODULE environment variable
+      run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-      - name: Post coverage comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          path: coverage.json
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run tests with coverage
+      run: pytest --cov=. --cov-report=term > coverage.txt
+
+    - name: Post coverage comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        path: ./coverage.txt
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
