@@ -39,16 +39,17 @@ jobs:
       run: |
         echo "### Coverage Summary" > coverage.md
         echo "" >> coverage.md
-        
-        # Extract total coverage percentage from the last line of the coverage.txt
-        echo "#### Total Coverage: $(tail -n 1 coverage.txt | awk '{print $NF}')" >> coverage.md
+
+        # Extract total coverage percentage from the last line that contains 'TOTAL'
+        TOTAL_COVERAGE=$(grep "TOTAL" coverage.txt | awk '{print $NF}')
+        echo "#### Total Coverage: $TOTAL_COVERAGE" >> coverage.md
         echo "" >> coverage.md
-        
+
         echo "#### Coverage Per File:" >> coverage.md
         echo "" >> coverage.md
-        
-        # Extract per-file coverage data
-        tail -n +4 coverage.txt | awk '{ 
+
+        # Extract per-file coverage data, ensuring to pick lines that contain file paths
+        grep -E "^[a-zA-Z0-9/_.-]+\.py" coverage.txt | awk '{ 
           if ($3 ~ /[0-9]+%/) { 
             print "- " $1 ": " $3 
           } 
