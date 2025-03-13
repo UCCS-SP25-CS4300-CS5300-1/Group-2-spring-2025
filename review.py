@@ -19,8 +19,14 @@ if pr_id is None:
 # Get the pull request object
 pr = repo.get_pull(int(pr_id))  # Get the pull request
 
-# Fetch the diff or files changed in the pull request
-diff = pr.diff()
+# Fetch the files changed in the pull request
+files = pr.get_files()
+
+# Create a string to store the diff of the files
+diff = ""
+for file in files:
+    diff += f"File: {file.filename}\n"
+    diff += f"Changes:\n{file.patch}\n\n"
 
 # Call OpenAI's API for code review
 openai.api_key = os.getenv('OPENAI_API_KEY')
