@@ -4,8 +4,13 @@ from github import Github
 
 # Initialize GitHub and OpenAI clients
 g = Github(os.getenv('GITHUB_TOKEN'))
-repo = g.get_repo('UCCS-SP25-CS4300-CS5300-1/Group-2-spring-2025')  # Replace with your repo details
-pr = repo.get_pull(int(os.getenv('GITHUB_PR_ID')))  # Get the pull request
+repo = g.get_repo('your-username/your-repository')  # Replace with your repo details
+
+pr_id = os.getenv('GITHUB_PR_ID')
+if pr_id is None:
+    raise ValueError("GITHUB_PR_ID environment variable is not set.")
+
+pr = repo.get_pull(int(pr_id))  # Get the pull request
 
 # Fetch the diff or files changed in the pull request
 diff = pr.diff()
