@@ -28,17 +28,20 @@ for file in files:
     diff += f"File: {file.filename}\n"
     diff += f"Changes:\n{file.patch}\n\n"
 
-# Call OpenAI's API for code review
+# Call OpenAI's API for code review using the new chat-completion method
 openai.api_key = os.getenv('OPENAI_API_KEY')
-response = openai.Completion.create(
+response = openai.ChatCompletion.create(
   model="gpt-3.5-turbo",
-  prompt=f"Please review the following code for potential issues or improvements:\n{diff}",
+  messages=[
+      {"role": "system", "content": "You are a helpful code reviewer."},
+      {"role": "user", "content": f"Please review the following code for potential issues or improvements:\n{diff}"}
+  ],
   max_tokens=2048,
   temperature=0.5
 )
 
 # Extract the review comments from OpenAI's response
-review_comments = response['choices'][0]['text']
+review_comments = response['choices'][0]['message']['content']
 
 # Post the review comments as a GitHub PR comment
 pr.create_issue_comment(review_comments)
