@@ -1,17 +1,21 @@
+name: Code Review with ChatGPT
+
 on:
   pull_request:
-    types: [opened, synchronize]
+    branches:
+      - main
+      - develop
 
 jobs:
-  code_review_job:
+  review:
     runs-on: ubuntu-latest
-    name: ChatGPT Code Review
+
     steps:
-      - name: GenAI Code Review
-        uses: cirolini/genai-code-review@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Code Review with ChatGPT
+        uses: chetanya5/code-review-with-chatgpt@main
         with:
-          openai_api_key: ${{ secrets.openai_api_key }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_pr_id: ${{ github.event.number }}
-          openai_model: "gpt-3.5-turbo" # optional
-          custom_prompt: "" # optional
+          chatgpt_api_key: ${{ secrets.OPENAI_API_KEY }}
