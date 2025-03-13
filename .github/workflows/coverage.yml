@@ -12,6 +12,9 @@ jobs:
     permissions:
       pull-requests: write  # Allow write access to pull requests
       issues: read          # Read access to issues
+      contents: read        # Read access to the repository contents (needed for some actions)
+      actions: write        # Write permissions to trigger other actions
+
 
     steps:
     - name: Checkout code
