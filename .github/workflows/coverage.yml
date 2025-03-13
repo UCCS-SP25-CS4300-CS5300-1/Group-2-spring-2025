@@ -27,29 +27,40 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov django djangorestframework pytest-django jq
+        pip install pytest pytest-cov django djangorestframework pytest-django
 
     - name: Set DJANGO_SETTINGS_MODULE environment variable
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-    - name: Run tests with coverage and output in JSON format
-      run: pytest --cov=. --cov-report=term --cov-report=json:coverage.json
+    - name: Run tests with coverage and generate JSON report
+      run: pytest --cov=. --cov-report=json:coverage.json
 
-    - name: Parse JSON and extract coverage details
+    - name: Parse the coverage JSON and create summary
       id: parse_coverage
       run: |
-        total_coverage=$(jq '.summary.total' coverage.json)
-        covered=$(echo $total_coverage | jq .covered)
-        missed=$(echo $total_coverage | jq .missed)
-        percentage=$(echo $total_coverage | jq .percent_covered)
-        echo "Coverage: $percentage% ($covered covered, $missed missed)" >> $GITHUB_ENV
+        import json
+
+        with open('coverage.json', 'r') as f:
+            data = json.load(f)
+
+        files = data.get('files', {})
+        coverage_summary = []
+
+        for file, file_data in files.items():
+            covered_lines = file_data['summary']['covered_lines']
+            total_lines = file_data['summary']['num_statements']
+            coverage_percentage = file_data['summary']['percent_covered']
+            
+            coverage_summary.append(f"{file}: {covered_lines}/{total_lines} lines covered ({coverage_percentage}%)")
+
+        summary_text = "\n".join(coverage_summary)
+
+        # Save the formatted coverage summary to a file
+        with open('formatted_coverage.txt', 'w') as f:
+            f.write(summary_text)
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        message: |
-          **Test Coverage Report**:
-          - Total Coverage: ${{ env.percentage }}%
-          - Covered: ${{ env.covered }}
-          - Missed: ${{ env.missed }}
+        path: ./formatted_coverage.txt
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
