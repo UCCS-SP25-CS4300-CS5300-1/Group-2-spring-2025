@@ -27,7 +27,7 @@ jobs:
     - name: Run tests with coverage
       run: |
         cd CS4300
-        pytest --cov=./CS4300_backend --cov-report=xml
+        pytest --cov=. --cov-report=xml
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
