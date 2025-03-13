@@ -36,27 +36,8 @@ jobs:
     - name: Run tests with coverage
       run: pytest --cov=. --cov-report=xml
 
-    - name: Create status check for coverage
-      uses: actions/github-script@v6
+    - name: Post coverage comment
+      uses: marocchino/sticky-pull-request-comment@v2
       with:
-        script: |
-          const coverageResult = require('fs').readFileSync('./coverage.xml', 'utf8');
-          const status = coverageResult.includes('100%') ? 'success' : 'failure';  // Customize condition based on coverage
-
-          const prNumber = process.env.GITHUB_REF.split('/')[2];
-          const statusCheck = await github.rest.repos.createCommitStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: context.sha,
-            state: status,
-            context: 'Test Coverage',
-            description: 'Coverage status',
-            target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          });
-
-#    - name: Post coverage comment
-#      uses: marocchino/sticky-pull-request-comment@v2
-#      with:
-#        path: ./coverage.xml
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }
-
+        path: ./coverage.xml
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }
