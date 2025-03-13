@@ -34,10 +34,10 @@ jobs:
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
     - name: Run tests with coverage
-      run: pytest --cov=. --cov-report=xml
+      run: pytest --cov=. --cov-report=term > coverage.txt
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        path: ./coverage.xml
+        path: ./coverage.txt
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
