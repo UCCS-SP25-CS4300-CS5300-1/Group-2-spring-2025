@@ -1,4 +1,4 @@
-name: Code Coverage
+name: Run Django Tests with Coverage
 
 on:
   pull_request:
@@ -9,6 +9,11 @@ on:
 jobs:
   coverage:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: read
+      contents: read
+      actions: write
 
     steps:
     - name: Checkout code
@@ -22,13 +27,16 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov
+        pip install pytest pytest-cov django djangorestframework pytest-django
 
-    - name: Run tests with coverage
-      run: |
-        pytest --cov=./CS4300/CS4300_backend/tests.py --cov-report=xml
+    - name: Set DJANGO_SETTINGS_MODULE environment variable
+      run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-    - name: Post coverage comment
-      uses: marocchino/sticky-pull-request-comment@v2
+    - name: Run tests with coverage (XML report)
+      run: pytest --cov=. --cov-report=xml:coverage.xml
+
+    - name: Post coverage comment using pytest-coverage-comment
+      uses: MishaKav/pytest-coverage-comment@v1
       with:
-        path: ./coverage.xml
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        pytest-xml-coverage-path: coverage.xml
