@@ -16,38 +16,23 @@ jobs:
       issues: read
       contents: read
       actions: write
-
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
 
-      - name: Get Pull Request Diff
-        id: pr_diff
-        run: |
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3.diff" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" \
-            -o pr_diff.patch
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-      - name: Review Code with OpenAI
-        id: openai_review
+      - name: Install dependencies
         run: |
-          PR_DIFF=$(cat pr_diff.patch)
-          REVIEW=$(curl -X POST https://api.openai.com/v1/completions \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
-            -d '{
-              "model": "gpt-3.5-turbo",
-              "messages": [{"role": "system", "content": "You are an experienced software developer."},
-                           {"role": "user", "content": "Please review the following code for potential issues and improvements:\n'"$PR_DIFF"'}],
-              "temperature": 0.5,
-              "max_tokens": 1500
-            }' | jq -r '.choices[0].message.content')
+          pip install openai github
 
-          echo "Review: $REVIEW"
-
-      - name: Post Review as PR Comment
+      - name: Run Custom Code Review
         run: |
-          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -d "{\"body\": \"$REVIEW\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+          python review.py
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
