@@ -39,11 +39,20 @@ jobs:
       run: |
         echo "### Coverage Summary" > coverage.md
         echo "" >> coverage.md
-        echo "#### Total Coverage: $(tail -n 10 coverage.txt | head -n 1)" >> coverage.md
+        
+        # Extract total coverage percentage from the last line of the coverage.txt
+        echo "#### Total Coverage: $(tail -n 1 coverage.txt | awk '{print $NF}')" >> coverage.md
         echo "" >> coverage.md
+        
         echo "#### Coverage Per File:" >> coverage.md
         echo "" >> coverage.md
-        tail -n +4 coverage.txt | awk 'NR>1 {print "- " $1 ": " $4}' >> coverage.md
+        
+        # Extract per-file coverage data
+        tail -n +4 coverage.txt | awk '{ 
+          if ($3 ~ /[0-9]+%/) { 
+            print "- " $1 ": " $3 
+          } 
+        }' >> coverage.md
 
     - name: Post coverage comment
       uses: marocchino/sticky-pull-request-comment@v2
