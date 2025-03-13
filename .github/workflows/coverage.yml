@@ -1,67 +1,32 @@
-name: Run Django Tests with Coverage
+name: Run Tests and Post Coverage Report
 
 on:
   pull_request:
     branches:
       - main
-      - develop
 
 jobs:
   coverage:
-    permissions:
-      pull-requests: write
-      issues: read
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest pytest-cov django djangorestframework pytest-django
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-cov pytest-django
 
-    - name: Set DJANGO_SETTINGS_MODULE environment variable
-      run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
+      - name: Run tests with coverage (JSON format)
+        run: pytest --cov=CS4300_django_server --cov-report=json:coverage.json
 
-    - name: Run tests with coverage and generate report
-      run: |
-        pytest --cov=. --cov-report=term-missing --cov-report=xml:coverage.xml
-
-    - name: Generate Markdown report
-      run: |
-        # Extract total coverage and test results from pytest output
-        TOTAL_COVERAGE=$(pytest --cov=. --cov-report=term-missing | grep 'TOTAL' | awk '{print $4}')
-        TESTS_RUN=$(pytest --maxfail=5 --disable-warnings --tb=short | grep 'tests' | head -n 1 | awk '{print $1}')
-        TESTS_PASSED=$(pytest --maxfail=5 --disable-warnings --tb=short | grep 'passed' | head -n 1 | awk '{print $1}')
-        TESTS_FAILED=$(pytest --maxfail=5 --disable-warnings --tb=short | grep 'failed' | head -n 1 | awk '{print $1}')
-        
-        echo "## :bar_chart: Test Coverage Report" > coverage_report.md
-        echo "**Total Coverage**: $TOTAL_COVERAGE" >> coverage_report.md
-        echo "**Tests Run**: $TESTS_RUN" >> coverage_report.md
-        echo "**Tests Passed**: $TESTS_PASSED" >> coverage_report.md
-        echo "**Tests Failed**: $TESTS_FAILED" >> coverage_report.md
-        echo "**Tests Skipped**: 0" >> coverage_report.md
-        echo "### :memo: Coverage Summary" >> coverage_report.md
-        echo "| **File** | **Lines Covered** | **Total Lines** | **Coverage** |" >> coverage_report.md
-        echo "|----------|-------------------|-----------------|--------------|" >> coverage_report.md
-        echo "| \`CS4300_django_server/settings.py\` | 13 | 15 | 86.67%" >> coverage_report.md
-        echo "| \`CS4300_django_server/urls.py\` | 3 | 5 | 60.00%" >> coverage_report.md
-        echo "### :white_check_mark: Test Results" >> coverage_report.md
-        echo "- **Tests Passed**: \`$TESTS_PASSED/$TESTS_RUN\`" >> coverage_report.md
-        echo "- **Tests Skipped**: \`0/$TESTS_RUN\`" >> coverage_report.md
-        echo "- **Tests Failed**: \`$TESTS_FAILED/$TESTS_RUN\`" >> coverage_report.md
-        echo "All tests have passed successfully! :tada:" >> coverage_report.md
-        cat coverage_report.md
-
-    - name: Post coverage comment
-      uses: marocchino/sticky-pull-request-comment@v2
-      with:
-        path: ./coverage_report.md
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Post coverage comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: coverage.json
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
