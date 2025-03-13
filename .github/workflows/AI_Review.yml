@@ -1,26 +1,17 @@
-name: AI Code Review
-
 on:
   pull_request:
-    branches:
-      - main
-      - develop
+    types: [opened, synchronize]
 
 jobs:
-  ai_code_review:
+  code_review_job:
     runs-on: ubuntu-latest
-
+    name: ChatGPT Code Review
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Run Code Review with ChatGPT
-      uses: MishaKav/code-review-with-chatgpt@v1
-      with:
-        openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        comment_on_pr: true
-        pr_comment_title: "AI Code Review"
-        prompt: |
-          Review the following code changes in the pull request and provide suggestions and improvements.
-          Please focus on code quality, readability, and best practices.
+      - name: GenAI Code Review
+        uses: cirolini/genai-code-review@v2
+        with:
+          openai_api_key: ${{ secrets.openai_api_key }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_pr_id: ${{ github.event.number }}
+          openai_model: "gpt-3.5-turbo" # optional
+          custom_prompt: "" # optional
