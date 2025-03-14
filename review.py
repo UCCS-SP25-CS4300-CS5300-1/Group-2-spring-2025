@@ -60,7 +60,7 @@ def post_review_comments(pr, review_comments):
 def main():
     try:
 
-        client = OpenAI()
+        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
         github_token = os.getenv('GITHUB_TOKEN')
         if not github_token:
