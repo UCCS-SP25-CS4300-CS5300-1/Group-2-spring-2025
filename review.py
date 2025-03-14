@@ -2,8 +2,31 @@ import os
 from github import Github
 from openai import OpenAI
 
+def initialize():
+    try:
+        # Initialize OpenAI client
+        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-# Get repository and pull request
+        # Get GitHub token and repository info from environment variables
+        github_token = os.getenv('GITHUB_TOKEN')
+        if not github_token:
+            raise ValueError("GITHUB_TOKEN is not set")
+
+        repo_name = os.getenv('GITHUB_REPOSITORY')
+        if not repo_name:
+            raise ValueError("GITHUB_REPOSITORY is not set")
+
+        pr_id = os.getenv('GITHUB_PR_ID')
+        if not pr_id:
+            raise ValueError("GITHUB_PR_ID is not set")
+
+        # Initialize Github instance
+        g = Github(github_token)
+
+        return client, g, repo_name, pr_id
+    except Exception as e:
+        raise ValueError(f"Failed to initialize: {e}")
+
 def get_repo_and_pull_request(g, repo_name, pr_id):
     try:
         repo = g.get_repo(repo_name)
@@ -12,8 +35,6 @@ def get_repo_and_pull_request(g, repo_name, pr_id):
     except Exception as e:
         raise ValueError(f"Failed to fetch repo or pull request: {e}")
 
-
-# Fetch changed files from pull request
 def fetch_files_from_pr(pr):
     try:
         files = pr.get_files()
@@ -24,8 +45,6 @@ def fetch_files_from_pr(pr):
     except Exception as e:
         raise ValueError(f"Failed to fetch files from PR: {e}")
 
-
-# Request code review from OpenAI
 def request_code_review(diff, client):
     try:
         response = client.chat.completions.create(
@@ -47,34 +66,16 @@ def request_code_review(diff, client):
     except Exception as e:
         raise ValueError(f"Failed to get code review from OpenAI: {e}")
 
-
-# Post the review comments to GitHub PR
 def post_review_comments(pr, review_comments):
     try:
         pr.create_issue_comment(review_comments)
     except Exception as e:
         raise ValueError(f"Failed to post review comments: {e}")
 
-
-# Main execution flow
 def main():
     try:
-
-        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
-        github_token = os.getenv('GITHUB_TOKEN')
-        if not github_token:
-            raise ValueError("GITHUB_TOKEN is not set")
-
-        repo_name = os.getenv('GITHUB_REPOSITORY')
-        if not repo_name:
-            raise ValueError("GITHUB_REPOSITORY is not set")
-
-        pr_id = os.getenv('GITHUB_PR_ID')
-        if not pr_id:
-            raise ValueError("GITHUB_PR_ID is not set")
-
-        g = Github(github_token)
+        # Initialize required variables
+        client, g, repo_name, pr_id = initialize()
 
         # Get repository and pull request
         repo, pr = get_repo_and_pull_request(g, repo_name, pr_id)
@@ -92,7 +93,6 @@ def main():
 
     except Exception as e:
         print(f"Error: {e}")
-
 
 if __name__ == "__main__":
     main()
