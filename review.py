@@ -4,22 +4,6 @@ from github import Github
 from openai import OpenAI
 
 
-# Initialize the OpenAI and GitHub clients
-def initialize_clients():
-    # GitHub Client
-    github_token = os.getenv('GITHUB_TOKEN')
-    if not github_token:
-        raise ValueError("GitHub token is missing")
-    g = Github(github_token)
-
-    # OpenAI Client
-    openai.api_key = os.getenv('OPENAI_API_KEY')
-    if not openai.api_key:
-        raise ValueError("OpenAI API key is missing")
-
-    return g
-
-
 # Get repository and pull request
 def get_repo_and_pull_request(g, repo_name, pr_id):
     try:
@@ -47,13 +31,13 @@ def request_code_review(diff, client):
     try:
         # Request a code review using the new API structure
         response = client.chat.completions.create(
-            model="gpt-4",  # Correct model name, change it if needed
+            model="gpt-4o",  # Correct model name, change it if needed
             messages=[
                 {"role": "system", "content": "You are a helpful code reviewer."},
                 {"role": "user",
                  "content": f"Please review the following code for potential issues or improvements: \nstart with giving"
                             f" it a score out of 10, then if youre going to suggest changes please reference the code"
-                            f" directly \n please list no more than 5 items:\n{diff}"}
+                            f" directly \n please list no more than 5 items but only if it is necessary:\n{diff}"}
 
 
             ],
@@ -81,16 +65,13 @@ def main():
     try:
 
         client = OpenAI()
+        github_token = os.getenv('GITHUB_TOKEN')
+        g = Github(github_token)
 
         # Get necessary environment variables
         repo_name = os.getenv('GITHUB_REPOSITORY')  # Example: 'UCCS-SP25-CS4300-CS5300-1/Group-2-spring-2025'
         pr_id = os.getenv('GITHUB_PR_ID')
 
-        if not repo_name or not pr_id:
-            raise ValueError("GITHUB_REPOSITORY or GITHUB_PR_ID environment variable is not set.")
-
-        # Initialize clients
-        g = initialize_clients()
 
         # Get repository and pull request
         repo, pr = get_repo_and_pull_request(g, repo_name, pr_id)
