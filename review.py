@@ -43,10 +43,10 @@ def fetch_files_from_pr(pr):
 
 
 # Request code review from OpenAI
-def request_code_review(diff):
+def request_code_review(diff, client):
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
+        response = client.chat.completions.create(
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a helpful code reviewer."},
                 {"role": "user",
@@ -71,6 +71,9 @@ def post_review_comments(pr, review_comments):
 # Main execution flow
 def main():
     try:
+
+        client = OpenAI()
+
         # Get necessary environment variables
         repo_name = os.getenv('GITHUB_REPOSITORY')  # Example: 'UCCS-SP25-CS4300-CS5300-1/Group-2-spring-2025'
         pr_id = os.getenv('GITHUB_PR_ID')
@@ -88,7 +91,7 @@ def main():
         diff = fetch_files_from_pr(pr)
 
         # Request code review from OpenAI
-        review_comments = request_code_review(diff)
+        review_comments = request_code_review(diff, client)
 
         # Post the review comments as a GitHub PR comment
         post_review_comments(pr, review_comments)
