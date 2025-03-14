@@ -45,8 +45,9 @@ def fetch_files_from_pr(pr):
 # Request code review from OpenAI
 def request_code_review(diff, client):
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o",
+        # Request a code review using the new API structure
+        response = client.chat_completions.create(
+            model="gpt-4",  # Correct model name, change it if needed
             messages=[
                 {"role": "system", "content": "You are a helpful code reviewer."},
                 {"role": "user",
@@ -55,7 +56,10 @@ def request_code_review(diff, client):
             max_tokens=2048,
             temperature=0.5
         )
+
+        # Extract the review comments from the response
         return response['choices'][0]['message']['content']
+
     except Exception as e:
         raise ValueError(f"Failed to get code review from OpenAI: {e}")
 
