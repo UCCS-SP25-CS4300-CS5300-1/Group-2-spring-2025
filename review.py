@@ -1,5 +1,4 @@
 import os
-import openai
 from github import Github
 from openai import OpenAI
 
@@ -29,23 +28,20 @@ def fetch_files_from_pr(pr):
 # Request code review from OpenAI
 def request_code_review(diff, client):
     try:
-        # Request a code review using the new API structure
         response = client.chat.completions.create(
-            model="gpt-4o",  # Correct model name, change it if needed
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a helpful code reviewer."},
-                {"role": "user",
-                 "content": f"Please review the following code for potential issues or improvements: \nstart with giving"
-                            f" it a score out of 10, then if youre going to suggest changes please reference the code"
-                            f" directly \n please list no more than 5 items but only if it is necessary:\n{diff}"}
-
-
+                {"role": "user", "content": (
+                    "Please review the following code for potential issues or improvements: "
+                    "start with giving it a score out of 10, then if you're going to suggest changes please "
+                    "reference the code directly. Please list no more than 5 items but only if it is necessary:\n"
+                    f"{diff}"
+                )}
             ],
             max_tokens=2048,
             temperature=0.5
         )
-
-        # Extract the review comments from the response
         return response.choices[0].message.content
 
     except Exception as e:
@@ -65,13 +61,20 @@ def main():
     try:
 
         client = OpenAI()
+
         github_token = os.getenv('GITHUB_TOKEN')
-        g = Github(github_token)
+        if not github_token:
+            raise ValueError("GITHUB_TOKEN is not set")
 
-        # Get necessary environment variables
-        repo_name = os.getenv('GITHUB_REPOSITORY')  # Example: 'UCCS-SP25-CS4300-CS5300-1/Group-2-spring-2025'
+        repo_name = os.getenv('GITHUB_REPOSITORY')
+        if not repo_name:
+            raise ValueError("GITHUB_REPOSITORY is not set")
+
         pr_id = os.getenv('GITHUB_PR_ID')
+        if not pr_id:
+            raise ValueError("GITHUB_PR_ID is not set")
 
+        g = Github(github_token)
 
         # Get repository and pull request
         repo, pr = get_repo_and_pull_request(g, repo_name, pr_id)
