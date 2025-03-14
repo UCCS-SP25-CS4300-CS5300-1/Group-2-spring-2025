@@ -58,7 +58,7 @@ def request_code_review(diff, client):
         )
 
         # Extract the review comments from the response
-        return response['choices'][0]['message']['content']
+        return response.choices[0].message.content
 
     except Exception as e:
         raise ValueError(f"Failed to get code review from OpenAI: {e}")
