@@ -46,7 +46,7 @@ def fetch_files_from_pr(pr):
 def request_code_review(diff, client):
     try:
         # Request a code review using the new API structure
-        response = client.chat_completions.create(
+        response = client.chat.completions.create(
             model="gpt-4",  # Correct model name, change it if needed
             messages=[
                 {"role": "system", "content": "You are a helpful code reviewer."},
