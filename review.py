@@ -51,7 +51,11 @@ def request_code_review(diff, client):
             messages=[
                 {"role": "system", "content": "You are a helpful code reviewer."},
                 {"role": "user",
-                 "content": f"Please review the following code for potential issues or improvements:\n{diff}"}
+                 "content": f"Please review the following code for potential issues or improvements: \nstart with giving"
+                            f" it a score out of 10, then if youre going to suggest changes please reference the code"
+                            f" directly\n{diff}"}
+
+
             ],
             max_tokens=2048,
             temperature=0.5
