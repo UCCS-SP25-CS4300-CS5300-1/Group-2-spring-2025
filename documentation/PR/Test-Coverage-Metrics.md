@@ -1,6 +1,4 @@
-# Feature Documentation Template
-
-## Run Django Tests with Coverage
+# Run Django Tests with Coverage Metrics
 
 This feature automates the testing and coverage reporting of a Django application during pull requests. It runs tests using `pytest` and generates a coverage report, which is posted as a comment on the pull request.
 

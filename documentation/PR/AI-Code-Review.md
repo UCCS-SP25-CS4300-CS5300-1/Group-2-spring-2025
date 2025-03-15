@@ -1,6 +1,4 @@
-# Feature Documentation Template
-
-## Pull Request Code Review Automation
+# Pull Request Code Review Automation
 
 This feature automates the process of reviewing pull requests on GitHub by integrating OpenAI's GPT-4 to provide code reviews.
 
