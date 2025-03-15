@@ -67,3 +67,27 @@ class TestReview(unittest.TestCase):
         review.post_review_comments(mock_pr, review_comments)
 
         mock_pr.create_issue_comment.assert_called_once_with(review_comments)
+
+    @patch('review.initialize')
+    @patch('review.get_repo_and_pull_request')
+    @patch('review.fetch_files_from_pr')
+    @patch('review.request_code_review')
+    @patch('review.post_review_comments')
+    def test_main(self, mock_post_review_comments, mock_request_code_review, mock_fetch_files_from_pr,
+                  mock_get_repo_and_pull_request, mock_initialize):
+        mock_initialize.return_value = (MagicMock(), MagicMock(), 'fake_repo', '1')
+        mock_get_repo_and_pull_request.return_value = (MagicMock(), MagicMock())
+        mock_fetch_files_from_pr.return_value = 'fake_diff'
+        mock_request_code_review.return_value = 'fake_review'
+
+        review.main()
+
+        mock_initialize.assert_called_once()
+        mock_get_repo_and_pull_request.assert_called_once()
+        mock_fetch_files_from_pr.assert_called_once()
+        mock_request_code_review.assert_called_once()
+        mock_post_review_comments.assert_called_once()
+
+
+if __name__ == '__main__':
+    unittest.main()
