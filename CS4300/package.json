@@ -1,5 +1,16 @@
 {
+  "name": "cs4300-project",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "https://your-github-username.github.io/your-repo-name",
   "dependencies": {
     "react-router-dom": "^7.2.0"
+  },
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
