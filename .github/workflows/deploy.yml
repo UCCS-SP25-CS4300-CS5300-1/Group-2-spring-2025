@@ -8,6 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: CS4300
     permissions:
       contents: write
 
@@ -21,15 +24,13 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        working-directory: CS4300
         run: npm install
 
       - name: Build project
-        working-directory: CS4300
         run: npm run build
 
       - name: Deploy to GitHub Pages
-        working-directory: CS4300
         run: npm run deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
