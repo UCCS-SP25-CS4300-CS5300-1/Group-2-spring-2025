@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: CS4300
+        working-directory: CS4300/cs4300_frontend
     permissions:
       contents: write
 
