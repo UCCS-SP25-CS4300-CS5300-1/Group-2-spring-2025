@@ -1,0 +1,30 @@
+name: Auto Create PR from prod to main
+
+on:
+  push:
+    branches:
+      - prod  # Trigger only when prod is updated
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create Pull Request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: prod
+          base: main
+          title: "Auto-Merge: prod → main"
+          body: "This PR was auto-created when prod was updated."
+          labels: "auto-merge"
+
+      - name: Enable Auto-Merge
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
+          merge-method: squash
+          github-token: ${{ secrets.GITHUB_TOKEN }}
