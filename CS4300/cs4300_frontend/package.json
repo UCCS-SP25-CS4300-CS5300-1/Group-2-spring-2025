@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist -r https://x-access-token:${GH_TOKEN}@github.com/uccs-sp25-cs4300-cs5300-1/Group-2-spring-2025.git"
   },
   "dependencies": {
     "react": "^19.0.0",
