@@ -3,7 +3,6 @@ name: Run Django Tests with Coverage
 on:
   pull_request:
     branches:
-      - main
       - develop
 
 jobs:
