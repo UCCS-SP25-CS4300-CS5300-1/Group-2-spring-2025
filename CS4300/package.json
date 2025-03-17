@@ -2,7 +2,7 @@
   "name": "cs4300-project",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://your-github-username.github.io/your-repo-name",
+  "homepage": "https://uccs-sp25-cs4300-cs5300-1.github.io/Group-2-spring-2025/",
   "dependencies": {
     "react-router-dom": "^7.2.0"
   },
