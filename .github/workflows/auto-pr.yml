@@ -21,6 +21,7 @@ jobs:
           title: "Auto-Merge: prod → main"
           body: "This PR was auto-created when prod was updated."
           labels: "auto-merge"
+          draft: false  # Ensures PR is not a draft
 
       - name: Enable Auto-Merge
         uses: peter-evans/enable-pull-request-automerge@v2
