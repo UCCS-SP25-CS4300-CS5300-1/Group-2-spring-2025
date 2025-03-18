@@ -5,14 +5,13 @@ import Scanner from "./components/pages/barcodeScanner/barcodeScanner";
 import Nutrition from "./components/pages/nutrition/nutrition";
 
 function App() {
-    // <Route path="/scanner" element={<Scanner />} />
     return (
         <BrowserRouter>
             <Navbar />
             <Routes>
-                 <Route path="/" element={<Scanner />} />
-                 <Route path="/about" element={ <Home />} />
-                 <Route path="nutrition" element={ <Nutrition />} />
+                 <Route path="/Group-2-spring-2025/" element={<Scanner />} />
+                 <Route path="/Group-2-spring-2025/about" element={ <Home />} />
+                 <Route path="/Group-2-spring-2025/nutrition" element={ <Nutrition />} />
              </Routes>
         </BrowserRouter>
     );

@@ -12,7 +12,7 @@ function Scanner() {
 
   const clicked = async() => {
     alert(inputValue);
-    navigate(`/nutrition?item=${inputValue}`); // this is terrible. Do not do this. I could hijack a link pretty easily. 
+    navigate(`/Group-2-spring-2025/nutrition?item=${inputValue}`); // this is terrible. Do not do this. I could hijack a link pretty easily. 
     if (true) {
       return 
     }
@@ -46,7 +46,7 @@ function Scanner() {
       </div>
       <div class="bottom-links">
         <a class="faq-btn" href="faq">FAQ</a>
-        <a class="about-btn" href="/about">About</a>
+        <a class="about-btn" href="about">About</a>
       </div>
     </div>
   );
