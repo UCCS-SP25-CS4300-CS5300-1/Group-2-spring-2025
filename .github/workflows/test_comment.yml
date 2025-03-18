@@ -1,4 +1,4 @@
-name: Run Django Tests with Coverage
+name: Post Django Test Results to Pull Request
 
 on:
   push:
@@ -31,9 +31,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest django djangorestframework pytest-django requests PyGithub
 
-    - name: Run Custom Test Execution and Post Results
+    - name: Post test results to pull request
       run: |
-        python post_test_results.py
+        python test_results.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_PR_ID: ${{ github.event.pull_request.number }}
