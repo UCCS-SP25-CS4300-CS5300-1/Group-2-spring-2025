@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import "./barcodeScanner.css";
 
 // need to fix this link before demo
-const API_URL = "http://20.171.241.228"
+const API_URL = "https://cs4300-group2.tech"
 
 const fetchBarcodeData = async (barcode) => {
     try {
