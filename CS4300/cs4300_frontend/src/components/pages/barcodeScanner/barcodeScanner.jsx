@@ -2,6 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import "./barcodeScanner.css";
 
+const API_URL = "http://20.171.241.228"
+
+const fetchBarcodeData = async (barcode) => {
+    try {
+        const response = await fetch(`${API_URL}/api/product/${barcode}/`);
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("Barcode Data:", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching barcode information:", error);
+        return null;
+    }
+};
+
 function Scanner() {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
@@ -11,18 +28,22 @@ function Scanner() {
   };
 
   const clicked = async() => {
-    alert(inputValue);
-    navigate(`/Group-2-spring-2025/nutrition?item=${inputValue}`); // this is terrible. Do not do this. I could hijack a link pretty easily. 
-    if (true) {
-      return 
+    if (!inputValue.trim()) {
+      alert("Please enter a barcode number.");
+    //alert(inputValue);
+    //navigate(`/Group-2-spring-2025/nutrition?item=${inputValue}`); // this is terrible. Do not do this. I could hijack a link pretty easily.
+    //if (true) {
+      return
     }
     try {
-      //const response = await fetch("http://localhost:8080");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.text();
-      navigate("/contact");
+      //API call
+      const data = await fetchBarcodeData(inputValue);
+
+      if (data) {
+                navigate(`/Group-2-spring-2025/nutrition`, { state: { barcodeData: data } });
+            } else {
+                alert("Product not found or error fetching data.");
+            }
     } catch(err){
       console.error("Error fetching barcode information: ", err);
     }

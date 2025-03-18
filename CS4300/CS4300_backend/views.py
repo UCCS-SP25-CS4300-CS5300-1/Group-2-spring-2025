@@ -24,4 +24,3 @@ class ProductView(APIView):
 class ExampleApiView(APIView):
     def get(self, request):
         return Response({'message': 'Hello, world!'})
-
