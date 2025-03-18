@@ -4,6 +4,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('example_api/', views.ExampleApiView.as_view(), name='example_api'),
-    # Add other URL patterns here
+    path('product/<str:barcode>/', views.ProductView.as_view(), name='product-detail')
 ]
