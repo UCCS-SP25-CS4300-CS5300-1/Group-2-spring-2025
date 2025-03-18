@@ -5,7 +5,6 @@ body {
     background-color: #f4f4f4;
     font-family: 'Roboto', sans-serif;
     color: #333;
-    overscroll-behavior: none;
   }
   
   /* Home Container */
@@ -39,7 +38,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 30px;
+    margin-top: 550px;
   }
   
   /* Image Styling */
