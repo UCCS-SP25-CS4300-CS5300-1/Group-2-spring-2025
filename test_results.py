@@ -45,7 +45,7 @@ def run_pytest():
 def post_test_results(pr, test_results):
     """Post pytest results as a PR comment."""
     try:
-        comment = f"### 🧪 Test Results\n```\n{test_results}\n```"
+        comment = f"### Test Results\n```\n{test_results}\n```"
         pr.create_issue_comment(comment)
         print("Test results posted successfully.")
     except Exception as e:

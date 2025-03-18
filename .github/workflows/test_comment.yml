@@ -9,7 +9,7 @@ on:
       - develop
 
 jobs:
-  tests:
+  post-test-results:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -18,7 +18,7 @@ jobs:
       actions: write
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v3
 
     - name: Set up Python
@@ -31,12 +31,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest django djangorestframework pytest-django requests PyGithub
 
-    - name: Set DJANGO_SETTINGS_MODULE environment variable
-      run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
-
-    - name: Run Custom Test Execution
+    - name: Run Custom Test Execution and Post Results
       run: |
-        python test_results.py
+        python post_test_results.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_PR_ID: ${{ github.event.pull_request.number }}
