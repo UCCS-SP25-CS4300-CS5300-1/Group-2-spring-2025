@@ -1,6 +1,9 @@
 name: Run Django Tests with Coverage
 
 on:
+  push:
+    branches:
+      - develop
   pull_request:
     branches:
       - develop
@@ -31,8 +34,8 @@ jobs:
     - name: Set DJANGO_SETTINGS_MODULE environment variable
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-    - name: Run tests with coverage (XML report)
-      run: pytest --cov=. --cov-report=xml:coverage.xml --cov-fail-under=80  # Fail pipeline if covereage under 80%
+    - name: Run tests with coverage (Console (asked for in sprint requirements) and XML report)
+      run: pytest --cov=. --cov-report=term --cov-report=xml:coverage.xml --cov-fail-under=80
 
     - name: Post coverage comment using pytest-coverage-comment
       uses: MishaKav/pytest-coverage-comment@v1
