@@ -25,3 +25,18 @@ class ExampleApiView(APIView):
     def get(self, request):
         return Response({'message': 'Hello, world!'})
 
+class BarcodeLookupView(APIView):
+    """
+    API endpoint to fetch barcode information without using the Product model.
+    """
+
+    def get(self, request, barcode, format=None):
+        # Simulated barcode lookup logic (replace with actual logic)
+        data = {
+            "barcode": barcode,
+            "product_name": "Sample Food Item",
+            "calories": 250,
+            "ingredients": ["Sugar", "Salt", "Flour"]
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
