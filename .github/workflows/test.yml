@@ -1,0 +1,50 @@
+name: Run Backend Tests
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  test:
+    name: Run Pytest
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: read
+      contents: read
+      actions: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest django djangorestframework pytest-django requests
+
+      - name: Set DJANGO_SETTINGS_MODULE environment variable
+        run: echo "DJANGO_SETTINGS_MODULE=CS4300_backend.settings" >> $GITHUB_ENV
+
+      - name: Run backend tests and capture results
+        id: run-tests
+        run: |
+          TEST_OUTPUT=$(pytest --cov=. --cov-report=term | tee /dev/tty)
+          PASSED=$(echo "$TEST_OUTPUT" | grep -oP '(?<=\bpassed\s)\d+' || echo 0)
+          FAILED=$(echo "$TEST_OUTPUT" | grep -oP '(?<=\bfailed\s)\d+' || echo 0)
+          echo "PASSED=$PASSED" >> $GITHUB_ENV
+          echo "FAILED=$FAILED" >> $GITHUB_ENV
+
+      - name: Post test summary
+        run: |
+          echo "### Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Passed: $PASSED" >> $GITHUB_STEP_SUMMARY
+          echo "❌ Failed: $FAILED" >> $GITHUB_STEP_SUMMARY
