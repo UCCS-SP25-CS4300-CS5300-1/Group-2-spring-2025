@@ -38,6 +38,8 @@ def run_pytest():
     """Run pytest and capture the output."""
     try:
         result = subprocess.run(["pytest", "--tb=short"], capture_output=True, text=True)
+        if result.returncode != 0:
+            raise RunTimeError("Pytest encountered errors")
         return result.stdout
     except Exception as e:
         raise ValueError(f"Failed to run pytest: {e}")
