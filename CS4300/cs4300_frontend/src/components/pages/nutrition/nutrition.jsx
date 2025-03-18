@@ -1,41 +1,68 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./nutrition.css";
-import foodImage from "../../../assets/foodImage.jpg"
+import foodImage from "../../../assets/foodImage.jpg";
 
-function updateFoodInfo(imageSrc = "../../../assets/foodImage.jpg", score = "7.27", alerts = ["Contains Blue Red", "UH OH"], nutrition = ["Has good food in it.", "Not poison"]) {
-    document.getElementById('food-image').src = foodImage;
-    document.getElementById('food-score').innerHTML = score;
-    
-    const alertsDiv = document.getElementById('food-alerts');
-    alertsDiv.innerHTML = '<h3>Food Alerts</h3>' + alerts.map(alert => `<p>${alert}</p>`).join('');
-    
-    const nutritionDiv = document.getElementById('nutrition-facts');
-    nutritionDiv.innerHTML = '<h3>Nutrition Facts</h3>' + nutrition.map(fact => `<p>${fact}</p>`).join('');
-}
+function Nutrition() {
+    const location = useLocation();
+    const barcodeData = location.state?.barcodeData || {}; // Retrieve barcode data
 
-function Nutrition(){
+    // Define state for food info
+    const [imageSrc, setImageSrc] = useState(foodImage);
+    const [name, setName] = useState("");
+    const [score, setScore] = useState("5");
+    const [alerts, setAlerts] = useState(["No alerts available"]);
+    const [nutrition, setNutrition] = useState(["No nutrition data available"]);
+
+    // Effect to update state when barcodeData changes
+    useEffect(() => {
+        if (barcodeData) {
+            // Assuming barcodeData has a name and nutrition_data string
+            setName(barcodeData.name || "Unknown Food");
+            setImageSrc(barcodeData.image || foodImage);
+            setScore(barcodeData.nutrition_score_fr || "N/A");
+            setAlerts(barcodeData.alerts || ["No alerts available"]);
+
+            // Parse the nutrition data from the JSON string
+            const nutritionData = barcodeData.nutrition_data ? JSON.parse(barcodeData.nutrition_data) : {};
+            setNutrition([
+                `Energy: ${nutritionData["energy-kcal"]} kcal`,
+                `Fat: ${nutritionData.fat} g`,
+                `Carbohydrates: ${nutritionData.carbohydrates} g`,
+                `Proteins: ${nutritionData.proteins} g`,
+                `Sugars: ${nutritionData.sugars} g`,
+                `Fiber: ${nutritionData.fiber} g`,
+                `Salt: ${nutritionData.salt} g`
+            ]);
+        }
+    }, [barcodeData]);
+
     return (
-    <div class="food-container">
-        <div class="main-section">
-            <img id="food-image" src="placeholder" alt="Food Image"></img>
-            <div class="score-box">
-                <label id="food-score">Score: 5</label>
+        <div className="food-container">
+            <div className="main-section">
+                {/* Display the food name */}
+                <h1>{name}</h1>
+                <img id="food-image" src={imageSrc} alt="Food Image" />
+                <div className="score-box">
+                    <label id="food-score">Score: {score}</label>
+                </div>
             </div>
-            <div>
-                <button onClick={updateFoodInfo}> Click To Update Info </button>
+            <div className="right-section">
+                <div className="food-alerts" id="food-alerts">
+                    <h3>Food Alerts</h3>
+                    {alerts.map((alert, index) => (
+                        <p key={index}>{alert}</p>
+                    ))}
+                </div>
+                <div className="nutrition-facts" id="nutrition-facts">
+                    <h3>Nutrition Facts</h3>
+                    {nutrition.map((fact, index) => (
+                        <p key={index}>{fact}</p>
+                    ))}
+                </div>
             </div>
         </div>
-        <div class="right-section">
-            <div class="food-alerts" id="food-alerts">
-                <h3>Food Alerts</h3>
-                <p>No alerts available</p>
-            </div>
-            <div class="nutrition-facts" id="nutrition-facts">
-                <h3>Nutrition Facts</h3>
-                <p>No nutrition data available</p>
-            </div>
-        </div>
-    </div>
-    )
+    );
 }
+
 export default Nutrition;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import "./barcodeScanner.css";
 
+// need to fix this link before demo
 const API_URL = "http://20.171.241.228"
 
 const fetchBarcodeData = async (barcode) => {
