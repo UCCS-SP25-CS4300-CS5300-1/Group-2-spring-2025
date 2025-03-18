@@ -6,3 +6,8 @@ omit =
     tests/*
     test_*.py
     review.py
+    manage.py
+    wsgi.py
+    asgi.py
+    urls.py
+    settings.py

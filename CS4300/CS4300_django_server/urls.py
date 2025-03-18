@@ -3,6 +3,6 @@
 from django.urls import path, include
 
 urlpatterns = [
-    path('backend/', include('CS4300_backend.urls')),
+    path('api/', include('CS4300_backend.urls')),
     # Add other URL patterns here
 ]
