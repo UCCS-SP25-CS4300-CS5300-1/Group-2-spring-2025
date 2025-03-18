@@ -35,10 +35,4 @@ jobs:
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
     - name: Run tests and capture results
-      run: pytest --tb=short | tee pytest_results.log
-
-    - name: Post test results using pytest-comment
-      uses: MishaKav/pytest-coverage-comment@v1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        pytest-xml-coverage-path: pytest_results.log
+      run: pytest
