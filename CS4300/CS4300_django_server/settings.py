@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-lxuc!b*h+_7i6o&t#u)vgs5u&w=r9c_i&*w@2hy@391f9-@y5!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "http://20.171.241.228",
+    "uccs-sp25-cs4300-cs5300-1.github.io",
+    "*",
+        ]
 
 
 # Application definition
@@ -43,7 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',    
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,12 +55,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://your-github-username.github.io",
-]
+"""CORS_ALLOWED_ORIGINS = [
+    "https://uccs-sp25-cs4300-cs5300-1.github.io",
+]"""
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 
 ROOT_URLCONF = 'CS4300_django_server.urls'
 
