@@ -39,7 +39,7 @@ def run_pytest():
     try:
         result = subprocess.run(["pytest", "--tb=short"], capture_output=True, text=True)
         if result.returncode != 0:
-            raise RunTimeError("Pytest encountered errors")
+            raise RuntimeError("Pytest encountered errors")
         return result.stdout
     except Exception as e:
         raise ValueError(f"Failed to run pytest: {e}")
