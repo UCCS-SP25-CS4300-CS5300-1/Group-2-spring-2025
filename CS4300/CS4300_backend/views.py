@@ -7,8 +7,8 @@ from .models import Product
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
-import json
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
 
 
 class ProductView(APIView):
@@ -27,9 +27,42 @@ def csrf_token_view(request):
     return JsonResponse({"csrfToken": get_token(request)})
 
 
+def logout_view(request):
+    logout(request)
+    return JsonResponse({"message": "Logged out successfully"})
+
+
+def check_auth_view(request):
+    if request.user.is_authenticated:
+        return JsonResponse({"isAuthenticated": True})
+    return JsonResponse({"isAuthenticated": False}, status=401)
+
+
+@api_view(['POST'])
+@csrf_exempt
+def register_view(request):
+    if request.method == "POST":
+        data = request.data
+        username = data.get("username")
+        password = data.get("password")
+        email = data.get("email")
+
+        if not username or not password or not email:
+            return JsonResponse({"error": "All fields are required"}, status=400)
+
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({"error": "Username already exists"}, status=400)
+
+        user = User.objects.create_user(username=username, password=password, email=email)
+        user.save()
+        return JsonResponse({"message": "User registered successfully"})
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+@api_view(['POST'])
 def login_view(request):
     if request.method == "POST":
-        data = json.loads(request.body)
+        data = request.data
         username = data.get("username")
         password = data.get("password")
 
@@ -42,38 +75,4 @@ def login_view(request):
             return JsonResponse({"message": "Login successful"})
         else:
             return JsonResponse({"error": "Invalid credentials"}, status=401)
-    return JsonResponse({"error": "Invalid request method"}, status=405)
-
-
-def logout_view(request):
-    logout(request)
-    return JsonResponse({"message": "Logged out successfully"})
-
-
-def check_auth_view(request):
-    if request.user.is_authenticated:
-        return JsonResponse({"isAuthenticated": True})
-    return JsonResponse({"isAuthenticated": False}, status=401)
-
-
-@csrf_exempt
-def register_view(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            username = data.get("username")
-            password = data.get("password")
-            email = data.get("email")
-
-            if not username or not password or not email:
-                return JsonResponse({"error": "All fields are required"}, status=400)
-
-            if User.objects.filter(username=username).exists():
-                return JsonResponse({"error": "Username already exists"}, status=400)
-
-            user = User.objects.create_user(username=username, password=password, email=email)
-            user.save()
-            return JsonResponse({"message": "User registered successfully"})
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "Invalid request method"}, status=405)
