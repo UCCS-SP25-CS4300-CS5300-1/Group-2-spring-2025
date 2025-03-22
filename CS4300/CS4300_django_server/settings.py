@@ -57,9 +57,28 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-"""CORS_ALLOWED_ORIGINS = [
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
     "https://uccs-sp25-cs4300-cs5300-1.github.io",
-]"""
+    "http://localhost:5173"
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://uccs-sp25-cs4300-cs5300-1.github.io",
+    "http://localhost:5173"
+]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'None'
 
 CORS_ALLOW_ALL_ORIGINS = True
 

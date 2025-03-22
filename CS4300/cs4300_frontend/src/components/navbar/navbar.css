@@ -7,31 +7,44 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 12px 0;
     z-index: 1100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.navbar ul {
+.navbar-left, .navbar-right {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: left; /* Center align */
     gap: 20px;
+}
+
+.navbar-left {
+    justify-content: left;
+}
+
+.navbar-right {
+    justify-content: right;
 }
 
 .navbar li {
     display: inline;
 }
 
-.navbar li a {
+.navbar li a, .navbar li button {
     color: white;
     text-decoration: none;
     font-size: 17px;
     padding: 10px 18px;
     transition: background 0.3s ease, color 0.3s ease;
     border-radius: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
-.navbar li a:hover {
+.navbar li a:hover, .navbar li button:hover {
     background: rgba(255, 255, 255, 0.2);
     color: #f4f4f4;
 }
