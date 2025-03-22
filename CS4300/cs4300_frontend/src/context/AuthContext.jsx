@@ -8,9 +8,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        if (isAuthenticated) {
-            localStorage.setItem("authToken", "your-auth-token");
-        } else {
+        if (!isAuthenticated) {
             localStorage.removeItem("authToken");
         }
     }, [isAuthenticated]);
