@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
 import json
+from django.http import JsonResponse
 
 
 class ProductView(APIView):
@@ -48,12 +49,12 @@ def logout_view(request):
     logout(request)
     return JsonResponse({"message": "Logged out successfully"})
 
-from django.http import JsonResponse
 
 def check_auth_view(request):
     if request.user.is_authenticated:
         return JsonResponse({"isAuthenticated": True})
     return JsonResponse({"isAuthenticated": False}, status=401)
+
 
 @csrf_exempt
 def register_view(request):

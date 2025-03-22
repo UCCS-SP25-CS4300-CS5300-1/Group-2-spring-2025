@@ -59,7 +59,7 @@ def request_code_review(diff, client):
                 )}
             ],
             max_tokens=2048,
-            temperature=0.5
+            temperature=0.2
         )
         return response.choices[0].message.content
 
