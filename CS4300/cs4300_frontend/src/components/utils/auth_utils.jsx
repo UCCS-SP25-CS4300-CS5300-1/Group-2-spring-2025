@@ -1,8 +1,8 @@
-const BASE_URL = "http://127.0.0.1:8000/api";
+const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
 async function getCSRFToken() {
     try {
-        const response = await fetch(`${BASE_URL}/csrf/`, {
+        const response = await fetch(`${API_URL}/csrf/`, {
             credentials: "include",
         });
         if (!response.ok) {
@@ -21,7 +21,7 @@ export async function login(username, password) {
         const csrfToken = await getCSRFToken();
         console.log(csrfToken)
 
-        const response = await fetch(`${BASE_URL}/login/`, {
+        const response = await fetch(`${API_URL}/login/`, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -46,7 +46,7 @@ export async function login(username, password) {
 
 export async function logout() {
     try {
-        await fetch(`${BASE_URL}/logout/`, {
+        await fetch(`${API_URL}/logout/`, {
             method: "POST",
             credentials: "include",
         });
@@ -59,7 +59,7 @@ export async function logout() {
 
 export async function checkAuthStatus() {
     try {
-        const response = await fetch(`${BASE_URL}/check-auth/`, {
+        const response = await fetch(`${API_URL}/check-auth/`, {
             credentials: "include",
         });
         if (response.ok) {
@@ -79,7 +79,7 @@ export async function checkAuthStatus() {
 export async function register(username, password, email) {
     const csrfToken = await getCSRFToken();
     try {
-        const response = await fetch(`${BASE_URL}/register/`, {
+        const response = await fetch(`${API_URL}/register/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
