@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import "./barcodeScanner.css";
 
-// need to fix this link before demo
-const API_URL = "https://cs4300-group2.tech"
+const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
+
 
 const fetchBarcodeData = async (barcode) => {
     try {
-        const response = await fetch(`${API_URL}/api/product/${barcode}/`);
+        const response = await fetch(`${API_URL}/product/${barcode}/`);
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
