@@ -1,5 +1,37 @@
 import requests
 import json
+from pyzbar import pyzbar
+import cv2
+import numpy as np
+
+class imageScan:
+    def __init__(self):
+        self.barcode = None
+
+
+    def fetch_upc(self, image):
+        def decode(image0):
+            decoded_objects = pyzbar.decode(image0)
+            for obj in decoded_objects:
+                return obj.data.decode('utf-8')
+
+        image.seek(0) 
+        filebytes = image.read()
+        nparray = np.frombuffer(filebytes, np.uint8)
+
+        img = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
+        if img is None:
+            print("cv2 failed to decode image")
+            return None
+
+        barcode = decode(img)
+
+        # this ended up being an issue with a perfect barcode image, grabbing pictures of real barcodes works better than a machine generated one.
+        # OCR worked great for my testing images but terrible with real images, this does not work with testing images but works great with real images.
+        # Who woulda thought... 
+
+        return barcode if barcode else None
+
 
 
 class Product:

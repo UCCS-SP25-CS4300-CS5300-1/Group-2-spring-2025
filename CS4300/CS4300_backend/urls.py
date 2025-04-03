@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('product/<str:barcode>/', views.ProductView.as_view(), name='product-detail'),
+    path('imagescan/', views.ImagescanView.as_view(), name="image-scanner"),
 
     path('csrf/', views.csrf_token_view, name='csrf'),
     path('login/', views.login_view, name='login'),

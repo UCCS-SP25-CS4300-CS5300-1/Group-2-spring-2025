@@ -37,4 +37,13 @@ Example:
 $ curl http://127.0.0.1:8000/api/product/1234567890/
 
 # This will return a json string of information
+```
 
+## Image Scanner
+
+Required installs:
+pyzbar
+cv2
+numpy
+
+The API takes an image and returns the food value based on the barcode. It utilizes the product information on the server to speed things up.
