@@ -2,6 +2,7 @@
 
 from rest_framework import serializers
 from .models import Product
+        
 
 class ProductSerializer(serializers.Serializer):
     barcode = serializers.CharField(max_length=20)
