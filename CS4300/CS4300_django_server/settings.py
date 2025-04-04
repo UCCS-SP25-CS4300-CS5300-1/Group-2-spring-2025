@@ -29,6 +29,8 @@ ALLOWED_HOSTS = [
     "http://20.171.241.228",
     "uccs-sp25-cs4300-cs5300-1.github.io",
     "*",
+    "cs4300-group2.TECH",
+    "www.cs4300-group2.tech",
         ]
 
 
@@ -57,28 +59,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOWED_ORIGINS = [
+"""CORS_ALLOWED_ORIGINS = [
     "https://uccs-sp25-cs4300-cs5300-1.github.io",
-    "http://localhost:5173"
-]
-CSRF_TRUSTED_ORIGINS = [
-    "https://uccs-sp25-cs4300-cs5300-1.github.io",
-    "http://localhost:5173"
-]
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-}
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SAMESITE = 'None'
+]"""
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -146,6 +129,20 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Security Settings
+SECURE_SSL_REDIRECT = False  # Redirect all HTTP requests to HTTPS
+SESSION_COOKIE_SECURE = True  # Ensure cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True  # Protect CSRF tokens with HTTPS
+
+# Allow Django to trust HTTPS headers from Nginx
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Prevent content from being loaded from untrusted sources
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+
+# Disable clickjacking attacks
+X_FRAME_OPTIONS = 'DENY'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
