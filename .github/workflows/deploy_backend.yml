@@ -51,9 +51,6 @@ jobs:
 
             echo "🧱 Running migrations..."
             python $DEPLOY_PATH/CS4300/manage.py migrate
-
-            echo "🧼 Collecting static files..."
-            python $DEPLOY_PATH/CS4300/manage.py collectstatic --noinput
             
             echo "🚀 Restarting services..."
             sudo systemctl restart gunicorn
