@@ -41,9 +41,7 @@ $ curl http://127.0.0.1:8000/api/product/1234567890/
 
 ## Image Scanner
 
-Required installs:
-pyzbar
-cv2
-numpy
+Required installs over base django:
+pip install pyzbar opencv-python numpy
 
 The API takes an image and returns the food value based on the barcode. It utilizes the product information on the server to speed things up.

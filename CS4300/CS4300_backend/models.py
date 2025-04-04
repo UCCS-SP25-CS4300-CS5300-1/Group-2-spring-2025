@@ -15,7 +15,12 @@ class imageScan:
             for obj in decoded_objects:
                 return obj.data.decode('utf-8')
 
-        image.seek(0) 
+        try:
+            image.seek(0) 
+        except:
+            print("Invalid Image")
+            return None
+
         filebytes = image.read()
         nparray = np.frombuffer(filebytes, np.uint8)
 
