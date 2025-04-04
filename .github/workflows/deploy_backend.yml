@@ -47,13 +47,13 @@ jobs:
             source $VENV_PATH
 
             echo "📚 Installing dependencies..."
-            pip install -r requirements.txt
+            pip install -r $DEPLOY_PATH/CS4300/requirements.txt
 
             echo "🧱 Running migrations..."
-            python manage.py migrate
+            python $DEPLOY_PATH/CS4300/manage.py migrate
 
             echo "🧼 Collecting static files..."
-            python manage.py collectstatic --noinput
+            python $DEPLOY_PATH/CS4300/manage.py collectstatic --noinput
             
             echo "🚀 Restarting services..."
             sudo systemctl restart gunicorn
