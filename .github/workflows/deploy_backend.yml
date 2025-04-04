@@ -26,7 +26,7 @@ jobs:
 
       - name: Deploy to Azure VM
         run: |
-          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << EOF
+          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
             DEPLOY_PATH="/home/$USER/Group-2-spring-2025"
             VENV_PATH="$DEPLOY_PATH/CS4300/venv/bin/activate
       
