@@ -1,0 +1,55 @@
+# .github/workflows/deploy-backend.yml
+name: Deploy Django Backend to Azure VM
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'CS4300/CS4300_backend/**'
+      - 'CS4300/CS4300_django_server/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Azure VM
+        run: |
+          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << EOF
+            DEPLOY_PATH="/home/$USER/Group-2-spring-2025"
+            VENV_PATH="$DEPLOY_PATH/CS4300/venv/bin/activate
+      
+            cd $VENV_PATH
+            
+            echo "📦 Pulling latest changes..."
+            git pull
+
+            echo "🐍 Activating virtual environment..."
+            source $SOURCE
+
+            echo "📚 Installing dependencies..."
+            pip install -r requirements.txt
+
+            echo "🧱 Running migrations..."
+            python manage.py migrate
+
+            echo "🧼 Collecting static files..."
+            python manage.py collectstatic --noinput
+            
+            echo "🚀 Restarting services..."
+            sudo systemctl restart gunicorn
+            sudo systemctl reload nginx
+            
+            echo "✅ Deployment complete."
+          EOF
