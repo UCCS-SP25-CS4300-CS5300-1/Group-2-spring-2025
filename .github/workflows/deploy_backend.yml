@@ -36,7 +36,7 @@ jobs:
           ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
             set -e
             DEPLOY_PATH="/home/$VM_USER/Group-2-spring-2025"
-            VENV_PATH="$DEPLOY_PATH/CS4300/venv/bin/activate
+            VENV_PATH="$DEPLOY_PATH/CS4300/venv/bin/activate"
       
             cd $VENV_PATH
             
