@@ -8,6 +8,13 @@ on:
     paths:
       - 'CS4300/CS4300_backend/**'
       - 'CS4300/CS4300_django_server/**'
+  
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'CS4300/CS4300_backend/**'
+      - 'CS4300/CS4300_django_server/**'
 
 jobs:
   deploy:
