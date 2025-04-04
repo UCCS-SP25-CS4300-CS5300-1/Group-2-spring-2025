@@ -1,5 +1,7 @@
 import requests
 import json
+from django.db import models
+from django.contrib.auth.models import User
 
 
 class Product:
@@ -18,4 +20,18 @@ class Product:
         else:
             self.name = "Unknown Product"
             self.nutrition_data = "No Data Available"
+
+
+class ScannedItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    barcode = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
+    favorite = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.barcode})"
+
+    class Meta:
+        ordering = ['-created_at']
 

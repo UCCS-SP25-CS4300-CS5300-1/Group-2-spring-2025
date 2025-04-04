@@ -19,7 +19,7 @@ async function getCSRFToken() {
 export async function login(username, password) {
     try {
         const csrfToken = await getCSRFToken();
-        console.log(csrfToken)
+        console.log(csrfToken);
 
         const response = await fetch(`${API_URL}/login/`, {
             method: "POST",
@@ -33,7 +33,8 @@ export async function login(username, password) {
 
         const data = await response.json();
         if (response.ok) {
-            localStorage.setItem("isAuthenticated", "true");  // Save login state
+            localStorage.setItem("token", data.token); // Save the token in localStorage
+            localStorage.setItem("isAuthenticated", "true"); // Save login state
             return { success: true, message: "Login successful", data };
         } else {
             return { success: false, error: data.error };

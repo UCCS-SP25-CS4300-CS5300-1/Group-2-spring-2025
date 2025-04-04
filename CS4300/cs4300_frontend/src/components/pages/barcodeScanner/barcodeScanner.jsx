@@ -7,7 +7,14 @@ const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
 const fetchBarcodeData = async (barcode) => {
     try {
-        const response = await fetch(`${API_URL}/product/${barcode}/`);
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+        const response = await fetch(`${API_URL}/product/${barcode}/`, {
+            headers: {
+                Authorization: `Token ${token}`, // Include the token in the Authorization header
+                "Content-Type": "application/json"
+            },
+            credentials: "include" // Ensure cookies are included in the request
+        });
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }

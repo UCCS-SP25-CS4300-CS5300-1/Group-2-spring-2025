@@ -7,6 +7,7 @@ import Login from "./components/pages/auth/login/login.jsx";
 import Register from "./components/pages/auth/register/register.jsx";
 import {PrivateRoute} from "./components/PrivateRoute/PrivateRoute.jsx";
 import { AuthProvider } from "./context/AuthContext";
+import BarcodeHistory from "./components/pages/barcodeHistory/barcodeHistory.jsx";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                      <Route path="/nutrition" element={ <Nutrition />} />
                      <Route path="/login" element={<Login />} />
                      <Route path="/register" element={<Register />} />
+                    <Route path="/history" element={<PrivateRoute><BarcodeHistory /></PrivateRoute>} />
 
                      <Route path="*" element={<Home />} />
                  </Routes>
