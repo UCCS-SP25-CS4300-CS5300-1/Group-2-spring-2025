@@ -48,7 +48,7 @@ def fetch_files_from_pr(pr):
 def request_code_review(diff, client):
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="o3-mini",
             messages=[
                 {"role": "system", "content": "You are a helpful code reviewer."},
                 {"role": "user", "content": (
@@ -58,13 +58,13 @@ def request_code_review(diff, client):
                     f"{diff}"
                 )}
             ],
-            max_tokens=2048,
-            temperature=0.2
+            max_completion_tokens=2048
         )
         return response.choices[0].message.content
 
     except Exception as e:
         raise ValueError(f"Failed to get code review from OpenAI: {e}")
+
 
 def post_review_comments(pr, review_comments):
     try:
@@ -74,19 +74,15 @@ def post_review_comments(pr, review_comments):
 
 def main():
     try:
-        # Initialize required variables
+
         client, g, repo_name, pr_id = initialize()
 
-        # Get repository and pull request
         repo, pr = get_repo_and_pull_request(g, repo_name, pr_id)
 
-        # Fetch files changed in the PR
         diff = fetch_files_from_pr(pr)
 
-        # Request code review from OpenAI
         review_comments = request_code_review(diff, client)
 
-        # Post the review comments as a GitHub PR comment
         post_review_comments(pr, review_comments)
 
         print("Code review posted successfully.")

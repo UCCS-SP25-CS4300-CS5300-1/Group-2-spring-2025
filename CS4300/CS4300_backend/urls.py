@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     # Barcode URLs
     path('product/<str:barcode>/', views.ProductView.as_view(), name='product-detail'),
+    path('imagescan/', views.ImagescanView.as_view(), name="image-scanner"),
 
     # Authentication URLs
     path('csrf/', views.csrf_token_view, name='csrf'),

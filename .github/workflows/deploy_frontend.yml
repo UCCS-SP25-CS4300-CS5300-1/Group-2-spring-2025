@@ -1,0 +1,32 @@
+name: Deploy React Frontend
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Debug folder structure
+        run: ls -laR
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./CS4300/cs4300_frontend
+
+      - name: Deploy to GitHub Pages
+        run: npm run deploy
+        working-directory: ./CS4300/cs4300_frontend
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

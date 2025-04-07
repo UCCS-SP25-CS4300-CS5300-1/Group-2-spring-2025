@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ProductSerializer
-from .models import Product
+from .models import Product, imageScan
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
@@ -13,6 +13,27 @@ from .models import ScannedItem
 from .serializers import ScannedItemSerializer
 from rest_framework.permissions import IsAuthenticated
 
+class ImagescanView(APIView):
+    def post(self, request, format=None):
+        image = request.FILES.get('file')
+        if not image:
+            return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+
+        scanner = imageScan()
+        upc = scanner.fetch_upc(image)
+
+        if not upc:
+            return Response({'error': 'No barcode found'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+        product = Product(upc)
+        product.fetch_nutrition_data()
+
+        serializer = ProductSerializer(product)
+
+        return Response(serializer.data, status = status.HTTP_200_OK)
+        
+
+        
 
 class ProductView(APIView):
     permission_classes = [IsAuthenticated]
