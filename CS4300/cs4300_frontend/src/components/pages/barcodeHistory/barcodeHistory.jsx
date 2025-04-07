@@ -3,11 +3,16 @@ import './barcodeHistory.css';
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
+// Function to fetch scanned items from the Django backend
 const fetchScannedItems = async () => {
     try {
-        const response = await fetch(`${API_URL}/scanned-items/`, {
+        const csrfToken = localStorage.getItem("token");
+        console.log("token sent to fetch scanned items: ", csrfToken);
+        const response = await fetch(`${API_URL}/user-scanned-items/`, {
+            credentials: "include",
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
             }
         });
         if (!response.ok) {
@@ -20,12 +25,16 @@ const fetchScannedItems = async () => {
     }
 };
 
+// Function to delete a scanned item
 const deleteScannedItem = async (id) => {
     try {
-        await fetch(`${API_URL}/scanned-items/${id}/`, {
+        const csrfToken = localStorage.getItem("token");
+        console.log("token sent to delete scanned item: ", csrfToken);
+        await fetch(`${API_URL}/user-scanned-items/${id}/`, {
             method: 'DELETE',
+            credentials: "include",
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                "X-CSRFToken": csrfToken,
             }
         });
     } catch (error) {
@@ -33,13 +42,17 @@ const deleteScannedItem = async (id) => {
     }
 };
 
+// Function to update a scanned item (e.g., toggle favorite)
 const updateScannedItem = async (id, data) => {
     try {
-        const response = await fetch(`${API_URL}/scanned-items/${id}/`, {
+        const csrfToken = localStorage.getItem("token");
+        console.log("token sent to update scanned item: ", csrfToken);
+        const response = await fetch(`${API_URL}/user-scanned-items/${id}/`, {
             method: 'PATCH',
+            credentials: "include",
             headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
             },
             body: JSON.stringify(data)
         });
@@ -57,6 +70,7 @@ function BarcodeHistory() {
     const [scannedItems, setScannedItems] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Fetch scanned items on mount
     useEffect(() => {
         const fetchItems = async () => {
             const data = await fetchScannedItems();
@@ -67,15 +81,20 @@ function BarcodeHistory() {
         fetchItems();
     }, []);
 
+    // Handle deletion: update the state after deleting the item on the server
     const handleDelete = async (id) => {
         await deleteScannedItem(id);
         setScannedItems(scannedItems.filter(item => item.id !== id));
     };
 
+    // Handle toggling the favorite flag using the PATCH endpoint
     const handleFavoriteToggle = async (id, favorite) => {
+        // Send a PATCH request with the toggled favorite state
         const updatedItem = await updateScannedItem(id, { favorite: !favorite });
         if (updatedItem) {
-            setScannedItems(scannedItems.map(item => item.id === id ? updatedItem : item));
+            setScannedItems(scannedItems.map(item =>
+                item.id === id ? updatedItem : item
+            ));
         }
     };
 
@@ -90,10 +109,15 @@ function BarcodeHistory() {
                 {scannedItems.map(item => (
                     <li key={item.id} className="scanned-item">
                         <span>{item.name} - {item.barcode}</span>
-                        <button className="favorite-btn" onClick={() => handleFavoriteToggle(item.id, item.favorite)}>
+                        <button
+                            className="favorite-btn"
+                            onClick={() => handleFavoriteToggle(item.id, item.favorite)}
+                        >
                             {item.favorite ? 'Unfavorite' : 'Favorite'}
                         </button>
-                        <button className="delete-btn" onClick={() => handleDelete(item.id)}>Delete</button>
+                        <button className="delete-btn" onClick={() => handleDelete(item.id)}>
+                            Delete
+                        </button>
                     </li>
                 ))}
             </ul>

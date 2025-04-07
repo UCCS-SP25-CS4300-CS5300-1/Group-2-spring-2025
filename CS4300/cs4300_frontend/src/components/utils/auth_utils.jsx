@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
-async function getCSRFToken() {
+export async function getCSRFToken() {
     try {
         const response = await fetch(`${API_URL}/csrf/`, {
             credentials: "include",
