@@ -59,11 +59,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-"""CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
     "https://uccs-sp25-cs4300-cs5300-1.github.io",
-]"""
+    "http://localhost:5173",
+]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 
