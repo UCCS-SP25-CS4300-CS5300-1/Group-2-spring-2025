@@ -30,7 +30,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pytest pytest-cov django djangorestframework pytest-django requests django-cors-headers pyzbar opencv-python numpy
-        sudo apt install zbar
+        sudo apt install python-zbar
 
     - name: Set DJANGO_SETTINGS_MODULE environment variable
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
