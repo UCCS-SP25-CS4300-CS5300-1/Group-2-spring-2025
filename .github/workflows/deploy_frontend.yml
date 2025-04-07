@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Debug folder structure
+        run: ls -laR
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -20,10 +23,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./cs4300_frontend
+        working-directory: ./CS4300/cs4300_frontend
 
       - name: Deploy to GitHub Pages
         run: npm run deploy
-        working-directory: ./cs4300_frontend
+        working-directory: ./CS4300/cs4300_frontend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
