@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: ./CS4300/cs4300_frontend
@@ -24,9 +26,7 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.npm
-        # or include node_modules if you choose to
+          path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
