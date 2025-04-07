@@ -58,13 +58,14 @@ def request_code_review(diff, client):
                     f"{diff}"
                 )}
             ],
-            max_tokens=2048,
+            max_completion_tokens=2048,
             temperature=0.2
         )
         return response.choices[0].message.content
 
     except Exception as e:
         raise ValueError(f"Failed to get code review from OpenAI: {e}")
+
 
 def post_review_comments(pr, review_comments):
     try:
