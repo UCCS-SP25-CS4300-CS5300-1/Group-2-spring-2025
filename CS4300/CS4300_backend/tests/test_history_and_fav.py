@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from unittest.mock import patch
 
-from your_app.models import ScannedItem  # Replace "your_app" with your app's name
+from ..models import ScannedItem
 
 
 class SaveScannedItemViewTests(APITestCase):
@@ -22,9 +22,9 @@ class SaveScannedItemViewTests(APITestCase):
             self.name = "Test Product"
 
         # Patch Product.__init__ in the view module so that SaveScannedItemView uses our dummy initializer
-        with patch('your_app.views.Product.__init__', new=fake_init):
+        with patch('CS4300_backend.views.Product.__init__', new=fake_init):
             # Also patch fetch_nutrition_data to do nothing
-            with patch('your_app.views.Product.fetch_nutrition_data', return_value=None):
+            with patch('CS4300_backend.views.Product.fetch_nutrition_data', return_value=None):
                 data = {'barcode': '123456789'}
                 response = self.client.post(self.url, data, format='json')
                 self.assertEqual(response.status_code, status.HTTP_201_CREATED)
