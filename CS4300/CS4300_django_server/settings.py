@@ -8,8 +8,6 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
-this is test two
-hope this works
 """
 
 from pathlib import Path
