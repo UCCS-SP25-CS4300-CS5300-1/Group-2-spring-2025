@@ -20,7 +20,6 @@ function App() {
                     <Route path="/nutrition" element={<Nutrition />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/nutrition" element={<Nutrition />} />
                     <Route path="*" element={<Home />} />
                 </Routes>
             </HashRouter>
