@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"; // ✅ import Link
 import "./navbar.css";
 import Logout from "../pages/auth/logout/logout";
 
@@ -6,14 +7,12 @@ function Navbar() {
     return (
         <nav className="navbar">
             <ul className="navbar-left">
-                <li><a href="/">Home</a></li>
-                <li><a href="/scanner">Scanner</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
-
-
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/scanner">Scanner</Link></li>
+                <li><Link to="/about">About</Link></li>
+                <li><Link to="/contact">Contact</Link></li>
+                <li><Link to="/login">Login</Link></li>
+                <li><Link to="/register">Register</Link></li>
             </ul>
             <ul className="navbar-right">
                 <li><Logout /></li>

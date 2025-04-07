@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import "./barcodeScanner.css";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
@@ -70,7 +70,7 @@ function Scanner() {
       const data = await fetchBarcodeData(input);
 
       if (data) {
-                navigate(`/Group-2-spring-2025/nutrition`, { state: { barcodeData: data } });
+          navigate("/nutrition", { state: { barcodeData: data } });
             } else {
                 alert("Product not found or error fetching data.");
             }
@@ -96,8 +96,8 @@ function Scanner() {
         <button class="signup-btn">Sign Up</button>
       </div>
       <div class="bottom-links">
-        <a class="faq-btn" href="faq">FAQ</a>
-        <a class="about-btn" href="about">About</a>
+          <Link className="faq-btn" to="/faq">FAQ</Link>
+          <Link className="about-btn" to="/about">About</Link>
       </div>
     </div>
   );
