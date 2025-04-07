@@ -58,8 +58,7 @@ def request_code_review(diff, client):
                     f"{diff}"
                 )}
             ],
-            max_completion_tokens=2048,
-            temperature=0.2
+            max_completion_tokens=2048
         )
         return response.choices[0].message.content
 
@@ -75,19 +74,15 @@ def post_review_comments(pr, review_comments):
 
 def main():
     try:
-        # Initialize required variables
+
         client, g, repo_name, pr_id = initialize()
 
-        # Get repository and pull request
         repo, pr = get_repo_and_pull_request(g, repo_name, pr_id)
 
-        # Fetch files changed in the PR
         diff = fetch_files_from_pr(pr)
 
-        # Request code review from OpenAI
         review_comments = request_code_review(diff, client)
 
-        # Post the review comments as a GitHub PR comment
         post_review_comments(pr, review_comments)
 
         print("Code review posted successfully.")
