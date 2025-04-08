@@ -35,7 +35,7 @@ class ProductSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         instance.barcode = validated_data.get('barcode', instance.barcode)
         instance.fetch_nutrition_data()
-        instance.fetch_heath_score()
+        instance.fetch_health_score()
         instance.fetch_health_score_summary()
         return instance
 
