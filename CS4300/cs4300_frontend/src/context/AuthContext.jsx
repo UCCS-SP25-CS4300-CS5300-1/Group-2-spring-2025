@@ -4,12 +4,13 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
-        return localStorage.getItem("authToken") !== null;
+        return localStorage.getItem("token") !== null;
     });
 
     useEffect(() => {
         if (!isAuthenticated) {
-            localStorage.removeItem("authToken");
+            localStorage.removeItem("token");
+            console.log("removed token from localStorage");
         }
     }, [isAuthenticated]);
 
