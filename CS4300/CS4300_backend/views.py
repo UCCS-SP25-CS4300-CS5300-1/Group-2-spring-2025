@@ -13,7 +13,6 @@ from .models import ScannedItem
 from .serializers import ScannedItemSerializer
 from rest_framework.permissions import IsAuthenticated
 
-
 class ImagescanView(APIView):
     def post(self, request, format=None):
         image = request.FILES.get('file')
@@ -40,6 +39,8 @@ class ProductView(APIView):
         # Create and populate the Product object
         product = Product(barcode)
         product.fetch_nutrition_data()  # Fetch data from the external API
+        product.fetch_health_score()  #Fetch data from OpenAI
+        product.fetch_health_score_summary()
 
         # Serialize and return product data
         serializer = ProductSerializer(product)

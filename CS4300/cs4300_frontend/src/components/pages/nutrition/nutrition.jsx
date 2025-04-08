@@ -13,6 +13,7 @@ function Nutrition() {
     const [score, setScore] = useState("5");
     const [alerts, setAlerts] = useState(["No alerts available"]);
     const [nutrition, setNutrition] = useState(["No nutrition data available"]);
+    const [summary, setSummary] = useState("No Summary Available");
 
     // Effect to update state when barcodeData changes
     useEffect(() => {
@@ -20,8 +21,9 @@ function Nutrition() {
             // Assuming barcodeData has a name and nutrition_data string
             setName(barcodeData.name || "Unknown Food");
             setImageSrc(barcodeData.image || foodImage);
-            setScore(barcodeData.nutrition_score_fr || "N/A");
+            setScore(barcodeData.health_score || "N/A");
             setAlerts(barcodeData.alerts || ["No alerts available"]);
+            setSummary(barcodeData.health_score_summary || "No summary available");
 
             // Parse the nutrition data from the JSON string
             const nutritionData = barcodeData.nutrition_data ? JSON.parse(barcodeData.nutrition_data) : {};
@@ -44,7 +46,8 @@ function Nutrition() {
                 <h1>{name}</h1>
                 <img id="food-image" src={imageSrc} alt="Food Image" />
                 <div className="score-box">
-                    <label id="food-score">Score: {score}</label>
+                    <div id="food-score">{score}</div>
+                    <div id="food-score-summary">{summary}</div>
                 </div>
             </div>
             <div className="right-section">
