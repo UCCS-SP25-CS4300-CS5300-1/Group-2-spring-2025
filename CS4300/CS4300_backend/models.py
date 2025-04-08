@@ -1,10 +1,19 @@
+import os
+
 import requests
 import json
+
+from openai import OpenAI
 from pyzbar import pyzbar
 import cv2
 import numpy as np
 from django.db import models
 from django.contrib.auth.models import User
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+api_key = os.getenv('OPENAI_API_KEY')
 
 class imageScan:
     def __init__(self):
@@ -58,6 +67,30 @@ class Product:
             self.name = "Unknown Product"
             self.nutrition_data = "No Data Available"
 
+    def fetch_health_score(self):
+        # Initialize OpenAI client
+        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+        prompt = (
+            "Generate a health score on a scale from 1-10 and a summary of its health factors based on this "
+            "information about the food:"
+            f"Product name: {self.name}"
+            f"Product Nutrition Data: {self.nutrition_data}"
+        )
+
+        #Send prompt to openAI o3-mini
+        try:
+            response = client.chat.completions.create(
+                model="o3-mini",
+                messages=[
+                    {"role": "system", "content": "You are a nutrition expert analyzing health factors of food products."},
+                    {"role": "user", "content": prompt}
+                ]
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            print("Error fetching health score: ", e)
+            self.health_score = "Unable to fetch health score"
 
 class ScannedItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
