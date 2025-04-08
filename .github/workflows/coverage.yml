@@ -18,35 +18,37 @@ jobs:
       actions: write
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+          cache-dependency-path: requirements.txt
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest pytest-cov django djangorestframework pytest-django requests django-cors-headers pyzbar opencv-python numpy
-        sudo apt-get update -y
-        sudo apt-get install -y libzbar-dev
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          sudo apt-get update -y
+          sudo apt-get install -y libzbar-dev
 
-    - name: Set DJANGO_SETTINGS_MODULE environment variable
-      run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
+      - name: Set DJANGO_SETTINGS_MODULE environment variable
+        run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
-    - name: Run migrations
-      run: cd CS4300/ |
-           python manage.py makemigrations
-           python manage.py migrate --noinput
+      - name: Run migrations
+        run: |
+          cd CS4300/
+          python manage.py makemigrations
+          python manage.py migrate --noinput
 
+      - name: Run tests with coverage (Console (asked for in sprint requirements) and XML report)
+        run: pytest --cov=. --cov-report=term --cov-report=xml:coverage.xml --cov-fail-under=80
 
-    - name: Run tests with coverage (Console (asked for in sprint requirements) and XML report)
-      run: pytest --cov=. --cov-report=term --cov-report=xml:coverage.xml --cov-fail-under=80
-
-    - name: Post coverage comment using pytest-coverage-comment
-      uses: MishaKav/pytest-coverage-comment@v1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        pytest-xml-coverage-path: coverage.xml
+      - name: Post coverage comment using pytest-coverage-comment
+        uses: MishaKav/pytest-coverage-comment@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pytest-xml-coverage-path: coverage.xml
