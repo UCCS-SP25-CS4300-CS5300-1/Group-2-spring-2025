@@ -126,8 +126,8 @@ function BarcodeHistory() {
                 <button className="signup-btn">Sign Up</button>
             </div>
             <div className="bottom-links">
-                <a className="faq-btn" href="faq">FAQ</a>
-                <a className="about-btn" href="about">About</a>
+                <a className="faq-btn" href="/#/contact">FAQ</a>
+                <a className="about-btn" href="/#/about">About</a>
             </div>
         </div>
     );
