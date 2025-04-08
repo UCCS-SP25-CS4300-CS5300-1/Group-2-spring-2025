@@ -19,7 +19,17 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  color: #406C35;  /* Changed to Kale Green for basic text color */
+  color: #000000; /* Set text color to black */
+}
+
+/* Default Containers for all pages */
+.page-section {
+  text-align: left;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  width: 90%;
 }
 
 /* Home Container */
