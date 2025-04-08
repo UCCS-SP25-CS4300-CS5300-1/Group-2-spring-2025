@@ -12,6 +12,7 @@ body {
 .barcode-app {
   display: flex;
   flex-direction: column;
+  background-color: #ffffff
   align-items: center;
   margin-top: 30px;
 }
