@@ -61,14 +61,30 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://uccs-sp25-cs4300-cs5300-1.github.io",
-    "http://localhost:5173",
+    "http://localhost:5173"
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://uccs-sp25-cs4300-cs5300-1.github.io",
+    "http://localhost:5173"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ALLOW_ALL_ORIGINS = True
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
-CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = "None"
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'None'
+
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
 
 ROOT_URLCONF = 'CS4300_django_server.urls'
 

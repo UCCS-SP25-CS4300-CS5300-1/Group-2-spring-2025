@@ -3,6 +3,8 @@ import json
 from pyzbar import pyzbar
 import cv2
 import numpy as np
+from django.db import models
+from django.contrib.auth.models import User
 
 class imageScan:
     def __init__(self):
@@ -16,7 +18,7 @@ class imageScan:
                 return obj.data.decode('utf-8')
 
         try:
-            image.seek(0) 
+            image.seek(0)
         except:
             print("Invalid Image")
             return None
@@ -33,7 +35,7 @@ class imageScan:
 
         # this ended up being an issue with a perfect barcode image, grabbing pictures of real barcodes works better than a machine generated one.
         # OCR worked great for my testing images but terrible with real images, this does not work with testing images but works great with real images.
-        # Who woulda thought... 
+        # Who woulda thought...
 
         return barcode if barcode else None
 
@@ -55,4 +57,18 @@ class Product:
         else:
             self.name = "Unknown Product"
             self.nutrition_data = "No Data Available"
+
+
+class ScannedItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    barcode = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
+    favorite = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.barcode})"
+
+    class Meta:
+        ordering = ['-created_at']
 

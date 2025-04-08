@@ -2,7 +2,8 @@
 
 from rest_framework import serializers
 from .models import Product
-        
+from .models import ScannedItem
+
 
 class ProductSerializer(serializers.Serializer):
     barcode = serializers.CharField(max_length=20)
@@ -24,3 +25,9 @@ class ProductSerializer(serializers.Serializer):
         instance.barcode = validated_data.get('barcode', instance.barcode)
         instance.fetch_nutrition_data()
         return instance
+
+
+class ScannedItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScannedItem
+        fields = ['id', 'barcode', 'name', 'favorite']

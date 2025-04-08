@@ -3,3 +3,5 @@
 ./CS4300/node_modules/
 __pycache__/
 *.pyc
+*.sql
+db.sqlite3

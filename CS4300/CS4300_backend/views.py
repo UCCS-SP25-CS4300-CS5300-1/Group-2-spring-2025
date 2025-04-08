@@ -9,6 +9,10 @@ from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
+from .models import ScannedItem
+from .serializers import ScannedItemSerializer
+from rest_framework.permissions import IsAuthenticated
+
 
 class ImagescanView(APIView):
     def post(self, request, format=None):
@@ -27,20 +31,18 @@ class ImagescanView(APIView):
 
         serializer = ProductSerializer(product)
 
-        return Response(serializer.data, status = status.HTTP_200_OK)
-        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-        
 
 class ProductView(APIView):
+
     def get(self, request, barcode, format=None):
-        # Create the Product object
+        # Create and populate the Product object
         product = Product(barcode)
-        product.fetch_nutrition_data()  # Fetch nutrition data from the API
+        product.fetch_nutrition_data()  # Fetch data from the external API
 
-        # Serialize the Product object
+        # Serialize and return product data
         serializer = ProductSerializer(product)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -93,7 +95,61 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return JsonResponse({"message": "Login successful"})
+            token = get_token(request)
+            return JsonResponse({"message": "Login successful", "token": token})
         else:
             return JsonResponse({"error": "Invalid credentials"}, status=401)
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+class SaveScannedItemView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        barcode = request.data.get('barcode')
+        if not barcode:
+            return Response({'error': 'No barcode provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Optionally, you can fetch the product data to extract additional info like product name
+        product = Product(barcode)
+        product.fetch_nutrition_data()
+
+        # Save the scanned item to the user's history, creating one if it doesn't exist
+        scanned_item = ScannedItem.objects.create(
+            user=request.user,
+            barcode=barcode,
+            name=product.name
+        )
+
+        serializer = ScannedItemSerializer(scanned_item)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class UserScannedItemsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        scanned_items = ScannedItem.objects.filter(user=request.user)
+        serializer = ScannedItemSerializer(scanned_items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk, format=None):
+        try:
+            scanned_item = ScannedItem.objects.get(pk=pk, user=request.user)
+            scanned_item.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ScannedItem.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, pk, format=None):
+        try:
+            scanned_item = ScannedItem.objects.get(pk=pk, user=request.user)
+        except ScannedItem.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data
+        scanned_item.favorite = data.get('favorite', scanned_item.favorite)
+        scanned_item.save()
+
+        serializer = ScannedItemSerializer(scanned_item)
+        return Response(serializer.data, status=status.HTTP_200_OK)
