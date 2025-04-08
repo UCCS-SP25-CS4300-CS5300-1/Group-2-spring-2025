@@ -87,7 +87,7 @@ class Product:
                     {"role": "user", "content": prompt}
                 ]
             )
-            return response.choices[0].message.content
+            self.health_score = response.choices[0].message.content
         except Exception as e:
             print("Error fetching health score: ", e)
             self.health_score = "Unable to fetch health score"

@@ -20,7 +20,7 @@ function Nutrition() {
             // Assuming barcodeData has a name and nutrition_data string
             setName(barcodeData.name || "Unknown Food");
             setImageSrc(barcodeData.image || foodImage);
-            setScore(barcodeData.nutrition_score_fr || "N/A");
+            setScore(barcodeData.health_score || "N/A");
             setAlerts(barcodeData.alerts || ["No alerts available"]);
 
             // Parse the nutrition data from the JSON string
@@ -44,7 +44,7 @@ function Nutrition() {
                 <h1>{name}</h1>
                 <img id="food-image" src={imageSrc} alt="Food Image" />
                 <div className="score-box">
-                    <label id="food-score">Score: {score}</label>
+                    <label id="food-score">{score}</label>
                 </div>
             </div>
             <div className="right-section">
