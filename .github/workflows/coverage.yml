@@ -37,7 +37,7 @@ jobs:
       run: echo "DJANGO_SETTINGS_MODULE=CS4300_django_server.settings" >> $GITHUB_ENV
 
     - name: Run migrations
-      run: cd CS4300/
+      run: cd CS4300/ |
            python manage.py makemigrations
            python manage.py migrate --noinput
 
