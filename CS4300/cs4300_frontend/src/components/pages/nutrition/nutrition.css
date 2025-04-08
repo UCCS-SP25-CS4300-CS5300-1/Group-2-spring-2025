@@ -1,9 +1,9 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
+    background-color: #CAE4C5; /* Pastel Mint */
     font-family: 'Roboto', sans-serif;
-    color: #333;
+    color: #406C35; /* Kale Green */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,7 +16,7 @@ body {
     flex-direction: row;
     align-items: flex-start;
     gap: 40px;
-    background-color: #fff;
+    background-color: #ECE2B1; /* Soft Cream */
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
@@ -31,7 +31,7 @@ body {
 }
 
 .food-alerts, .nutrition-facts {
-    background: #ffffff;
+    background: #CAE4C5; /* Pastel Mint */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -39,13 +39,13 @@ body {
 
 .food-alerts h3, .nutrition-facts h3 {
     font-size: 1.2rem;
-    color: #555;
+    color: #254222; /* Forest Depth */
     margin-bottom: 10px;
 }
 
 .food-alerts p, .nutrition-facts p {
     font-size: 0.9rem;
-    color: #666;
+    color: #406C35; /* Kale Green */
 }
 
 .main-section {
@@ -67,27 +67,27 @@ body {
 h1 {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #333;
+    color: #254222; /* Forest Depth */
     text-align: center;
     margin-bottom: 20px;
 }
 
 .score-box {
     margin-top: 10px;
-    background: #ffffff;
+    background: #CAE4C5; /* Pastel Mint */
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     text-align: center;
     font-size: 1rem;
-    color: #444;
+    color: #406C35; /* Kale Green */
 }
 
 button {
     padding: 10px 20px;
     font-size: 1rem;
-    background-color: #007bff;
+    background-color: #99CC66; /* Leafy Mint */
     color: white;
     border: none;
     border-radius: 5px;
@@ -97,5 +97,5 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #406C35; /* Kale Green */
 }
