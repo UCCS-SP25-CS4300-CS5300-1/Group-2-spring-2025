@@ -92,6 +92,8 @@ class Product:
             print("Error fetching health score: ", e)
             self.health_score = "Unable to fetch health score"
 
+        return self.health_score
+
     def fetch_health_score_summary(self):       #this will give a summary/justification of the health score generated above
         # Initialize OpenAI client
         client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
