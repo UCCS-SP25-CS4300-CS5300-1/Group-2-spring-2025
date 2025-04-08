@@ -1,6 +1,6 @@
 from django.test import TestCase
 from unittest.mock import patch, MagicMock
-from CS4300_backend.serializers import ProductSerializer
+from ..serializers import ProductSerializer
 
 class ProductSerializerTest(TestCase):
     @patch("CS4300_backend.serializers.Product")

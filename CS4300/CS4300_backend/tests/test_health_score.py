@@ -2,6 +2,9 @@ import os
 import pytest
 from unittest.mock import patch, MagicMock
 from ..models import Product
+from dotenv import load_dotenv
+load_dotenv()
+
 
 @pytest.fixture
 def mock_openai_client():
