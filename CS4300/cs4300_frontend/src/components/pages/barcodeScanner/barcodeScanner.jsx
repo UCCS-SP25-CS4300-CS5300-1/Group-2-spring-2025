@@ -137,15 +137,10 @@ function Scanner() {
             </button>
             <div className="button-group">
                 <button className="account-btn">Account</button>
-                <button className="signup-btn">Sign Up</button>
             </div>
             <div className="bottom-links">
-                <Link className="faq-btn" to="/faq">
-                    FAQ
-                </Link>
-                <Link className="about-btn" to="/about">
-                    About
-                </Link>
+                <Link className="faq-btn" to="/contact">FAQ</Link>
+                <Link className="about-btn" to="/about">About</Link>
             </div>
         </div>
     );
