@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // <-- ADD THIS
 import './barcodeHistory.css';
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
@@ -25,7 +26,6 @@ const fetchScannedItems = async () => {
     }
 };
 
-// Function to delete a scanned item
 const deleteScannedItem = async (id) => {
     try {
         const csrfToken = localStorage.getItem("token");
@@ -42,7 +42,6 @@ const deleteScannedItem = async (id) => {
     }
 };
 
-// Function to update a scanned item (e.g., toggle favorite)
 const updateScannedItem = async (id, data) => {
     try {
         const csrfToken = localStorage.getItem("token");
@@ -81,13 +80,11 @@ function BarcodeHistory() {
         fetchItems();
     }, []);
 
-    // Handle deletion: update the state after deleting the item on the server
     const handleDelete = async (id) => {
         await deleteScannedItem(id);
         setScannedItems(scannedItems.filter(item => item.id !== id));
     };
 
-    // Handle toggling the favorite flag using the PATCH endpoint
     const handleFavoriteToggle = async (id, favorite) => {
         // Send a PATCH request with the toggled favorite state
         const updatedItem = await updateScannedItem(id, { favorite: !favorite });
@@ -123,11 +120,10 @@ function BarcodeHistory() {
             </ul>
             <div className="button-group">
                 <button className="account-btn">Account</button>
-                <button className="signup-btn">Sign Up</button>
             </div>
             <div className="bottom-links">
-                <a className="faq-btn" href="faq">FAQ</a>
-                <a className="about-btn" href="about">About</a>
+                <Link className="faq-btn" to="/contact">FAQ</Link>
+                <Link className="about-btn" to="/about">About</Link>
             </div>
         </div>
     );
