@@ -1,9 +1,6 @@
 name: Post Django Test Results to Pull Request
 
 on:
-  push:
-    branches:
-      - develop
   pull_request:
     branches:
       - develop
