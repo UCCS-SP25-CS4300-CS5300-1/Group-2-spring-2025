@@ -120,7 +120,6 @@ function BarcodeHistory() {
             </ul>
             <div className="button-group">
                 <button className="account-btn">Account</button>
-                <button className="signup-btn">Sign Up</button>
             </div>
             <div className="bottom-links">
                 <Link className="faq-btn" to="/contact">FAQ</Link>
