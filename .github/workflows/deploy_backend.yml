@@ -49,7 +49,7 @@ jobs:
             pip install -r $DEPLOY_PATH/CS4300/requirements.txt
 
             echo "Running migrations..."
-          python $DEPLOY_PATH/CS4300/manage.py makemigrations
+            python $DEPLOY_PATH/CS4300/manage.py makemigrations
             python $DEPLOY_PATH/CS4300/manage.py migrate
             
             echo "Restarting services..."
