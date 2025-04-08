@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../context/AuthContext.jsx";
 import { login } from "../../../utils/auth_utils";
+import './login.css';
 
 function Login() {
     const [username, setUsername] = useState("");
