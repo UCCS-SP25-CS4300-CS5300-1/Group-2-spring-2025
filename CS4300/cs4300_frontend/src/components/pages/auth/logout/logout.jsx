@@ -9,7 +9,7 @@ function Logout() {
 
     const handleLogout = async () => {
         await logout();
-        localStorage.removeItem("authToken");
+        localStorage.removeItem("token");
         setIsAuthenticated(false);
         setRedirect(true);
         console.log("User logged out");
