@@ -72,8 +72,8 @@ class Product:
         client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
         prompt = (
-            "Generate a health score, scaled from 1-10, 2 newlines, and a summary (75-100 words) of its health factors based on "
-            "this information about the food:"
+            "Generate a health score, scaled from 1-10, 2 newlines, and a summary (75-100 words) of its health factors "
+            "based on this information about the food:"
             f"Product name: {self.name}"
             f"Product Nutrition Data: {self.nutrition_data}"
         )
