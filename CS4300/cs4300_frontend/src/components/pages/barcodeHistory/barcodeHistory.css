@@ -1,0 +1,103 @@
+/* Barcode History Container */
+.scanned-items-app {
+    max-width: 700px;
+    margin: 40px auto;
+    font-family: 'Roboto', sans-serif;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.scanned-items-app h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #003366;
+}
+
+/* List Styling */
+.scanned-items-list {
+    list-style: none;
+    padding: 0;
+}
+
+.scanned-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.scanned-item span {
+    flex: 1;
+    color: #333;
+    font-size: 1rem;
+}
+
+/* Buttons */
+.scanned-item button {
+    padding: 8px 12px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.favorite-btn {
+    background-color: #003366;
+    color: #fff;
+}
+
+.favorite-btn:hover {
+    background-color: #00172e;
+}
+
+.delete-btn {
+    background-color: #c0392b;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #a83225;
+}
+
+/* Bottom Grouped Buttons/Links */
+.button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.button-group button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 25px;
+    background-color: #003366;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-group button:hover {
+    background-color: #00172e;
+}
+
+.bottom-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.bottom-links a {
+    margin: 0 10px;
+    color: #003366;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.bottom-links a:hover {
+    color: #00172e;
+}

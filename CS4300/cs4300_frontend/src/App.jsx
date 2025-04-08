@@ -8,6 +8,7 @@ import Register from "./components/pages/auth/register/register.jsx";
 import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import BarcodeHistory from "./components/pages/barcodeHistory/barcodeHistory.jsx";
+import "./App.css";
 
 function App() {
     return (

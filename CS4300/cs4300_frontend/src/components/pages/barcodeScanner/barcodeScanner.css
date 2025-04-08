@@ -8,12 +8,7 @@ body {
   overscroll-behavior: none;
 }
 
-/* Home Container */
-.home {
-  text-align: center;
-}
-
-/* Main Section */
+/* Barcode Scanner Container */
 .barcode-app {
   display: flex;
   flex-direction: column;
@@ -21,30 +16,41 @@ body {
   margin-top: 30px;
 }
 
-/* Description Section */
+/* Input Section */
 .input-group {
   max-width: 600px;
+  width: 100%;
   text-align: left;
   margin-top: 50px;
   padding: 35px;
   margin-bottom: 35px;
-  background: white;
+  background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.input-group h2 {
-  color: #003366;
-  font-size: 26px;
-  margin-bottom: 120px;
+.input-group label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
 }
 
-.input-group p {
-  font-size: 17px;
-  line-height: 1.7;
+.input-group input[type="file"],
+.input-group input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 15px;
 }
 
-.scan-btn, .account-btn, .signup-btn, .faq-btn, .about-btn {
+/* Buttons */
+.scan-btn,
+.account-btn,
+.signup-btn,
+.faq-btn,
+.about-btn {
   padding: 10px 20px;
   font-size: 16px;
   border: none;
@@ -56,10 +62,15 @@ body {
   margin: 5px;
 }
 
-.scan-btn:hover, .account-btn:hover, .signup-btn:hover, .faq-btn:hover, .about-btn:hover {
+.scan-btn:hover,
+.account-btn:hover,
+.signup-btn:hover,
+.faq-btn:hover,
+.about-btn:hover {
   background-color: #00172e;
 }
 
+/* Groups */
 .button-group {
   display: flex;
   gap: 20px;
