@@ -40,6 +40,7 @@ class ProductView(APIView):
         product = Product(barcode)
         product.fetch_nutrition_data()  # Fetch data from the external API
         product.fetch_health_score()  #Fetch data from OpenAI
+        product.fetch_health_score_summary()
 
         # Serialize and return product data
         serializer = ProductSerializer(product)
