@@ -1,0 +1,59 @@
+name: Deploy Django Backend to Azure VM
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'CS4300/CS4300_backend/**'
+      - 'CS4300/CS4300_django_server/**'
+
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'CS4300/CS4300_backend/**'
+      - 'CS4300/CS4300_django_server/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Azure VM
+        run: |
+          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
+            set -e
+            DEPLOY_PATH="/home/$USER/Group-2-spring-2025"
+            VENV_PATH="$DEPLOY_PATH/CS4300/venv/bin/activate"
+      
+            cd $DEPLOY_PATH
+            
+            echo "Pulling latest changes..."
+            git pull
+
+            echo "Activating virtual environment..."
+            source $VENV_PATH
+
+            echo "Installing dependencies..."
+            pip install -r $DEPLOY_PATH/CS4300/requirements.txt
+
+            echo "Running migrations..."
+            python $DEPLOY_PATH/CS4300/manage.py migrate
+            
+            echo "Restarting services..."
+            sudo systemctl restart gunicorn
+            sudo systemctl reload nginx
+            
+            echo "Deployment complete."
+          EOF

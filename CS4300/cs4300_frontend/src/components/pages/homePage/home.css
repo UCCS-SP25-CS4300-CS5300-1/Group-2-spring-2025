@@ -1,0 +1,171 @@
+/* Global Styles and Animated Gradient Background */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body {
+  /* Gradient using Pastel Mint, Leafy Mint, and Sage Wash */
+  background: linear-gradient(270deg, #CAE4C5, #99CC66, #8BAF68);
+  background-size: 600% 600%;
+  animation: gradient 16s ease infinite;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  color: #000000; /* Set text color to black */
+}
+
+/* Default Containers for all pages */
+.page-section {
+  text-align: left;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  width: 90%;
+}
+
+/* Home Container */
+.home {
+  text-align: center;
+}
+
+/* Main Section */
+.home-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 550px;
+}
+
+/* Background Image Styling */
+.home-image {
+  width: 78%;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  align-content: center;
+}
+
+.faded-background-image {
+  position: fixed;
+  top: 9vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+  border-radius: 2%;
+}
+
+/* Big Bold Title Overlay */
+.faded-title {
+  position: fixed;
+  top: 30vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8rem;
+  font-weight: bold;
+  color: #b9dba3;
+  text-shadow: 4px 4px 16px rgb(191, 222, 176);
+  transition: opacity 0.3s ease-in-out;
+  z-index: 0;
+  width: 90%;
+  -webkit-text-stroke: 4px #426d36;
+}
+
+/* Subtitle Under the Title */
+.faded-subtitle {
+  position: fixed;
+  top: 50vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3rem;
+  color: #b8d9a2;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 0;
+  -webkit-text-stroke: 2px #436d37;
+}
+
+
+/* Description Section */
+.home-description {
+  text-align: left;
+  margin-top: 120vh;
+  padding: 20px;
+  background: #ECE2B1;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+}
+
+.home-description h2 {
+  color: #406C35;
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+
+.home-description p {
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* Overview Section */
+.home-overview {
+  margin: 20px auto;
+  padding: 20px;
+  background: #ECE2B1;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  width: 90%;
+}
+
+.home-overview h2 {
+  color: #406C35;
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+
+.home-overview p {
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* Features Section */
+.home-features {
+  margin: 20px auto;
+  padding: 20px;
+  background: #ECE2B1;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  width: 90%;
+}
+
+.home-features h2 {
+  color: #406C35;
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+
+.home-features .feature {
+  margin-bottom: 20px;
+}
+
+.home-features .feature h3 {
+  font-size: 22px;
+  color: #406C35;
+  margin-bottom: 8px;
+}
+
+.home-features .feature p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Footer Section */

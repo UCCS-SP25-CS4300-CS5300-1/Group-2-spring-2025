@@ -1,0 +1,13 @@
+[run]
+
+# Exclude test files and review.py from coverage since they are not part of the coverage metrics
+
+omit =
+    tests/*
+    test_*.py
+    review.py
+    manage.py
+    wsgi.py
+    asgi.py
+    urls.py
+    settings.py

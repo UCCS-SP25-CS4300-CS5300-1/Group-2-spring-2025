@@ -1,0 +1,149 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./barcodeScanner.css";
+import {getCSRFToken} from "../../utils/auth_utils.jsx";
+
+const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
+
+// Public Product Lookup (Image or Text)
+const fetchBarcodeData = async (barcode) => {
+    if (typeof barcode !== "string") {
+        const formData = new FormData();
+        formData.append("file", barcode);
+
+        try {
+            const response = await fetch(`${API_URL}/imagescan/`, {
+                method: "POST",
+                body: formData,
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            console.log("Barcode Data:", data);
+            return data;
+        } catch (error) {
+            console.error("Error fetching barcode information:", error);
+            return null;
+        }
+    } else {
+        try {
+            const response = await fetch(`${API_URL}/product/${barcode}/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            console.log("Barcode Data:", data);
+            return data;
+        } catch (error) {
+            console.error("Error fetching barcode information:", error);
+            return null;
+        }
+    }
+};
+
+// this CSRF token shouldnt work but it doesnt and I dont wanna break it
+const saveScannedItem = async (barcode) => {
+    try {
+        const csrfToken = localStorage.getItem("token");
+        console.log("token sent to saved scanned item: ", csrfToken)
+        const response = await fetch(`${API_URL}/save-scanned-item/`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+            },
+            body: JSON.stringify({ barcode }),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to save scanned item");
+        }
+        const data = await response.json();
+        console.log("Saved scanned item:", data);
+        return data;
+    } catch (error) {
+        console.error("Error saving scanned item:", error);
+        return null;
+    }
+};
+
+
+function Scanner() {
+    const navigate = useNavigate();
+    const [inputValue, setInputValue] = useState("");
+
+    const inputChange = (event) => {
+        setInputValue(event.target.value);
+    };
+
+    const clicked = async () => {
+        const fileInput = document.getElementById("barcode-image");
+        const file = fileInput.files[0];
+        let input = inputValue;
+
+        if (!inputValue.trim()) {
+            if (!file) {
+                alert("Please enter a barcode number.");
+                return;
+            }
+            // If no text input, use the file upload.
+            input = file;
+        }
+        try {
+            // Fetch product data (public endpoint)
+            const data = await fetchBarcodeData(input);
+            if (data) {
+                // If user is authenticated, save the scanned item to history.
+                const token = localStorage.getItem("token");
+                if (token) {
+                    // Use the barcode from the input if it was text, otherwise from the fetched data.
+                    const barcodeToSave = typeof input === "string" ? input : data.barcode;
+                    await saveScannedItem(barcodeToSave);
+                }
+                // Navigate to the nutrition details page with the product data.
+                navigate("/nutrition", { state: { barcodeData: data } });
+            } else {
+                alert("Product not found or error fetching data.");
+            }
+        } catch (err) {
+            console.error("Error fetching barcode information: ", err);
+        }
+    };
+
+    return (
+        <div className="barcode-app">
+            <h2>Food Scanner</h2>
+            <div className="input-group">
+                <label htmlFor="barcode-image">Upload Barcode Image:</label>
+                <input type="file" id="barcode-image" accept="image/*" />
+                <div></div>
+                <label htmlFor="barcode-int">Input Barcode Number:</label>
+                <input
+                    type="text"
+                    id="barcode-int"
+                    placeholder="Enter UPC"
+                    onChange={inputChange}
+                />
+            </div>
+            <button className="scan-btn" onClick={clicked}>
+                Scan Barcode
+            </button>
+            <div className="button-group">
+                <button className="account-btn">Account</button>
+            </div>
+            <div className="bottom-links">
+                <Link className="faq-btn" to="/contact">FAQ</Link>
+                <Link className="about-btn" to="/about">About</Link>
+            </div>
+        </div>
+    );
+}
+
+export default Scanner;

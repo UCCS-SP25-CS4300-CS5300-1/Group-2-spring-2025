@@ -1,0 +1,71 @@
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import "./nutrition.css";
+import foodImage from "../../../assets/foodImage.jpg";
+
+function Nutrition() {
+    const location = useLocation();
+    const barcodeData = location.state?.barcodeData || {}; // Retrieve barcode data
+
+    // Define state for food info
+    const [imageSrc, setImageSrc] = useState(foodImage);
+    const [name, setName] = useState("");
+    const [score, setScore] = useState("5");
+    const [alerts, setAlerts] = useState(["No alerts available"]);
+    const [nutrition, setNutrition] = useState(["No nutrition data available"]);
+    const [summary, setSummary] = useState("No Summary Available");
+
+    // Effect to update state when barcodeData changes
+    useEffect(() => {
+        if (barcodeData) {
+            // Assuming barcodeData has a name and nutrition_data string
+            setName(barcodeData.name || "Unknown Food");
+            setImageSrc(barcodeData.image || foodImage);
+            setScore(barcodeData.health_score || "N/A");
+            setAlerts(barcodeData.alerts || ["No alerts available"]);
+            setSummary(barcodeData.health_score_summary || "No summary available");
+
+            // Parse the nutrition data from the JSON string
+            const nutritionData = barcodeData.nutrition_data ? JSON.parse(barcodeData.nutrition_data) : {};
+            setNutrition([
+                `Energy: ${nutritionData["energy-kcal"]} kcal`,
+                `Fat: ${nutritionData.fat} g`,
+                `Carbohydrates: ${nutritionData.carbohydrates} g`,
+                `Proteins: ${nutritionData.proteins} g`,
+                `Sugars: ${nutritionData.sugars} g`,
+                `Fiber: ${nutritionData.fiber} g`,
+                `Salt: ${nutritionData.salt} g`
+            ]);
+        }
+    }, [barcodeData]);
+
+    return (
+        <div className="food-container">
+            <div className="main-section">
+                {/* Display the food name */}
+                <h1>{name}</h1>
+                <img id="food-image" src={imageSrc} alt="Food Image" />
+                <div className="score-box">
+                    <div id="food-score">{score}</div>
+                    <div id="food-score-summary">{summary}</div>
+                </div>
+            </div>
+            <div className="right-section">
+                <div className="food-alerts" id="food-alerts">
+                    <h3>Food Alerts</h3>
+                    {alerts.map((alert, index) => (
+                        <p key={index}>{alert}</p>
+                    ))}
+                </div>
+                <div className="nutrition-facts" id="nutrition-facts">
+                    <h3>Nutrition Facts</h3>
+                    {nutrition.map((fact, index) => (
+                        <p key={index}>{fact}</p>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default Nutrition;
