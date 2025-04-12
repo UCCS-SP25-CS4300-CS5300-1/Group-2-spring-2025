@@ -44,4 +44,23 @@ $ curl http://127.0.0.1:8000/api/product/1234567890/
 Required installs over base django:
 pip install pyzbar opencv-python numpy
 
-The API takes an image and returns the food value based on the barcode. It utilizes the product information on the server to speed things up.
+The API takes an image in the body of an HTTP request and returns the food value based on the barcode. It utilizes the product information on the server to speed things up.
+
+## What is it?
+The image scanner allows for a UPC/EAN13 image to be uploaded to the server and retrieve the product data back. It utilizes the same lookup functions as the text barcode lookup but allows for barcode image uploads rather than typing in the barcode.
+
+## How does it work?
+Simply attach an image to the body of the HTTP request sent to the server:
+```javascript
+const formData = new FormData();
+formData.append("file", barcode);
+const response = await fetch(`http://127.0.0.1:8000/api/imagescan/`, {
+      method: "POST",
+      body: formData,
+});
+if (!response.ok) {
+      throw new Error("Network response was not ok");
+}
+const data = await response.json();
+// this will return the same format and information as above but with an easier input method
+```

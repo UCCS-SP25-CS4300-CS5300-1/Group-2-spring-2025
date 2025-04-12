@@ -13,6 +13,15 @@ from .models import ScannedItem
 from .serializers import ScannedItemSerializer
 from rest_framework.permissions import IsAuthenticated
 
+def getProductInfo(product):
+    # Create and populate the Product object
+    product.fetch_nutrition_data()  # Fetch data from the external API
+    product.fetch_health_score()  #Fetch data from OpenAI
+    product.fetch_health_score_summary()
+
+    # Serialize and return product data
+    serializer = ProductSerializer(product)
+
 class ImagescanView(APIView):
     def post(self, request, format=None):
         image = request.FILES.get('file')
@@ -24,11 +33,8 @@ class ImagescanView(APIView):
 
         if not upc:
             return Response({'error': 'No barcode found'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
-        product = Product(upc)
-        product.fetch_nutrition_data()
-
-        serializer = ProductSerializer(product)
+        
+        serializer = getProductInfo(Product(upc))
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -36,14 +42,7 @@ class ImagescanView(APIView):
 class ProductView(APIView):
 
     def get(self, request, barcode, format=None):
-        # Create and populate the Product object
-        product = Product(barcode)
-        product.fetch_nutrition_data()  # Fetch data from the external API
-        product.fetch_health_score()  #Fetch data from OpenAI
-        product.fetch_health_score_summary()
-
-        # Serialize and return product data
-        serializer = ProductSerializer(product)
+        serializer = getProductInfo(Product(barcode))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
