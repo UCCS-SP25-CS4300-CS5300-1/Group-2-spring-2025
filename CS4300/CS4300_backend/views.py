@@ -20,7 +20,7 @@ def getProductInfo(product):
     product.fetch_health_score_summary()
 
     # Serialize and return product data
-    serializer = ProductSerializer(product)
+    return ProductSerializer(product)
 
 class ImagescanView(APIView):
     def post(self, request, format=None):
