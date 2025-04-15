@@ -1,7 +1,4 @@
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from .serializers import ProductSerializer
 from .models import Product, imageScan
 from django.contrib.auth import authenticate, login, logout
@@ -9,18 +6,20 @@ from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from .models import ScannedItem
 from .serializers import ScannedItemSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from .models import ScannedItem
+import openai
+import os
+
 
 def getProductInfo(product):
-    # Create and populate the Product object
     product.fetch_nutrition_data()  # Fetch data from the external API
-    product.fetch_health_score()  #Fetch data from OpenAI
-    product.fetch_health_score_summary()
-
-    # Serialize and return product data
     return ProductSerializer(product)
+
 
 class ImagescanView(APIView):
     def post(self, request, format=None):
@@ -33,7 +32,7 @@ class ImagescanView(APIView):
 
         if not upc:
             return Response({'error': 'No barcode found'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-        
+
         serializer = getProductInfo(Product(upc))
 
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -44,6 +43,66 @@ class ProductView(APIView):
     def get(self, request, barcode, format=None):
         serializer = getProductInfo(Product(barcode))
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class HealthScoreOnlyView(APIView):
+    def post(self, request):
+        name = request.data.get("name")
+        nutrition_data = request.data.get("nutrition_data")
+
+        if not name or not nutrition_data:
+            return Response({"error": "Missing product name or nutrition data"}, status=400)
+
+        prompt_score = (
+            "Generate a health score scaled from 1-10 in the format 'x.x/10' and no summary or extra information "
+            f"based on this information about the food: "
+            f"Product name: {name}\nProduct Nutrition Data: {nutrition_data}"
+        )
+
+        try:
+            client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+            score_response = client.chat.completions.create(
+                model="o3-mini",
+                messages=[
+                    {"role": "system", "content": "You are a nutrition expert."},
+                    {"role": "user", "content": prompt_score}
+                ]
+            )
+            score = score_response.choices[0].message.content
+            return Response({"health_score": score}, status=200)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
+
+
+class HealthSummaryOnlyView(APIView):
+    def post(self, request):
+        name = request.data.get("name")
+        nutrition_data = request.data.get("nutrition_data")
+
+        if not name or not nutrition_data:
+            return Response({"error": "Missing product name, nutrition data, or health score"}, status=400)
+
+        prompt_summary = (
+            "Generate a 50-75 word summary about the health factors of the below food product based on a potential"
+            "health score that you generate, without stating the score unnecessarily.\n"
+            f"Product name: {name}\n Product Nutrition Data: {nutrition_data}"
+        )
+
+        try:
+            client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+            summary_response = client.chat.completions.create(
+                model="o3-mini",
+                messages=[
+                    {"role": "system", "content": "You are a nutrition expert."},
+                    {"role": "user", "content": prompt_summary}
+                ]
+            )
+            summary = summary_response.choices[0].message.content
+            return Response({"health_score_summary": summary}, status=200)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
 
 
 def csrf_token_view(request):

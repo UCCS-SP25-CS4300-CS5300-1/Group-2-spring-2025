@@ -29,7 +29,6 @@ class imageScan:
         try:
             image.seek(0)
         except:
-            print("Invalid Image")
             return None
 
         filebytes = image.read()
@@ -37,7 +36,6 @@ class imageScan:
 
         img = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
         if img is None:
-            print("cv2 failed to decode image")
             return None
 
         barcode = decode(img)
@@ -67,59 +65,7 @@ class Product:
             self.name = "Unknown Product"
             self.nutrition_data = "No Data Available"
 
-    def fetch_health_score(self):       #this will generate a decimal health score out of 10 based on the food product
-        # Initialize OpenAI client
-        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-        prompt = (
-            "Generate a health score scaled from 1-10 in the format 'x.x/10' and no summary or extra information "
-            "based on this information about the food:"
-            f"Product name: {self.name}"
-            f"Product Nutrition Data: {self.nutrition_data}"
-        )
-
-        #Send prompt to openAI o3-mini
-        try:
-            response = client.chat.completions.create(
-                model="o3-mini",
-                messages=[
-                    {"role": "system", "content": "You are a nutrition expert analyzing health factors of food products."},
-                    {"role": "user", "content": prompt}
-                ]
-            )
-            self.health_score = response.choices[0].message.content
-        except Exception as e:
-            print("Error fetching health score: ", e)
-            self.health_score = "Unable to fetch health score"
-
-        return self.health_score
-
-    def fetch_health_score_summary(self):       #this will give a summary/justification of the health score generated above
-        # Initialize OpenAI client
-        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
-        prompt = (
-            "Generate a 50-75 word summary about the health factors of the below food product based on this health "
-            "score of it, without restating the score unnecessarily "
-            f"({self.health_score})"
-            f"Product name: {self.name}"
-            f"Product Nutrition Data: {self.nutrition_data}"
-        )
-
-        #Send prompt to openAI o3-mini
-        try:
-            response = client.chat.completions.create(
-                model="o3-mini",
-                messages=[
-                    {"role": "system", "content": "You are a nutrition expert analyzing health factors of food products."},
-                    {"role": "user", "content": prompt}
-                ]
-            )
-            self.health_score_summary = response.choices[0].message.content
-            print(self.health_score_summary)
-        except Exception as e:
-            print("Error fetching health score summary: ", e)
-            self.health_score_summary = "Unable to generate health score summary"
 
 class ScannedItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
