@@ -105,7 +105,9 @@ function Scanner() {
                 if (token) {
                     // Use the barcode from the input if it was text, otherwise from the fetched data.
                     const barcodeToSave = typeof input === "string" ? input : data.barcode;
-                    await saveScannedItem(barcodeToSave);
+                    saveScannedItem(barcodeToSave).catch((err) => {
+                        console.warn("Failed to save scanned item:", err);
+                    });
                 }
                 // Navigate to the nutrition details page with the product data.
                 navigate("/nutrition", { state: { barcodeData: data } });

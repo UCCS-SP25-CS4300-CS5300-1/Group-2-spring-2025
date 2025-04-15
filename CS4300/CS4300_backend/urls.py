@@ -21,4 +21,7 @@ urlpatterns = [
     # payload: {"favorite": true} would set the item as favorite to the user-scanned-items/<pk> endpoint
     # delete request would delete the item from the history
     path('user-scanned-items/<int:pk>/', views.UserScannedItemsView.as_view(), name='scanned-item-detail'),
+
+    path("health-score/", views.HealthScoreOnlyView.as_view(), name="health_score"),
+    path("health-summary/", views.HealthSummaryOnlyView.as_view(), name="health_summary"),
 ]

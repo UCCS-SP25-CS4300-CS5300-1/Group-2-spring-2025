@@ -3,48 +3,91 @@ import { useLocation } from "react-router-dom";
 import "./nutrition.css";
 import foodImage from "../../../assets/foodImage.jpg";
 
+const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
+
 function Nutrition() {
     const location = useLocation();
-    const barcodeData = location.state?.barcodeData || {}; // Retrieve barcode data
+    const barcodeData = location.state?.barcodeData || {};
 
-    // Define state for food info
     const [imageSrc, setImageSrc] = useState(foodImage);
     const [name, setName] = useState("");
-    const [score, setScore] = useState("5");
+    const [score, setScore] = useState("Loading...");
     const [alerts, setAlerts] = useState(["No alerts available"]);
     const [nutrition, setNutrition] = useState(["No nutrition data available"]);
-    const [summary, setSummary] = useState("No Summary Available");
+    const [summary, setSummary] = useState("Loading...");
 
-    // Effect to update state when barcodeData changes
     useEffect(() => {
-        if (barcodeData) {
-            // Assuming barcodeData has a name and nutrition_data string
-            setName(barcodeData.name || "Unknown Food");
-            setImageSrc(barcodeData.image || foodImage);
-            setScore(barcodeData.health_score || "N/A");
-            setAlerts(barcodeData.alerts || ["No alerts available"]);
-            setSummary(barcodeData.health_score_summary || "No summary available");
+        if (!barcodeData) return;
 
-            // Parse the nutrition data from the JSON string
-            const nutritionData = barcodeData.nutrition_data ? JSON.parse(barcodeData.nutrition_data) : {};
-            setNutrition([
-                `Energy: ${nutritionData["energy-kcal"]} kcal`,
-                `Fat: ${nutritionData.fat} g`,
-                `Carbohydrates: ${nutritionData.carbohydrates} g`,
-                `Proteins: ${nutritionData.proteins} g`,
-                `Sugars: ${nutritionData.sugars} g`,
-                `Fiber: ${nutritionData.fiber} g`,
-                `Salt: ${nutritionData.salt} g`
-            ]);
+        const foodName = barcodeData.name || "Unknown Food";
+        const nutritionString = barcodeData.nutrition_data || "{}";
+        const nutritionData = JSON.parse(nutritionString);
+        const csrfToken = localStorage.getItem("token");
+
+        setName(foodName);
+        setImageSrc(barcodeData.image || foodImage);
+        setAlerts(barcodeData.alerts || ["No alerts available"]);
+
+        const normalizedNutrition = {};
+        for (const key in nutritionData) {
+            if (Object.hasOwn(nutritionData, key)) {
+                normalizedNutrition[key.toLowerCase()] = nutritionData[key];
+            }
         }
+
+        setNutrition([
+            `Energy: ${normalizedNutrition["energy-kcal"] != null ? `${normalizedNutrition["energy-kcal"]} kcal` : "N/A"}`,
+            `Fat: ${normalizedNutrition["fat"] != null ? `${normalizedNutrition["fat"]} g` : "N/A"}`,
+            `Carbohydrates: ${normalizedNutrition["carbohydrates"] != null ? `${normalizedNutrition["carbohydrates"]} g` : "N/A"}`,
+            `Proteins: ${normalizedNutrition["proteins"] != null ? `${normalizedNutrition["proteins"]} g` : "N/A"}`,
+            `Sugars: ${normalizedNutrition["sugars"] != null ? `${normalizedNutrition["sugars"]} g` : "N/A"}`,
+            `Fiber: ${normalizedNutrition["fiber"] != null ? `${normalizedNutrition["fiber"]} g` : "N/A"}`,
+            `Salt: ${normalizedNutrition["salt"] != null ? `${normalizedNutrition["salt"]} g` : "N/A"}`
+        ]);
+
+
+
+        // Call health-score and health-summary in parallel
+        Promise.all([
+            fetch(`${API_URL}/health-score/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken,
+                },
+                credentials: "include",
+                body: JSON.stringify({ name: foodName, nutrition_data: nutritionString })
+            }),
+            fetch(`${API_URL}/health-summary/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken,
+                },
+                credentials: "include",
+                body: JSON.stringify({ name: foodName, nutrition_data: nutritionString })
+            })
+        ])
+            .then(async ([scoreRes, summaryRes]) => {
+                const scoreData = await scoreRes.json();
+                const summaryData = await summaryRes.json();
+
+                setScore(scoreData?.health_score || "Unavailable");
+                setSummary(summaryData?.health_score_summary || "Unable to generate summary");
+            })
+            .catch((err) => {
+                console.error(err);
+                setScore("Unavailable");
+                setSummary("Error generating health data.");
+            });
+
     }, [barcodeData]);
 
     return (
         <div className="food-container">
             <div className="main-section">
-                {/* Display the food name */}
                 <h1>{name}</h1>
-                <img id="food-image" src={imageSrc} alt="Food Image" />
+                <img id="food-image" src={imageSrc} alt="Food" />
                 <div className="score-box">
                     <div id="food-score">{score}</div>
                     <div id="food-score-summary">{summary}</div>

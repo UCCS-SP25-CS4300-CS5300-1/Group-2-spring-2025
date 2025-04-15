@@ -21,22 +21,16 @@ class ProductSerializer(serializers.Serializer):
 
         #get necessary info about product
         product.fetch_nutrition_data()
-        product.fetch_health_score()
-        product.fetch_health_score_summary()
 
         return {
             'barcode': product.barcode,
             'name': product.name,
             'nutrition_data': product.nutrition_data,
-            'health_score': product.health_score,
-            'health_score_summary': product.health_score_summary
         }
 
     def update(self, instance, validated_data):
         instance.barcode = validated_data.get('barcode', instance.barcode)
         instance.fetch_nutrition_data()
-        instance.fetch_health_score()
-        instance.fetch_health_score_summary()
         return instance
 
 
