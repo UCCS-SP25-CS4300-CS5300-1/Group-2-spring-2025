@@ -29,7 +29,6 @@ class imageScan:
         try:
             image.seek(0)
         except:
-            print("Invalid Image")
             return None
 
         filebytes = image.read()
@@ -37,7 +36,6 @@ class imageScan:
 
         img = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
         if img is None:
-            print("cv2 failed to decode image")
             return None
 
         barcode = decode(img)
