@@ -23,10 +23,12 @@ function Nutrition() {
         const nutritionString = barcodeData.nutrition_data || "{}";
         const nutritionData = JSON.parse(nutritionString);
         const csrfToken = localStorage.getItem("token");
+        const alertsString = barcodeData.alerts || "{}";
+        const alertsData = JSON.parse(alertsString)
 
         setName(foodName);
         setImageSrc(barcodeData.image || foodImage);
-        setAlerts(barcodeData.alerts || ["No alerts available"]);
+        setAlerts(alertsData || ["No alerts available"]);
 
         const normalizedNutrition = {};
         for (const key in nutritionData) {

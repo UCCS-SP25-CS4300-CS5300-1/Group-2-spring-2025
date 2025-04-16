@@ -40,19 +40,20 @@ class imageScan:
 
         barcode = decode(img)
 
-        # this ended up being an issue with a perfect barcode image, grabbing pictures of real barcodes works better than a machine generated one.
-        # OCR worked great for my testing images but terrible with real images, this does not work with testing images but works great with real images.
-        # Who woulda thought...
-
         return barcode if barcode else None
 
-
+def parseAllergens(product_data):
+    allergens_list = product_data.get("allergens_from_ingredients", {})
+    allergens_list = allergens_list.replace("en:", "").split(", ") # split into a list and remove any en:
+    allergens_list = list(set(allergens_list)) # remove duplicates
+    allergens = json.dumps(allergens_list)
+    return allergens
 
 class Product:
     def __init__(self, barcode):
         self.barcode = barcode
 
-    def fetch_nutrition_data(self):
+    def fetch_nutrition_data(self, customAllergens=None):
         url = f"https://world.openfoodfacts.net/api/v2/product/{self.barcode}.json"
         response = requests.get(url)
 
@@ -61,11 +62,18 @@ class Product:
             product_data = data.get('product', {})
             self.name = product_data.get('product_name', 'Unknown')
             self.nutrition_data = json.dumps(product_data.get('nutriments', {}))
+            self.alerts = parseAllergens(product_data)
         else:
             self.name = "Unknown Product"
             self.nutrition_data = "No Data Available"
+            self.alerts = "No Data Available"
 
+class Allergen(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    Allergen = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.Allergen
 
 class ScannedItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

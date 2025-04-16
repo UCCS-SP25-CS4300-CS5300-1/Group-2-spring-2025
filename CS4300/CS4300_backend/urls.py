@@ -13,6 +13,9 @@ urlpatterns = [
     path('check-auth/', views.check_auth_view, name='check-auth'),
     path('register/', views.register_view, name='register'),
 
+    # Allergen update URLs
+    path('add-allergen/', views.SaveAllergenView.as_view(), name="add-allergen"),
+
     # Scanned Item URLs
     path('save-scanned-item/', views.SaveScannedItemView.as_view(), name='save-scanned-item'),
     path('user-scanned-items/', views.UserScannedItemsView.as_view(), name='user-scanned-items'),

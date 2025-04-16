@@ -6,12 +6,12 @@ from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from .serializers import ScannedItemSerializer
+from .serializers import ScannedItemSerializer, AllergenSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .models import ScannedItem
+from .models import ScannedItem, Allergen
 import openai
 import os
 
@@ -212,3 +212,19 @@ class UserScannedItemsView(APIView):
 
         serializer = ScannedItemSerializer(scanned_item)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class SaveAllergenView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        allergen = request.data.get('allergen')
+        if not allergen:
+            return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Save the scanned item to the user's history, creating one if it doesn't exist
+        AllergyObj = Allergen.objects.create(
+            allergen = allergen
+        )
+
+        serializer = AllergenSerializer(AllergyObj)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
