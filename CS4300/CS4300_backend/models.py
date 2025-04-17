@@ -42,16 +42,24 @@ class imageScan:
 
         return barcode if barcode else None
 
-def parseAllergens(product_data):
+def parseAllergens(product_data, custom):
     allergens_list = product_data.get("allergens_from_ingredients", {})
     allergens_list = allergens_list.replace("en:", "").split(", ") # split into a list and remove any en:
     allergens_list = list(set(allergens_list)) # remove duplicates
+    ingredients = json.dumps(product_data.get("ingredients", {}))
+    ingredients = "".join(ingredients).lower()
+    if custom and type(custom) == list:
+        for allergen in custom:
+            if str(allergen).lower() in ingredients:
+                allergens_list.append(str(allergen))
     allergens = json.dumps(allergens_list)
     return allergens
 
 class Product:
-    def __init__(self, barcode):
+    # note for later: "image_front_url" sometimes gives an image for the food
+    def __init__(self, barcode, allergens=None):
         self.barcode = barcode
+        self.customAllergens = allergens
 
     def fetch_nutrition_data(self, customAllergens=None):
         url = f"https://world.openfoodfacts.net/api/v2/product/{self.barcode}.json"
@@ -62,7 +70,7 @@ class Product:
             product_data = data.get('product', {})
             self.name = product_data.get('product_name', 'Unknown')
             self.nutrition_data = json.dumps(product_data.get('nutriments', {}))
-            self.alerts = parseAllergens(product_data)
+            self.alerts = parseAllergens(product_data, (customAllergens or self.customAllergens))
         else:
             self.name = "Unknown Product"
             self.nutrition_data = "No Data Available"
@@ -70,10 +78,10 @@ class Product:
 
 class Allergen(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    Allergen = models.CharField(max_length=100)
+    allergen = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.Allergen
+        return f'{self.allergen}'
 
 class ScannedItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

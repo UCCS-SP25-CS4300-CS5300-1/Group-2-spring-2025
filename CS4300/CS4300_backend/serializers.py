@@ -27,7 +27,7 @@ class ProductSerializer(serializers.Serializer):
             'barcode': product.barcode,
             'name': product.name,
             'nutrition_data': product.nutrition_data,
-            'alerts': product.alerts,
+            'alerts': product.alerts
         }
 
     def update(self, instance, validated_data):

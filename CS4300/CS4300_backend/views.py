@@ -16,7 +16,11 @@ import openai
 import os
 
 
-def getProductInfo(product):
+def getProductInfo(barcode, request):
+    allergens = None
+    if request.user != "AnonymousUser":
+        allergens = list(Allergen.objects.filter(user=request.user))
+    product = Product(barcode, allergens=allergens)
     product.fetch_nutrition_data()  # Fetch data from the external API
     return ProductSerializer(product)
 
@@ -33,7 +37,7 @@ class ImagescanView(APIView):
         if not upc:
             return Response({'error': 'No barcode found'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        serializer = getProductInfo(Product(upc))
+        serializer = getProductInfo(upc, request)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -41,9 +45,8 @@ class ImagescanView(APIView):
 class ProductView(APIView):
 
     def get(self, request, barcode, format=None):
-        serializer = getProductInfo(Product(barcode))
+        serializer = getProductInfo(barcode, request)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class HealthScoreOnlyView(APIView):
     def post(self, request):
@@ -221,10 +224,26 @@ class SaveAllergenView(APIView):
         if not allergen:
             return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Save the scanned item to the user's history, creating one if it doesn't exist
         AllergyObj = Allergen.objects.create(
-            allergen = allergen
+            user=request.user,
+            allergen=str(allergen)
         )
 
         serializer = AllergenSerializer(AllergyObj)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class AllergensView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        allergens = Allergen.objects.filter(user=request.user)
+        serializer = AllergenSerializer(allergens, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, format=None):
+        try:
+            allergen = Allergen.objects.get(user=request.user)
+            allergen.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Allergen.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
