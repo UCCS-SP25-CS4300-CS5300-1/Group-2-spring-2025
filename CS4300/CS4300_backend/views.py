@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import ProductSerializer
-from .models import Product, imageScan
+from .models import Product, imageScan, ScannedItem, Allergen
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
@@ -11,7 +11,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .models import ScannedItem, Allergen
 import openai
 import os
 
