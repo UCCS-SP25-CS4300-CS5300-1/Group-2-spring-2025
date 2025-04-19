@@ -215,7 +215,8 @@ class UserScannedItemsView(APIView):
         serializer = ScannedItemSerializer(scanned_item)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-class SaveAllergenView(APIView):
+
+class AllergensView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
@@ -230,9 +231,6 @@ class SaveAllergenView(APIView):
 
         serializer = AllergenSerializer(AllergyObj)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-class AllergensView(APIView):
-    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         allergens = Allergen.objects.filter(user=request.user)

@@ -5,11 +5,11 @@ import {getCSRFToken} from "../../utils/auth_utils.jsx";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
-// this CSRF token shouldnt work but it doesnt and I dont wanna break it
+// sending the token because it seems to be required for the API to work
 const saveAllergen = async (allergen) => {
     try {
         const csrfToken = localStorage.getItem("token");
-        const response = await fetch(`${API_URL}/add-allergen/`, {
+        const response = await fetch(`${API_URL}/user-allergens/`, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -37,7 +37,6 @@ const getAllergens = async () => {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken,
             }
         });
         if (!response.ok) {
@@ -56,9 +55,6 @@ const deleteAllergen = async (id) => {
         await fetch(`${API_URL}/user-allergens/`, {
             method: 'DELETE',
             credentials: "include",
-            headers: {
-                "X-CSRFToken": csrfToken,
-            }
         });
     } catch (error) {
         console.error(error);
