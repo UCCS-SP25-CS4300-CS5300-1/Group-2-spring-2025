@@ -6,7 +6,7 @@ import {getCSRFToken} from "../../utils/auth_utils.jsx";
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
 // Public Product Lookup (Image or Text)
-const fetchBarcodeData = async (barcode) => {
+export const fetchBarcodeData = async (barcode) => {
     if (typeof barcode !== "string") {
         const formData = new FormData();
         formData.append("file", barcode);
