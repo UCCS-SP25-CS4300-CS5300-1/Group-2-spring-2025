@@ -1,13 +1,30 @@
-import React, { useState } from "react";
-import { fetchBarcodeData } from "../barcodeScanner/barcodeScanner.jsx"; // Reuse the fetchBarcodeData function
+// Compare.jsx
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { fetchBarcodeData } from "../barcodeScanner/barcodeScanner.jsx";
 import "./compare.css";
 import foodImage from "../../../assets/foodImage.jpg";
 
 const Compare = () => {
+    const location = useLocation();
+    const leftBarcode = location.state?.leftBarcode;
+
     const [leftData, setLeftData] = useState(null);
     const [rightData, setRightData] = useState(null);
     const [leftInput, setLeftInput] = useState("");
     const [rightInput, setRightInput] = useState("");
+
+    // On mount, if we received a barcode, fetch its data automatically
+    useEffect(() => {
+        if (leftBarcode) {
+            setLeftInput(leftBarcode);
+            fetchBarcodeData(leftBarcode)
+                .then(data => {
+                    if (data) setLeftData(data);
+                })
+                .catch(err => console.error("Error fetching left barcode data:", err));
+        }
+    }, [leftBarcode]);
 
     const handleScan = async (side) => {
         const fileInput = document.getElementById(`${side}-barcode-image`);
@@ -45,21 +62,21 @@ const Compare = () => {
         }
 
         const nutritionData = JSON.parse(data.nutrition_data || "{}");
-        const normalizedNutrition = {};
+        const normalized = {};
         for (const key in nutritionData) {
             if (Object.hasOwn(nutritionData, key)) {
-                normalizedNutrition[key.toLowerCase()] = nutritionData[key];
+                normalized[key.toLowerCase()] = nutritionData[key];
             }
         }
 
-        const nutritionFacts = [
-            `Energy: ${normalizedNutrition["energy-kcal"] != null ? `${normalizedNutrition["energy-kcal"].toFixed(1)} kcal` : "N/A"}`,
-            `Fat: ${normalizedNutrition["fat"] != null ? `${normalizedNutrition["fat"].toFixed(1)} g` : "N/A"}`,
-            `Carbohydrates: ${normalizedNutrition["carbohydrates"] != null ? `${normalizedNutrition["carbohydrates"].toFixed(1)} g` : "N/A"}`,
-            `Proteins: ${normalizedNutrition["proteins"] != null ? `${normalizedNutrition["proteins"].toFixed(1)} g` : "N/A"}`,
-            `Sugars: ${normalizedNutrition["sugars"] != null ? `${normalizedNutrition["sugars"].toFixed(1)} g` : "N/A"}`,
-            `Fiber: ${normalizedNutrition["fiber"] != null ? `${normalizedNutrition["fiber"].toFixed(1)} g` : "N/A"}`,
-            `Salt: ${normalizedNutrition["salt"] != null ? `${normalizedNutrition["salt"].toFixed(1)} g` : "N/A"}`
+        const facts = [
+            `Energy: ${normalized["energy-kcal"] != null ? `${normalized["energy-kcal"].toFixed(1)} kcal` : "N/A"}`,
+            `Fat: ${normalized["fat"] != null ? `${normalized["fat"].toFixed(1)} g` : "N/A"}`,
+            `Carbohydrates: ${normalized["carbohydrates"] != null ? `${normalized["carbohydrates"].toFixed(1)} g` : "N/A"}`,
+            `Proteins: ${normalized["proteins"] != null ? `${normalized["proteins"].toFixed(1)} g` : "N/A"}`,
+            `Sugars: ${normalized["sugars"] != null ? `${normalized["sugars"].toFixed(1)} g` : "N/A"}`,
+            `Fiber: ${normalized["fiber"] != null ? `${normalized["fiber"].toFixed(1)} g` : "N/A"}`,
+            `Salt: ${normalized["salt"] != null ? `${normalized["salt"].toFixed(1)} g` : "N/A"}`
         ];
 
         return (
@@ -71,9 +88,7 @@ const Compare = () => {
                 <div className="right-section">
                     <div className="nutrition-facts">
                         <h3>Nutrition Facts</h3>
-                        {nutritionFacts.map((fact, index) => (
-                            <p key={index}>{fact}</p>
-                        ))}
+                        {facts.map((fact, i) => <p key={i}>{fact}</p>)}
                     </div>
                 </div>
             </div>
@@ -89,7 +104,7 @@ const Compare = () => {
                         type="text"
                         placeholder="Enter Barcode"
                         value={leftInput}
-                        onChange={(e) => setLeftInput(e.target.value)}
+                        onChange={e => setLeftInput(e.target.value)}
                     />
                     <label htmlFor="left-barcode-image">Upload Barcode Image:</label>
                     <input type="file" id="left-barcode-image" accept="image/*" />
@@ -101,7 +116,7 @@ const Compare = () => {
                         type="text"
                         placeholder="Enter Barcode"
                         value={rightInput}
-                        onChange={(e) => setRightInput(e.target.value)}
+                        onChange={e => setRightInput(e.target.value)}
                     />
                     <label htmlFor="right-barcode-image">Upload Barcode Image:</label>
                     <input type="file" id="right-barcode-image" accept="image/*" />
