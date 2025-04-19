@@ -110,7 +110,12 @@ function Scanner() {
                     });
                 }
                 // Navigate to the nutrition details page with the product data.
-                navigate("/nutrition", { state: { barcodeData: data } });
+                if (data.name !== "Unknown Product"){
+                    navigate("/nutrition", { state: { barcodeData: data } });
+                } else {
+                    alert("Product not found or error fetching data.");
+                }
+
             } else {
                 alert("Product not found or error fetching data.");
             }
