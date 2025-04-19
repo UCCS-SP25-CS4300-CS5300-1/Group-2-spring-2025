@@ -1,52 +1,46 @@
+// src/components/barcodeHistory/BarcodeHistory.jsx
+
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // <-- ADD THIS
+import { Link } from 'react-router-dom';
 import './barcodeHistory.css';
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
-// Function to fetch scanned items from the Django backend
-const fetchScannedItems = async () => {
+async function fetchScannedItems() {
     try {
         const csrfToken = localStorage.getItem("token");
-        console.log("token sent to fetch scanned items: ", csrfToken);
-        const response = await fetch(`${API_URL}/user-scanned-items/`, {
+        const res = await fetch(`${API_URL}/user-scanned-items/`, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRFToken": csrfToken,
             }
         });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching scanned items:', error);
+        if (!res.ok) throw new Error('Failed to fetch');
+        return await res.json();
+    } catch (err) {
+        console.error("fetchScannedItems:", err);
         return [];
     }
-};
+}
 
-const deleteScannedItem = async (id) => {
+async function deleteScannedItem(id) {
     try {
         const csrfToken = localStorage.getItem("token");
-        console.log("token sent to delete scanned item: ", csrfToken);
         await fetch(`${API_URL}/user-scanned-items/${id}/`, {
             method: 'DELETE',
             credentials: "include",
-            headers: {
-                "X-CSRFToken": csrfToken,
-            }
+            headers: { "X-CSRFToken": csrfToken }
         });
-    } catch (error) {
-        console.error('Error deleting scanned item:', error);
+    } catch (err) {
+        console.error("deleteScannedItem:", err);
     }
-};
+}
 
-const updateScannedItem = async (id, data) => {
+async function updateScannedItem(id, data) {
     try {
         const csrfToken = localStorage.getItem("token");
-        console.log("token sent to update scanned item: ", csrfToken);
-        const response = await fetch(`${API_URL}/user-scanned-items/${id}/`, {
+        const res = await fetch(`${API_URL}/user-scanned-items/${id}/`, {
             method: 'PATCH',
             credentials: "include",
             headers: {
@@ -55,43 +49,38 @@ const updateScannedItem = async (id, data) => {
             },
             body: JSON.stringify(data)
         });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error updating scanned item:', error);
+        if (!res.ok) throw new Error('Failed to update');
+        return await res.json();
+    } catch (err) {
+        console.error("updateScannedItem:", err);
         return null;
     }
-};
+}
 
-function BarcodeHistory() {
+export default function BarcodeHistory() {
     const [scannedItems, setScannedItems] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch scanned items on mount
+    // load list on mount
     useEffect(() => {
-        const fetchItems = async () => {
-            const data = await fetchScannedItems();
-            setScannedItems(data);
+        (async () => {
+            const items = await fetchScannedItems();
+            setScannedItems(items);
             setLoading(false);
-        };
-
-        fetchItems();
+        })();
     }, []);
 
     const handleDelete = async (id) => {
         await deleteScannedItem(id);
-        setScannedItems(scannedItems.filter(item => item.id !== id));
+        setScannedItems(prev => prev.filter(item => item.id !== id));
     };
 
     const handleFavoriteToggle = async (id, favorite) => {
-        // Send a PATCH request with the toggled favorite state
-        const updatedItem = await updateScannedItem(id, { favorite: !favorite });
-        if (updatedItem) {
-            setScannedItems(scannedItems.map(item =>
-                item.id === id ? updatedItem : item
-            ));
+        const updated = await updateScannedItem(id, { favorite: !favorite });
+        if (updated) {
+            setScannedItems(prev =>
+                prev.map(item => item.id === id ? updated : item)
+            );
         }
     };
 
@@ -106,27 +95,38 @@ function BarcodeHistory() {
                 {scannedItems.map(item => (
                     <li key={item.id} className="scanned-item">
                         <span>{item.name} - {item.barcode}</span>
+
                         <button
                             className="favorite-btn"
                             onClick={() => handleFavoriteToggle(item.id, item.favorite)}
                         >
-                            {item.favorite ? 'Unfavorite' : 'Favorite'}
+                            {item.favorite ? '★ Unfavorite' : '☆ Favorite'}
                         </button>
-                        <button className="delete-btn" onClick={() => handleDelete(item.id)}>
+
+                        <button
+                            className="delete-btn"
+                            onClick={() => handleDelete(item.id)}
+                        >
                             Delete
                         </button>
+
+                        {item.barcode && (
+                            <Link
+                                to="/compare"
+                                state={{ leftBarcode: item.barcode }}
+                                className="compare-btn"
+                            >
+                                Compare
+                            </Link>
+                        )}
                     </li>
                 ))}
             </ul>
-            <div className="button-group">
-                <button className="account-btn">Account</button>
-            </div>
+
             <div className="bottom-links">
-                <Link className="faq-btn" to="/contact">FAQ</Link>
-                <Link className="about-btn" to="/about">About</Link>
+                <Link to="/contact" className="faq-btn">FAQ</Link>
+                <Link to="/about" className="about-btn">About</Link>
             </div>
         </div>
     );
 }
-
-export default BarcodeHistory;
