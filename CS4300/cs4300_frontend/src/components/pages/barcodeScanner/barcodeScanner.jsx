@@ -8,6 +8,7 @@ const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 // Public Product Lookup (Image or Text)
 const fetchBarcodeData = async (barcode) => {
     const csrfToken = localStorage.getItem("token");
+export const fetchBarcodeData = async (barcode) => {
     if (typeof barcode !== "string") {
         const formData = new FormData();
         formData.append("file", barcode);
@@ -84,6 +85,7 @@ const saveScannedItem = async (barcode) => {
 function Scanner() {
     const navigate = useNavigate();
     const [inputValue, setInputValue] = useState("");
+    const [leftData, setLeftData] = useState(null);
 
     const inputChange = (event) => {
         setInputValue(event.target.value);
@@ -106,6 +108,7 @@ function Scanner() {
             // Fetch product data (public endpoint)
             const data = await fetchBarcodeData(input);
             if (data) {
+                setLeftData(data);
                 // If user is authenticated, save the scanned item to history.
                 const token = localStorage.getItem("token");
                 if (token) {
@@ -116,7 +119,12 @@ function Scanner() {
                     });
                 }
                 // Navigate to the nutrition details page with the product data.
-                navigate("/nutrition", { state: { barcodeData: data } });
+                if (data.name && !data.name.toLowerCase().includes("unknown")){
+                    navigate("/nutrition", { state: { barcodeData: data } });
+                } else {
+                    alert("Product not found or error fetching data.");
+                }
+
             } else {
                 alert("Product not found or error fetching data.");
             }

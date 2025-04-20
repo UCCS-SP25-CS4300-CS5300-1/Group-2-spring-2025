@@ -12,6 +12,8 @@ import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import BarcodeHistory from "./components/pages/barcodeHistory/barcodeHistory.jsx";
 import "./App.css";
+import compare from "./components/pages/compare/Compare.jsx";
+import Compare from "./components/pages/compare/Compare.jsx";
 
 function App() {
     return (
@@ -27,6 +29,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/account" element={<Account />} />
+                    <Route path="/compare" element={<Compare/>} />
                     <Route path="*" element={<Home />} />
                 </Routes>
             </HashRouter>

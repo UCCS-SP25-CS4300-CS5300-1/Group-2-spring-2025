@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import "./nutrition.css";
 import foodImage from "../../../assets/foodImage.jpg";
 
@@ -8,6 +8,7 @@ const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 function Nutrition() {
     const location = useLocation();
     const barcodeData = location.state?.barcodeData || {};
+    const navigate = useNavigate()
 
     const [imageSrc, setImageSrc] = useState(foodImage);
     const [name, setName] = useState("");
@@ -108,6 +109,12 @@ function Nutrition() {
                         <p key={index}>{fact}</p>
                     ))}
                 </div>
+            </div>
+            <div className="compare_button">
+                <button onClick={() =>
+                    navigate("/compare", { state: { leftBarcode: barcodeData.barcode}})}>
+                    Compare this with another food
+                </button>
             </div>
         </div>
     );
