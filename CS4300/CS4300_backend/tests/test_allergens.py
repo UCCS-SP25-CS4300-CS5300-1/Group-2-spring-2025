@@ -28,18 +28,20 @@ class saveAllergen(TestCase):
         self.crsf = self.client.get(reverse("csrf"))
 
     def test_saveAllergen(self):
-        response = self.client.post(self.url, 
-            data='{"allergen": "test"}', 
-            headers={"content_type":'application/json', 
-            'X-CSRFToken': self.crsf}
-        )
+        response = self.client.post(self.url, {'allergen': 'test'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(
+            Allergen.objects.filter(user=self.user, allergen='test').exists()
+        )
 
     def test_getAllergens(self):
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.json())
-        self.assertEqual(response.json())
-
-
-        
+    
+    def test_deleteAllergen(self):
+        response = self.client.delete(
+            self.url,
+            data=json.dumps({'allergen': 'test'}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

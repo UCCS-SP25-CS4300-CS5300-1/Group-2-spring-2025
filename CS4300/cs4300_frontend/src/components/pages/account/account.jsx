@@ -49,12 +49,18 @@ const getAllergens = async () => {
     }
 };
 
+// needs the token here as well
 const deleteAllergen = async (id) => {
     try {
         const csrfToken = localStorage.getItem("token");
         await fetch(`${API_URL}/user-allergens/`, {
             method: 'DELETE',
             credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+            },
+            body: JSON.stringify({allergen: id}),
         });
     } catch (error) {
         console.error(error);

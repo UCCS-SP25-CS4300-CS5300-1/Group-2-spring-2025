@@ -221,6 +221,8 @@ class AllergensView(APIView):
 
     def post(self, request, format=None):
         allergen = request.data.get('allergen')
+        if request.user == "AnonymousUser":
+            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
         if not allergen:
             return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -233,14 +235,22 @@ class AllergensView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get(self, request, format=None):
+        if request.user == "AnonymousUser":
+            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
         allergens = Allergen.objects.filter(user=request.user)
         serializer = AllergenSerializer(allergens, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, format=None):
+        if request.user == "AnonymousUser":
+            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            allergen = Allergen.objects.get(user=request.user)
+            todelete = request.data.get('allergen')
+            if not todelete:
+                return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+            allergen = Allergen.objects.get(user=request.user, allergen=str(todelete))
             allergen.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
         except Allergen.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
