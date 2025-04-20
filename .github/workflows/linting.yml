@@ -25,5 +25,4 @@ jobs:
 
       - name: Run Pylint
         run: |
-          cd CS4300
           python -m pylint CS4300
