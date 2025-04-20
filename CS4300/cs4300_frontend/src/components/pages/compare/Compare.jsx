@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { fetchBarcodeData } from "../barcodeScanner/barcodeScanner.jsx";
 import "./compare.css";
-import foodImage from "../../../assets/foodImage.jpg";
+import noImage from "../../../assets/no-image.jpg";
 
 const Compare = () => {
     const location = useLocation();
@@ -14,7 +14,6 @@ const Compare = () => {
     const [leftInput, setLeftInput] = useState("");
     const [rightInput, setRightInput] = useState("");
 
-    // On mount, if we received a barcode, fetch its data automatically
     useEffect(() => {
         if (leftBarcode) {
             setLeftInput(leftBarcode);
@@ -83,7 +82,15 @@ const Compare = () => {
             <div className="food-container">
                 <div className="main-section">
                     <h1>{data.name}</h1>
-                    <img id="food-image" src={data.image || foodImage} alt="Food" />
+                    <img
+                        id="food-image"
+                        src={data.image_url || noImage}
+                        alt="Food"
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = noImage;
+                        }}
+                    />
                 </div>
                 <div className="right-section">
                     <div className="nutrition-facts">

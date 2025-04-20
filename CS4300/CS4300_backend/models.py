@@ -40,6 +40,10 @@ class imageScan:
 
         barcode = decode(img)
 
+        # this ended up being an issue with a perfect barcode image, grabbing pictures of real barcodes works better than a machine generated one.
+        # OCR worked great for my testing images but terrible with real images, this does not work with testing images but works great with real images.
+        # Who woulda thought...
+
         return barcode if barcode else None
 
 def parseAllergens(product_data, custom):
@@ -58,6 +62,7 @@ def parseAllergens(product_data, custom):
 class Product:
     # note for later: "image_front_url" sometimes gives an image for the food
     def __init__(self, barcode, allergens=None):
+        self.image_url = None
         self.barcode = barcode
         self.customAllergens = allergens
 
@@ -71,6 +76,7 @@ class Product:
             self.name = product_data.get('product_name', 'Unknown')
             self.nutrition_data = json.dumps(product_data.get('nutriments', {}))
             self.alerts = parseAllergens(product_data, (customAllergens or self.customAllergens))
+            self.image_url = product_data.get('image_front_url')
         else:
             self.name = "Unknown Product"
             self.nutrition_data = "No Data Available"
