@@ -1,22 +1,25 @@
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import ProductSerializer
-from .models import Product, imageScan
+from .models import Product, imageScan, ScannedItem, Allergen
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from .serializers import ScannedItemSerializer
+from .serializers import ScannedItemSerializer, AllergenSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .models import ScannedItem
 import openai
 import os
 
 
-def getProductInfo(product):
+def getProductInfo(barcode, request):
+    allergens = None
+    if request.user != "AnonymousUser":
+        allergens = list(Allergen.objects.filter(user=request.user))
+    product = Product(barcode, allergens=allergens)
     product.fetch_nutrition_data()  # Fetch data from the external API
     return ProductSerializer(product)
 
@@ -33,7 +36,7 @@ class ImagescanView(APIView):
         if not upc:
             return Response({'error': 'No barcode found'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        serializer = getProductInfo(Product(upc))
+        serializer = getProductInfo(upc, request)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -41,9 +44,8 @@ class ImagescanView(APIView):
 class ProductView(APIView):
 
     def get(self, request, barcode, format=None):
-        serializer = getProductInfo(Product(barcode))
+        serializer = getProductInfo(barcode, request)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class HealthScoreOnlyView(APIView):
     def post(self, request):
@@ -212,3 +214,43 @@ class UserScannedItemsView(APIView):
 
         serializer = ScannedItemSerializer(scanned_item)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class AllergensView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        allergen = request.data.get('allergen')
+        if request.user == "AnonymousUser":
+            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+        if not allergen:
+            return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        AllergyObj = Allergen.objects.create(
+            user=request.user,
+            allergen=str(allergen)
+        )
+
+        serializer = AllergenSerializer(AllergyObj)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get(self, request, format=None):
+        if request.user == "AnonymousUser":
+            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+        allergens = Allergen.objects.filter(user=request.user)
+        serializer = AllergenSerializer(allergens, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, format=None):
+        if request.user == "AnonymousUser":
+            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            todelete = request.data.get('allergen')
+            if not todelete:
+                return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+            allergen = Allergen.objects.get(user=request.user, allergen=str(todelete))
+            allergen.delete()
+            return Response(status=status.HTTP_200_OK)
+        except Allergen.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)

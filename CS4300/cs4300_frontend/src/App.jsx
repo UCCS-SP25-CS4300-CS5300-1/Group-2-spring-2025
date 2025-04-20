@@ -7,6 +7,7 @@ import Scanner from "./components/pages/barcodeScanner/barcodeScanner";
 import Nutrition from "./components/pages/nutrition/nutrition";
 import Login from "./components/pages/auth/login/login.jsx";
 import Register from "./components/pages/auth/register/register.jsx";
+import Account from "./components/pages/account/account.jsx";
 import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import BarcodeHistory from "./components/pages/barcodeHistory/barcodeHistory.jsx";
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/history" element={<PrivateRoute><BarcodeHistory /></PrivateRoute>} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/account" element={<Account />} />
                     <Route path="/compare" element={<Compare/>} />
                     <Route path="*" element={<Home />} />
                 </Routes>

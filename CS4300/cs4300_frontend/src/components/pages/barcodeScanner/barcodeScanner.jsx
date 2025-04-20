@@ -6,8 +6,9 @@ import {getCSRFToken} from "../../utils/auth_utils.jsx";
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
 // Public Product Lookup (Image or Text)
+const fetchBarcodeData = async (barcode) => {
+    const csrfToken = localStorage.getItem("token");
 export const fetchBarcodeData = async (barcode) => {
-
     if (typeof barcode !== "string") {
         const formData = new FormData();
         formData.append("file", barcode);
@@ -15,6 +16,10 @@ export const fetchBarcodeData = async (barcode) => {
         try {
             const response = await fetch(`${API_URL}/imagescan/`, {
                 method: "POST",
+                credentials: "include",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                },
                 body: formData,
             });
             if (!response.ok) {
@@ -31,10 +36,11 @@ export const fetchBarcodeData = async (barcode) => {
         try {
             const response = await fetch(`${API_URL}/product/${barcode}/`, {
                 method: "GET",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken,
                 },
-                credentials: "include",
             });
             if (!response.ok) {
                 throw new Error("Network response was not ok");

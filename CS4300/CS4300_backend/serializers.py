@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 from .models import Product
-from .models import ScannedItem
+from .models import ScannedItem, Allergen
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,6 +13,7 @@ class ProductSerializer(serializers.Serializer):
     nutrition_data = serializers.JSONField(read_only=True)
     health_score = serializers.CharField(max_length=255, read_only=True)
     health_score_summary = serializers.CharField(max_length=255, read_only=True)
+    alerts = serializers.CharField(max_length=255, read_only=True)
 
     def create(self, validated_data):
         #Create product instance from given barcode
@@ -26,6 +27,7 @@ class ProductSerializer(serializers.Serializer):
             'barcode': product.barcode,
             'name': product.name,
             'nutrition_data': product.nutrition_data,
+            'alerts': product.alerts
         }
 
     def update(self, instance, validated_data):
@@ -33,6 +35,11 @@ class ProductSerializer(serializers.Serializer):
         instance.fetch_nutrition_data()
         return instance
 
+
+class AllergenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Allergen
+        fields = ["allergen"]
 
 class ScannedItemSerializer(serializers.ModelSerializer):
     class Meta:
