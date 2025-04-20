@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import "./nutrition.css";
-import foodImage from "../../../assets/foodImage.jpg";
+import noImage from "../../../assets/no-image.jpg";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
@@ -10,7 +10,7 @@ function Nutrition() {
     const barcodeData = location.state?.barcodeData || {};
     const navigate = useNavigate()
 
-    const [imageSrc, setImageSrc] = useState(foodImage);
+    const [imageSrc, setImageSrc] = useState(noImage);
     const [name, setName] = useState("");
     const [score, setScore] = useState("Loading...");
     const [alerts, setAlerts] = useState(["No alerts available"]);
@@ -28,7 +28,7 @@ function Nutrition() {
         const alertsData = JSON.parse(alertsString)
 
         setName(foodName);
-        setImageSrc(barcodeData.image || foodImage);
+        setImageSrc(barcodeData.image_url || noImage);
         setAlerts(alertsData || ["No alerts available"]);
 
         const normalizedNutrition = {};
@@ -90,7 +90,12 @@ function Nutrition() {
         <div className="food-container">
             <div className="main-section">
                 <h1>{name}</h1>
-                <img id="food-image" src={imageSrc} alt="Food" />
+                <img
+                    id="food-image"
+                    src={imageSrc}
+                    alt="Food"
+                    onError={() => setImageSrc(noImage)}
+                />
                 <div className="score-box">
                     <div id="food-score">{score}</div>
                     <div id="food-score-summary">{summary}</div>

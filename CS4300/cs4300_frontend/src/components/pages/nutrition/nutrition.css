@@ -58,8 +58,12 @@ body {
 }
 
 #food-image {
-    width: 180px;
-    height: 180px;
+    width: 30vh;
+    height: 30vh;
+    max-width: 30vh;
+    max-height: 30vh;
+    min-width: 30vh;
+    min-height: 30vh;
     border-radius: 10px;
     object-fit: cover;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -104,3 +108,4 @@ button:hover {
 .nutrition-section {
     min-width: 90vw;
 }
+

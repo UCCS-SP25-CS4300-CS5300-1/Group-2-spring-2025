@@ -20,7 +20,7 @@ def getProductInfo(barcode, request):
     if request.user != "AnonymousUser":
         allergens = list(Allergen.objects.filter(user=request.user))
     product = Product(barcode, allergens=allergens)
-    product.fetch_nutrition_data()  # Fetch data from the external API
+    product.fetch_nutrition_data()
     return ProductSerializer(product)
 
 
