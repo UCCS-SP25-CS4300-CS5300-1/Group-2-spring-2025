@@ -47,6 +47,7 @@ class ProductView(APIView):
         serializer = getProductInfo(barcode, request)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class HealthScoreOnlyView(APIView):
     def post(self, request):
         name = request.data.get("name")
@@ -214,7 +215,7 @@ class UserScannedItemsView(APIView):
 
         serializer = ScannedItemSerializer(scanned_item)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
 
 class AllergensView(APIView):
     permission_classes = [IsAuthenticated]
