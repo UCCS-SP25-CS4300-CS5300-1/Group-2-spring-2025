@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 
 token = os.getenv("GITHUB_TOKEN")
@@ -6,7 +7,7 @@ repo = os.getenv("GITHUB_REPOSITORY")
 
 if not token or not repo:
     print("Error: Missing GITHUB_TOKEN or GITHUB_REPOSITORY environment variables")
-    exit(1)
+    sys.exit(1)
 
 headers = {
     "Authorization": f"token {token}",
@@ -22,7 +23,12 @@ print(f"{'Dependency':<20} | {'Severity':<8} | {'Vulnerable':<15} | {'Patched':<
 
 
 while True:
-    response = requests.get(url, headers=headers, params={"page": page, "per_page": 100})
+    try:
+        response = requests.get(url, headers=headers, params={"page": page, "per_page": 100})
+    except requests.exceptions.RequestException as e:
+        print("Network error occurred:", e)
+        break
+
     if response.status_code != 200:
         print("Error:", response.status_code, response.json())
         break
