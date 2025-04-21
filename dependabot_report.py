@@ -19,15 +19,15 @@ page = 1
 found = False
 
 print("Dependabot Alerts Report:")
-print(f"{'Dependency':<20} | {'Severity':<8} | {'Vulnerable':<15} | {'Patched':<10} | {'State':<8}\n")
-
+print(f"{'Dependency':<20} | {'Severity':<8} | {'Vulnerable':<15} | {'Patched':<10} | {'State':<8}")
+print("-" * 75)
 
 while True:
     try:
-        response = requests.get(url, headers=headers, params={"page": page, "per_page": 100})
-    except requests.exceptions.RequestException as e:
-        print("Network error occurred:", e)
-        break
+        response = requests.get(url, headers=headers, params={"page": page, "per_page": 100})
+    except requests.exceptions.RequestException as e:
+        print("Network error occurred:", e)
+        break
 
     if response.status_code != 200:
         print("Error:", response.status_code, response.json())
