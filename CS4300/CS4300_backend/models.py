@@ -19,7 +19,6 @@ class imageScan:
     def __init__(self):
         self.barcode = None
 
-
     def fetch_upc(self, image):
         def decode(image0):
             decoded_objects = pyzbar.decode(image0)
@@ -34,9 +33,14 @@ class imageScan:
         filebytes = image.read()
         nparray = np.frombuffer(filebytes, np.uint8)
 
+
         img = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
+
         if img is None:
             return None
+
+            # 🖼 Save the image for debugging
+        cv2.imwrite("debug_capture.jpg", img)
 
         barcode = decode(img)
 
