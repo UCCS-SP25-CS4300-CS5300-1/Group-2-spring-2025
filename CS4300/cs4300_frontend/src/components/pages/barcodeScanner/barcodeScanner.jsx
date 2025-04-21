@@ -156,52 +156,16 @@ function Scanner() {
         }
     };
 
-    //capture photo from live camera feed
-    const capturePhoto = () => {
-        const video = videoRef.current;
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        const context = canvas.getContext("2d");
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-
-        canvas.toBlob(async (blob) => {
-            const file = new File([blob], "barcode.jpg", { type: "image/jpeg" });
-            const data = await fetchBarcodeData(file);
-            if(data){
-                setLeftData(data);
-                const token = localStorage.getItem("token");
-                if(token) {
-                    const barcodeToSave = data.barcode;
-                    saveScannedItem(barcodeToSave).catch((err) => {
-                        console.warn("Failed to save scanned item: ", err);
-                    });
-                }
-                if (data.name && !data.name.toLowerCase().includes("unknown")){
-                    navigate("/nutrition", {state: { barcodeData: data } });
-                } else {
-                    alert("Product not found or error fetching data");
-                }
-            } else {
-                alert("Product not found or error fetching data");
-            }
-        }, "image/jpeg");
-    };
+    const handleSwitch = () => {
+        navigate('/live-scanner');
+      };
 
     return (
         <div className="barcode-app">
             <h2>Food Scanner</h2>
             <div className="input-group">
                 <label htmlFor="barcode-image">Upload Barcode Image:</label>
-                <input type="file" id="barcode-image" accept="image/*" />
-
-                <div className="camera-wrapper">
-                    <label>Live Camera Preview:</label>
-                    <video ref={videoRef} id="camera-stream" autoPlay playsInline width="300" height="200"></video>
-                    <button type="button" onClick={capturePhoto}>Capture from Camera</button>
-                </div>
+                <input type="file" id="barcode-image" accept="image/*"/>
 
                 <label htmlFor="barcode-int">Input Barcode Number:</label>
                 <input
@@ -215,6 +179,11 @@ function Scanner() {
             <button className="scan-btn" onClick={clicked}>
                 Scan Barcode
             </button>
+
+            <div>
+                <button className="switch-btn" onClick={handleSwitch}>Switch to Camera Scan</button>
+            </div>
+
             <div className="button-group">
                 <button className="account-btn">Account</button>
             </div>

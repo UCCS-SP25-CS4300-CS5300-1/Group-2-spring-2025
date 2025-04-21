@@ -30,6 +30,11 @@ class ImagescanView(APIView):
         if not image:
             return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
 
+        #SAVES UPLOADED IMAGE TO DISK FOR DEBUGGING
+        with open("test_upload.jpg", "wb") as f:
+            for chunk in image.chunks():
+                f.write(chunk)
+
         scanner = imageScan()
         upc = scanner.fetch_upc(image)
 
@@ -39,7 +44,6 @@ class ImagescanView(APIView):
         serializer = getProductInfo(upc, request)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class ProductView(APIView):
 

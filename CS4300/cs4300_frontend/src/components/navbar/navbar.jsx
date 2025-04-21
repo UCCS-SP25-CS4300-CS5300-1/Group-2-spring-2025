@@ -36,7 +36,7 @@ function Navbar() {
             </ul>
 
             <ul className="navbar-center">
-                <li><Link to="/scanner">Scanner</Link></li>
+                <li><Link to="/live-scanner">Scanner</Link></li>
                 <li><Link to="/about">About</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
                 <li><Link to="/compare">Compare</Link></li>

@@ -3,7 +3,7 @@ import Home from "./components/pages/homePage/home";
 import About from "./components/pages/about/about"
 import Contact from "./components/pages/contact/contact"
 import Navbar from "./components/navbar/navbar";
-import Scanner from "./components/pages/barcodeScanner/barcodeScanner";
+import ManualScanner from "./components/pages/barcodeScanner/barcodeScanner.jsx";
 import Nutrition from "./components/pages/nutrition/nutrition";
 import Login from "./components/pages/auth/login/login.jsx";
 import Register from "./components/pages/auth/register/register.jsx";
@@ -14,6 +14,7 @@ import BarcodeHistory from "./components/pages/barcodeHistory/barcodeHistory.jsx
 import "./App.css";
 import compare from "./components/pages/compare/Compare.jsx";
 import Compare from "./components/pages/compare/Compare.jsx";
+import LiveScanner from "./components/pages/barcodeScanner/liveScanner.jsx";
 
 function App() {
     return (
@@ -21,7 +22,8 @@ function App() {
             <HashRouter>
                 <Navbar />
                 <Routes>
-                    <Route path="/scanner" element={<PrivateRoute><Scanner /></PrivateRoute>} />
+                    <Route path="/manual-scanner" element={<PrivateRoute><ManualScanner /></PrivateRoute>} />
+                    <Route path="/live-scanner" element={<LiveScanner />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/nutrition" element={<Nutrition />} />
