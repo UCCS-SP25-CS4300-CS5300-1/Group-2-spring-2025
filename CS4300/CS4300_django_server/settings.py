@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'rest_framework',
     "CS4300_backend",
     'corsheaders',
-    'channels'
 ]
 
 MIDDLEWARE = [
@@ -112,7 +111,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CS4300_django_server.wsgi.application'
 
-ASGI_APPLICATION = 'CS4300_django_server.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

@@ -30,11 +30,6 @@ class ImagescanView(APIView):
         if not image:
             return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
 
-        #SAVES UPLOADED IMAGE TO DISK FOR DEBUGGING
-        with open("test_upload.jpg", "wb") as f:
-            for chunk in image.chunks():
-                f.write(chunk)
-
         scanner = imageScan()
         upc = scanner.fetch_upc(image)
 
@@ -45,11 +40,13 @@ class ImagescanView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class ProductView(APIView):
 
     def get(self, request, barcode, format=None):
         serializer = getProductInfo(barcode, request)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class HealthScoreOnlyView(APIView):
     def post(self, request):
@@ -218,7 +215,7 @@ class UserScannedItemsView(APIView):
 
         serializer = ScannedItemSerializer(scanned_item)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
 
 class AllergensView(APIView):
     permission_classes = [IsAuthenticated]
