@@ -88,9 +88,10 @@ function Scanner() {
 
     //init camera
     useEffect(() => {
+        let stream = null;
         const startCamera = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({
+                stream = await navigator.mediaDevices.getUserMedia({
                     video: { facingMode: "environment" },
                 });
                 if (videoRef.current) {
@@ -101,6 +102,12 @@ function Scanner() {
             }
         };
         startCamera();
+        return () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                console.log("📷 Camera stream stopped.");
+            }
+        };
     }, []);
 
     const inputChange = (event) => {
@@ -157,8 +164,6 @@ function Scanner() {
         canvas.height = video.videoHeight;
 
         const context = canvas.getContext("2d");
-        context.translate(canvas.width, 0);
-        context.scale(-1, 1);
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
 

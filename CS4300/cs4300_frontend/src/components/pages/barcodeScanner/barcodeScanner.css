@@ -91,8 +91,3 @@ body {
     gap: 0.5em;
     align-items: center;
 }
-
-/* Mirror Camera Feed */
-#camera-stream {
-  transform: scaleX(-1);
-}
