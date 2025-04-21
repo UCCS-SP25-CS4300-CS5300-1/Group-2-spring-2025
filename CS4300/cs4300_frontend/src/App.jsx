@@ -23,7 +23,7 @@ function App() {
                 <Navbar />
                 <Routes>
                     <Route path="/manual-scanner" element={<PrivateRoute><ManualScanner /></PrivateRoute>} />
-                    <Route path="/live-scanner" element={<LiveScanner />} />
+                    <Route path="/live-scanner" element={<PrivateRoute><LiveScanner /></PrivateRoute>} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/nutrition" element={<Nutrition />} />

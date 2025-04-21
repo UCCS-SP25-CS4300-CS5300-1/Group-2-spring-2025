@@ -36,12 +36,11 @@ function LiveScanner() {
                 }
 
                 // Start decoding from the first available device
-                codeReaderRef.current.decodeFromVideoDevice(devices[0].deviceId, videoRef.current, (result, err) => {
+                codeReaderRef.current.decodeFromVideoDevice(devices[0].deviceId, videoRef.current, (result, err, controls) => {
                     if (result) {
                         console.log("Barcode scanned:", result.getText());
 
-                        // Stop the scanner
-
+                        controls.stop();
 
                         // Send barcode to your existing backend
                         fetch(`${API_URL}/product/${result.getText()}/`, {
@@ -64,7 +63,6 @@ function LiveScanner() {
                                 console.error("Backend error:", err);
                                 alert("Failed to fetch product info.");
                             });
-                        codeReaderRef.current?.reset();
                     } else if (err) {
                         console.log("No result yet:", err);
                     }
