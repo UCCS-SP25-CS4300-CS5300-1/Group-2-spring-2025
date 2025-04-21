@@ -19,7 +19,6 @@ class imageScan:
     def __init__(self):
         self.barcode = None
 
-
     def fetch_upc(self, image):
         def decode(image0):
             decoded_objects = pyzbar.decode(image0)
