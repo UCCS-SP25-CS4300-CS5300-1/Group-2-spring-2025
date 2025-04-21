@@ -19,7 +19,7 @@ print(f"{'Dependency':<20} | {'Severity':<8} | {'Vulnerable':<15} | {'Patched':<
 while True:
 	try:
 		response = requests.get(url, headers=headers, params={"page": page, "per_page": 100})
-    except requests.exceptions.RequestException as e:
+    	except requests.exceptions.RequestException as e:
 		print("Network error occurred:", e)
 		break
 
