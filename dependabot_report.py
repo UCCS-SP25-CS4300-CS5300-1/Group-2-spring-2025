@@ -6,8 +6,8 @@ token = os.getenv("GITHUB_TOKEN")
 repo = os.getenv("GITHUB_REPOSITORY")
 
 if not token or not repo:
-    print("Error: Missing GITHUB_TOKEN or GITHUB_REPOSITORY environment variables")
-    sys.exit(1)
+    print("Error: Missing GITHUB_TOKEN or GITHUB_REPOSITORY environment variables")
+    sys.exit(1)
 
 headers = {
     "Authorization": f"token {token}",
