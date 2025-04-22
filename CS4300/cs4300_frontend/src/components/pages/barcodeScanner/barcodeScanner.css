@@ -1,56 +1,51 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #CAE4C5;
-  font-family: 'Roboto', sans-serif;
-  color: #406C35;
-  overscroll-behavior: none;
-}
-
+/* Global App Container */
 .barcode-app {
   padding: 2rem 1rem;
   text-align: center;
+  font-family: 'Roboto', sans-serif;
+  background-color: #CAE4C5;
+  color: #254222;
 }
 
+/* Page Title */
 .barcode-app h2 {
   font-size: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: #254222;
 }
 
-/* Input Card */
-.input-group {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #254222;
-}
-
-.input-group input[type="file"],
-.input-group input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #8BAF68;
-  border-radius: 4px;
-  margin-bottom: 1.25rem;
+/* Error Message */
+.error-text {
+  color: red;
   font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
-/* Buttons */
+/* Video Preview Styling */
+.live-video {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  display: block;
+}
+
+/* Button Group Under Camera */
+.scanner-button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* All Buttons */
+.switch-btn,
 .scan-btn,
 .bottom-btn,
-.account-btn,
-.switch-btn {
+.account-btn {
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #99CC66;
@@ -59,56 +54,27 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 1rem;
 }
 
+.switch-btn:hover,
 .scan-btn:hover,
 .bottom-btn:hover,
-.account-btn:hover,
-.switch-btn:hover {
+.account-btn:hover {
   background-color: #406C35;
 }
 
-/* Link + Button group */
-.bottom-actions,
-.bottom-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.bottom-links a {
-  color: #254222;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1rem;
-  transition: color 0.3s ease;
-}
-
-.bottom-links a:hover {
-  color: #406C35;
-}
-
-/* Camera Scanner Section */
-.camera-wrapper {
-  margin-top: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  align-items: center;
-}
-
-/* Responsive Fixes */
+/* Responsive Adjustments */
 @media (max-width: 600px) {
-  .input-group {
-    padding: 1.5rem;
+  .live-video {
+    width: 90%;
   }
 
-  .bottom-actions,
-  .bottom-links {
-    flex-direction: column;
-    align-items: center;
+  .scanner-button-group {
+    width: 100%;
+  }
+
+  .switch-btn {
+    width: 90%;
+    max-width: 300px;
   }
 }

@@ -94,10 +94,16 @@ export default function BarcodeHistory() {
           <li key={item.id} className="scanned-item">
             <span>{item.name} - {item.barcode}</span>
             <div className="item-actions">
-              <button className="favorite-btn" onClick={() => handleFavoriteToggle(item.id, item.favorite)}>
+              <button
+                className="favorite-btn"
+                onClick={() => handleFavoriteToggle(item.id, item.favorite)}
+              >
                 {item.favorite ? "★ Unfavorite" : "☆ Favorite"}
               </button>
-              <button className="delete-btn" onClick={() => handleDelete(item.id)}>
+              <button
+                className="delete-btn"
+                onClick={() => handleDelete(item.id)}
+              >
                 Delete
               </button>
               {item.barcode && (
@@ -115,7 +121,9 @@ export default function BarcodeHistory() {
       </ul>
 
       <div className="button-group">
-        <button className="account-btn" onClick={() => navigate("/account")}>Account</button>
+        <button className="account-btn" onClick={() => navigate("/account")}>
+          Account
+        </button>
       </div>
 
       <div className="bottom-links">

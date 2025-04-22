@@ -1,38 +1,123 @@
 .compare-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  font-family: 'Roboto', sans-serif;
+  background-color: #CAE4C5;
+  color: #254222;
 }
 
 .scanner-section {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .scanner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+  flex: 1 1 300px;
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.scanner input[type="text"],
+.scanner input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #8BAF68;
+  border-radius: 4px;
+}
+
+.scanner button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #99CC66;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.scanner button:hover {
+  background-color: #406C35;
 }
 
 .nutrition-section {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .nutrition {
-    border: 1px solid #ccc;
-    padding: 20px;
-    width: 45%;
+  flex: 1 1 400px;
+  background-color: #ECE2B1;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.nutrition h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #254222;
+}
+
+.nutrition .food-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nutrition img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nutrition .nutrition-facts {
+  margin-top: 1rem;
+}
+
+.nutrition .nutrition-facts p {
+  font-size: 0.95rem;
+  color: #406C35;
+  margin: 0.3rem 0;
 }
 
 .product-not-found {
-    text-align: center;
-    font-size: 2rem;
-    color: red;
-    margin: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+  color: red;
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .scanner-section,
+  .nutrition-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scanner,
+  .nutrition {
+    width: 90%;
+  }
 }
