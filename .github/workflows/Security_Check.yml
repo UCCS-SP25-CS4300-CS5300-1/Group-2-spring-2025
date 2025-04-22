@@ -31,5 +31,5 @@ jobs:
 
       - name: Run Safety/Bandit
         run: |
-          safety check --full-report
+          safety scan
           bandit -r CS4300 -s MEDIUM
