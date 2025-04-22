@@ -44,8 +44,7 @@ jobs:
 
     - name: Run linting with coverage
       run: |
-            pylint CS4300 --exit-zero > pylint-report.txt
-            cat pylint-report.txt
+            python -m pylint CS4300 || true
 
     - name: Run tests with coverage (Console (asked for in sprint requirements) and XML report)
       run: pytest --cov=. --cov-report=term --cov-report=xml:coverage.xml --cov-fail-under=80
