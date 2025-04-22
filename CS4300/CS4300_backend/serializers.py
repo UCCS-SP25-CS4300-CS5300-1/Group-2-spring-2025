@@ -29,11 +29,11 @@ class ProductSerializer(serializers.Serializer):
             'alerts': product.alerts,
             'image_url': product.image_url,
         }
-
-    def update(self, instance, validated_data):
-        instance.barcode = validated_data.get('barcode', instance.barcode)
-        instance.fetch_nutrition_data()
-        return instance
+    # removed update from the product serializer as it doesn't seem to be used.
+    # def update(self, instance, validated_data):
+    #     instance.barcode = validated_data.get('barcode', instance.barcode)
+    #     instance.fetch_nutrition_data()
+    #     return instance
 
 
 class AllergenSerializer(serializers.ModelSerializer):

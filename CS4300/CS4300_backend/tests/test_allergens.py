@@ -14,16 +14,6 @@ class saveAllergen(TestCase):
         self.email = 'testuser@example.com'
         self.user = User.objects.create_user(username=self.username, password=self.password, email=self.email)
         self.url = reverse("user-allergens")
-        # need to create a user for the allergens to work
-        # self.client.post(reverse('register'), {
-        #     'username': 'newuser',
-        #     'password': 'newpassword',
-        #     'email': 'newuser@example.com'
-        # }, content_type='application/json')
-        # self.client.post(reverse('login'), {
-        #     'username': self.username,
-        #     'password': self.password
-        # }, content_type='application/json')
         self.client.force_login(self.user)
         self.crsf = self.client.get(reverse("csrf"))
 
@@ -33,6 +23,8 @@ class saveAllergen(TestCase):
         self.assertTrue(
             Allergen.objects.filter(user=self.user, allergen='test').exists()
         )
+        response = self.client.post(self.url, {'nothing': 'test'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_getAllergens(self):
         response = self.client.get(self.url, format='json')
@@ -45,3 +37,9 @@ class saveAllergen(TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.client.delete(
+            self.url,
+            data=json.dumps({'nothing': 'test'}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
