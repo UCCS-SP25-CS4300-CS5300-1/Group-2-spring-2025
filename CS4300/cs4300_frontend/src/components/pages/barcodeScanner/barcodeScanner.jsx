@@ -4,7 +4,6 @@ import "./barcodeScanner.css";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
-// ✅ Named export for external use
 export const fetchBarcodeData = async (barcode) => {
   const csrfToken = localStorage.getItem("token");
 
@@ -45,7 +44,6 @@ export const fetchBarcodeData = async (barcode) => {
   }
 };
 
-// Save scanned item to backend
 const saveScannedItem = async (barcode) => {
   try {
     const csrfToken = localStorage.getItem("token");
@@ -138,9 +136,6 @@ function Scanner() {
       <h2>Food Scanner</h2>
 
       <div className="input-group">
-        <label htmlFor="barcode-image">Upload Barcode Image:</label>
-        <input type="file" id="barcode-image" accept="image/*" />
-
         <label htmlFor="barcode-int">Input Barcode Number:</label>
         <input
           type="text"
@@ -148,29 +143,26 @@ function Scanner() {
           placeholder="Enter UPC"
           onChange={inputChange}
         />
+
+        <label htmlFor="barcode-image">Upload Barcode Image:</label>
+        <input type="file" id="barcode-image" accept="image/*" />
       </div>
 
-      <button className="scan-btn" onClick={clicked}>
-        Scan Barcode
+      <button className="scan-btn" onClick={clicked}>Scan Barcode</button>
+
+      <button className="switch-btn" onClick={handleSwitch}>
+        Switch to Camera Scan
       </button>
 
-      <div>
-        <button className="switch-btn" onClick={handleSwitch}>
-          Switch to Camera Scan
+      <div className="button-group">
+        <button className="account-btn" onClick={() => navigate("/account")}>
+          Account
         </button>
       </div>
 
-      <div className="button-group">
-        <button className="account-btn">Account</button>
-      </div>
-
       <div className="bottom-links">
-        <Link className="faq-btn" to="/contact">
-          FAQ
-        </Link>
-        <Link className="about-btn" to="/about">
-          About
-        </Link>
+        <Link className="faq-btn" to="/contact">FAQ</Link>
+        <Link className="about-btn" to="/about">About</Link>
       </div>
     </div>
   );
