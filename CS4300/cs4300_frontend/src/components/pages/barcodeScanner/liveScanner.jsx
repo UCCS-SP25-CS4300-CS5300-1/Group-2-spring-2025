@@ -18,6 +18,9 @@ export default function LiveScanner() {
   useEffect(() => {
     (async () => {
       try {
+        // immediately prompts the user for camera access
+        await navigator.mediaDevices.getUserMedia({ video: true });
+
         const cams = await BrowserMultiFormatReader.listVideoInputDevices();
         if (!cams.length) {
           setError("No camera devices found.");
@@ -26,8 +29,8 @@ export default function LiveScanner() {
           setSelectedDeviceId(cams[0].deviceId);
         }
       } catch (e) {
-        console.error("Camera enumeration error:", e);
-        setError("Could not enumerate cameras.");
+        console.error("Camera permission / enumeration error:", e);
+        setError("Camera access was denied or unavailable.");
       }
     })();
   }, []);
