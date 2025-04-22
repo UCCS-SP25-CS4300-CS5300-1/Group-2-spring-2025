@@ -50,13 +50,13 @@ class imageScan:
 
         return barcode if barcode else None
 
-def parseAllergens(product_data, custom):
+def parseAllergens(product_data, custom=False):
     allergens_list = product_data.get("allergens_from_ingredients", {})
     allergens_list = allergens_list.replace("en:", "").split(", ") # split into a list and remove any en:
     allergens_list = list(set(allergens_list)) # remove duplicates
     ingredients = json.dumps(product_data.get("ingredients", {}))
     ingredients = "".join(ingredients).lower()
-    if custom and type(custom) == list:
+    if custom and isinstance(custom, list):
         for allergen in custom:
             if str(allergen).lower() in ingredients:
                 allergens_list.append(str(allergen))
