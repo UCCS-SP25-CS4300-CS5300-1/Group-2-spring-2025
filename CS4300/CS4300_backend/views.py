@@ -17,7 +17,7 @@ import os
 
 def getProductInfo(barcode, request):
     allergens = None
-    if request.user != "AnonymousUser":
+    if request.user.is_authenticated:
         allergens = list(Allergen.objects.filter(user=request.user))
     product = Product(barcode, allergens=allergens)
     product.fetch_nutrition_data()
