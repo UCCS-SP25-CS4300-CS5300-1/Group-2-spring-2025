@@ -1,7 +1,7 @@
 // Compare.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import fetchBarcodeData from "../barcodeScanner/barcodeScanner.jsx";
+import { fetchBarcodeData } from "../barcodeScanner/barcodeScanner.jsx";
 import "./compare.css";
 import noImage from "../../../assets/no-image.jpg";
 
