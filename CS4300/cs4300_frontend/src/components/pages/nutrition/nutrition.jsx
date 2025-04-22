@@ -14,6 +14,7 @@ function Nutrition() {
     const [name, setName] = useState("");
     const [score, setScore] = useState("Loading...");
     const [alerts, setAlerts] = useState(["No alerts available"]);
+    const [Ingredients, setIngredients] = useState(["Information Failed to Load"]);
     const [nutrition, setNutrition] = useState(["No nutrition data available"]);
     const [summary, setSummary] = useState("Loading...");
 
@@ -25,11 +26,14 @@ function Nutrition() {
         const nutritionData = JSON.parse(nutritionString);
         const csrfToken = localStorage.getItem("token");
         const alertsString = barcodeData.alerts || "{}";
-        const alertsData = JSON.parse(alertsString)
+        const alertsData = JSON.parse(alertsString);
+        const IngredientsString = barcodeData.ingredients || "{}";
+        const IngredientsData = JSON.parse(IngredientsString);
 
         setName(foodName);
         setImageSrc(barcodeData.image_url || noImage);
         setAlerts(alertsData || ["No alerts available"]);
+        setIngredients(IngredientsData || ["Information Failed to Load"]);
 
         const normalizedNutrition = {};
         for (const key in nutritionData) {
@@ -111,6 +115,12 @@ function Nutrition() {
                 <div className="nutrition-facts" id="nutrition-facts">
                     <h3>Nutrition Facts</h3>
                     {nutrition.map((fact, index) => (
+                        <p key={index}>{fact}</p>
+                    ))}
+                </div>
+                <div className="ingredients" id="ingredients">
+                <h3>Ingredients</h3>
+                    {Ingredients.map((fact, index) => (
                         <p key={index}>{fact}</p>
                     ))}
                 </div>
