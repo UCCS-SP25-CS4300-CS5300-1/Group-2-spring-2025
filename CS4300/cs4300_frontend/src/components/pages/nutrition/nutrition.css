@@ -1,115 +1,131 @@
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #CAE4C5; /* Pastel Mint */
-    font-family: 'Roboto', sans-serif;
-    color: #406C35; /* Kale Green */
-    display: flex;
-    justify-content: center;
-    align-items: top;
-    height: 100vh;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: #CAE4C5; /* Pastel Mint */
+  font-family: 'Roboto', sans-serif;
+  color: #406C35; /* Kale Green */
 }
 
+/* Container */
 .food-container {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 40px;
-    background-color: #ECE2B1; /* Soft Cream */
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    max-width: 80vh;
-    position: sticky;
-    top: 0;
-    margin-top: 10%;
-    margin-bottom: 10%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 2rem;
+  background-color: #ECE2B1; /* Soft Cream */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  margin: 2rem auto;
+  box-sizing: border-box;
 }
 
-.right-section {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 280px;
-    width: 100%;
-}
-
-.food-alerts, .nutrition-facts, .ingredients {
-    background: #CAE4C5; /* Pastel Mint */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.food-alerts h3, .nutrition-facts h3, .ingredients h3 {
-    font-size: 1.2rem;
-    color: #254222; /* Forest Depth */
-    margin-bottom: 10px;
-}
-
-.food-alerts p, .nutrition-facts p, .ingredients p {
-    font-size: 0.9rem;
-    color: #406C35; /* Kale Green */
-}
-
+/* Main Section */
 .main-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
+  flex: 1 1 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 #food-image {
-    width: 30vh;
-    height: 30vh;
-    max-width: 30vh;
-    max-height: 30vh;
-    min-width: 30vh;
-    min-height: 30vh;
-    border-radius: 10px;
-    object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 180px;
+  height: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Title */
 h1 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #254222; /* Forest Depth */
-    text-align: center;
-    margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #254222; /* Forest Depth */
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
+/* Score Box */
 .score-box {
-    margin-top: 10px;
-    background: #CAE4C5; /* Pastel Mint */
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    text-align: center;
-    font-size: 1rem;
-    color: #406C35; /* Kale Green */
+  background: #CAE4C5; /* Pastel Mint */
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  color: #406C35;
 }
 
+/* Right Section */
+.right-section {
+  flex: 1 1 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Info Cards */
+.food-alerts,
+.nutrition-facts,
+.ingredients {
+  background: #CAE4C5;
+  padding: 1.25rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Headers */
+.food-alerts h3,
+.nutrition-facts h3,
+.ingredients h3 {
+  font-size: 1.2rem;
+  color: #254222;
+  margin-bottom: 0.75rem;
+}
+
+/* Card Paragraphs */
+.food-alerts p,
+.nutrition-facts p,
+.ingredients p {
+  font-size: 0.95rem;
+  color: #406C35;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .food-container {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+
+  .main-section,
+  .right-section {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Button Styling (if any used in this page) */
 button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #99CC66; /* Leafy Mint */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #99CC66; /* Leafy Mint */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
 }
 
 button:hover {
-    background-color: #406C35; /* Kale Green */
+  background-color: #406C35;
 }
-
-.nutrition-section {
-    min-width: 90vw;
-}
-
