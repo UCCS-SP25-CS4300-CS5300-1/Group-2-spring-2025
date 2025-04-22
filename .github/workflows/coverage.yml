@@ -43,13 +43,12 @@ jobs:
            python manage.py migrate --noinput
 
     - name: Run linting with coverage
-      run: OUTPUT=$(pylint CS4300 --exit-zero)
-           echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
+      run: pylint CS4300 --exit-zero > pylint-report.txt
 
     - name: post results
       uses: mshick/add-pr-comment@v1
       with:
-        message: ${{ env.MESSAGE }}
+        message-path: pylint-report.txt
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]'
         allow-repeats: false
