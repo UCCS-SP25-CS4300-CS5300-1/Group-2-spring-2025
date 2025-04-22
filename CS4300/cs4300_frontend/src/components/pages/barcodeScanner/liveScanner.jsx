@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./barcodeScanner.css";
+import { fetchBarcodeData } from "../barcodeScanner/barcodeScanner.jsx";
 import { BrowserMultiFormatReader, BarcodeFormat } from "@zxing/browser";
 import { DecodeHintType } from "@zxing/library";
+
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
@@ -37,11 +39,11 @@ export default function LiveScanner() {
   useEffect(() => {
     if (!selectedDeviceId) return;
 
-    // Stop any previous stream
+    // cleanup any previous stream
     controlsRef.current?.stop();
     if (videoRef.current) videoRef.current.srcObject = null;
 
-    // Setup the reader
+    // set up ZXing reader
     const hints = new Map();
     hints.set(DecodeHintType.POSSIBLE_FORMATS, [
       BarcodeFormat.CODE_128,
@@ -49,41 +51,38 @@ export default function LiveScanner() {
       BarcodeFormat.UPC_A,
       BarcodeFormat.QR_CODE,
     ]);
-    codeReaderRef.current = new BrowserMultiFormatReader(hints, { delayBetweenScanAttempts: 300 });
+    codeReaderRef.current = new BrowserMultiFormatReader(hints, {
+      delayBetweenScanAttempts: 300,
+    });
 
     let active = true;
     codeReaderRef.current.decodeFromVideoDevice(
       selectedDeviceId,
       videoRef.current,
-      (result, err, controls) => {
+      async (result, err, controls) => {
         if (!active) return;
         controlsRef.current = controls;
+
         if (result) {
-          console.log("Barcode scanned:", result.getText());
+          // stop scanning and clear video
           controls.stop();
           if (videoRef.current) videoRef.current.srcObject = null;
 
-          // Fetch product data
-          fetch(`${API_URL}/product/${result.getText()}/`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": localStorage.getItem("token"),
-            },
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.name && !data.name.toLowerCase().includes("unknown")) {
-                navigate("/nutrition", { state: { barcodeData: data } });
-              } else {
-                alert("Product not found.");
-              }
-            })
-            .catch((e) => {
-              console.error("Backend error:", e);
-              alert("Failed to fetch product info.");
-            });
+          const barcode = result.getText();
+          console.log("Barcode scanned:", barcode);
+
+          // ② Delegate to your helper
+          const data = await fetchBarcodeData(barcode);
+
+          if (data) {
+            if (data.name && !data.name.toLowerCase().includes("unknown")) {
+              navigate("/nutrition", { state: { barcodeData: data } });
+            } else {
+              alert("Product not found.");
+            }
+          } else {
+            alert("Failed to fetch product info.");
+          }
         } else if (err) {
           console.log("No result yet:", err);
         }
