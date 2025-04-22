@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +35,7 @@ ALLOWED_HOSTS = [
     "*",
     "cs4300-group2.TECH",
     "www.cs4300-group2.tech",
+    "cs4300group2.rocks",
         ]
 
 
@@ -61,14 +66,17 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://uccs-sp25-cs4300-cs5300-1.github.io",
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "https://cs4300group2.rocks"
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://uccs-sp25-cs4300-cs5300-1.github.io",
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "https://cs4300group2.rocks"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

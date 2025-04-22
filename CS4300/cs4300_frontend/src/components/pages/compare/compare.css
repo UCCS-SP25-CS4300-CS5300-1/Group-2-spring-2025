@@ -1,0 +1,38 @@
+.compare-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.scanner-section {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.scanner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.nutrition-section {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.nutrition {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 45%;
+}
+
+.product-not-found {
+    text-align: center;
+    font-size: 2rem;
+    color: red;
+    margin: 20px;
+}

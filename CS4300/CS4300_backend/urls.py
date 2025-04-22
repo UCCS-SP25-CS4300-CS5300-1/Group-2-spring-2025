@@ -13,6 +13,9 @@ urlpatterns = [
     path('check-auth/', views.check_auth_view, name='check-auth'),
     path('register/', views.register_view, name='register'),
 
+    # Allergen update URLs
+    path('user-allergens/', views.AllergensView.as_view(), name="user-allergens"),
+
     # Scanned Item URLs
     path('save-scanned-item/', views.SaveScannedItemView.as_view(), name='save-scanned-item'),
     path('user-scanned-items/', views.UserScannedItemsView.as_view(), name='user-scanned-items'),
@@ -21,4 +24,7 @@ urlpatterns = [
     # payload: {"favorite": true} would set the item as favorite to the user-scanned-items/<pk> endpoint
     # delete request would delete the item from the history
     path('user-scanned-items/<int:pk>/', views.UserScannedItemsView.as_view(), name='scanned-item-detail'),
+
+    path("health-score/", views.HealthScoreOnlyView.as_view(), name="health_score"),
+    path("health-summary/", views.HealthSummaryOnlyView.as_view(), name="health_summary"),
 ]

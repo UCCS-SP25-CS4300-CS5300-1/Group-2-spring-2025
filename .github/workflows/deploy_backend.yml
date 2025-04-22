@@ -8,12 +8,6 @@ on:
       - 'CS4300/CS4300_backend/**'
       - 'CS4300/CS4300_django_server/**'
 
-  pull_request:
-    branches:
-      - develop
-    paths:
-      - 'CS4300/CS4300_backend/**'
-      - 'CS4300/CS4300_django_server/**'
 
 jobs:
   deploy:
@@ -51,9 +45,13 @@ jobs:
             echo "Running migrations..."
             python $DEPLOY_PATH/CS4300/manage.py migrate
             
-            echo "Restarting services..."
-            sudo systemctl restart gunicorn
-            sudo systemctl reload nginx
+            echo "Force restarting Gunicorn..."
+            cd $DEPLOY_PATH/CS4300
+            pkill gunicorn || true
+            gunicorn --bind 0.0.0.0:8000 CS4300_django_server.wsgi:application --daemon
+
+            echo "Restarting Nginx..."
+            sudo service nginx restart
             
             echo "Deployment complete."
           EOF

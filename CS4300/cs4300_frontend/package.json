@@ -13,9 +13,13 @@
       "deploy": "gh-pages -d dist -r https://x-access-token:${GITHUB_TOKEN}@github.com/UCCS-SP25-CS4300-CS5300-1/Group-2-spring-2025.git"
    },
    "dependencies": {
+      "@zxing/browser": "^0.1.5",
+      "@zxing/library": "^0.21.3",
       "react": "^19.0.0",
+      "react-barcode-scanner": "^4.0.0",
       "react-dom": "^19.0.0",
-      "react-router-dom": "^7.3.0"
+      "react-router-dom": "^7.3.0",
+      "react-zxing": "^2.1.0"
    },
    "devDependencies": {
       "@eslint/js": "^9.21.0",

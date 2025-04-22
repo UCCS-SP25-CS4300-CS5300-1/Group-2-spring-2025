@@ -2,30 +2,45 @@
 
 from rest_framework import serializers
 from .models import Product
-from .models import ScannedItem
+from .models import ScannedItem, Allergen
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class ProductSerializer(serializers.Serializer):
     barcode = serializers.CharField(max_length=20)
     name = serializers.CharField(max_length=255, read_only=True)
     nutrition_data = serializers.JSONField(read_only=True)
+    alerts = serializers.CharField(read_only=True)
+    image_url = serializers.CharField(max_length=255, read_only=True)
+    ingredients = serializers.CharField(read_only=True)
 
     def create(self, validated_data):
-        # We don't actually create a Product instance in the DB
+        # Create product instance from given barcode
         barcode = validated_data.get('barcode')
         product = Product(barcode)
+
+        # Get necessary info about product
         product.fetch_nutrition_data()
         return {
             'barcode': product.barcode,
             'name': product.name,
-            'nutrition_data': product.nutrition_data
+            'nutrition_data': product.nutrition_data,
+            'alerts': product.alerts,
+            'ingredients': product.ingredients,
+            'image_url': product.image_url,
         }
+    # removed update from the product serializer as it doesn't seem to be used.
+    # def update(self, instance, validated_data):
+    #     instance.barcode = validated_data.get('barcode', instance.barcode)
+    #     instance.fetch_nutrition_data()
+    #     return instance
 
-    def update(self, instance, validated_data):
-        instance.barcode = validated_data.get('barcode', instance.barcode)
-        instance.fetch_nutrition_data()
-        return instance
 
+class AllergenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Allergen
+        fields = ["allergen"]
 
 class ScannedItemSerializer(serializers.ModelSerializer):
     class Meta:
