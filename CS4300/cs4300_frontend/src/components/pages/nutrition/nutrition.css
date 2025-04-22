@@ -6,7 +6,7 @@ body {
     color: #406C35; /* Kale Green */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: top;
     height: 100vh;
     box-sizing: border-box;
 }
@@ -21,6 +21,10 @@ body {
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     max-width: 80vh;
+    position: sticky;
+    top: 0;
+    margin-top: 10%;
+    margin-bottom: 10%;
 }
 
 .right-section {
@@ -31,20 +35,20 @@ body {
     width: 100%;
 }
 
-.food-alerts, .nutrition-facts {
+.food-alerts, .nutrition-facts, .ingredients {
     background: #CAE4C5; /* Pastel Mint */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.food-alerts h3, .nutrition-facts h3 {
+.food-alerts h3, .nutrition-facts h3, .ingredients h3 {
     font-size: 1.2rem;
     color: #254222; /* Forest Depth */
     margin-bottom: 10px;
 }
 
-.food-alerts p, .nutrition-facts p {
+.food-alerts p, .nutrition-facts p, .ingredients p {
     font-size: 0.9rem;
     color: #406C35; /* Kale Green */
 }
