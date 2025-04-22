@@ -1,7 +1,7 @@
 // Compare.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchBarcodeData } from "../barcodeScanner/barcodeScanner.jsx";
+import fetchBarcodeData from "../barcodeScanner/barcodeScanner.jsx";
 import "./compare.css";
 import noImage from "../../../assets/no-image.jpg";
 
@@ -13,6 +13,9 @@ const Compare = () => {
   const [rightData, setRightData] = useState(null);
   const [leftInput, setLeftInput] = useState("");
   const [rightInput, setRightInput] = useState("");
+
+  const leftFileRef = useRef(null);
+  const rightFileRef = useRef(null);
 
   useEffect(() => {
     if (leftBarcode) {
@@ -26,9 +29,8 @@ const Compare = () => {
   }, [leftBarcode]);
 
   const handleScan = async (side) => {
-    const fileInput = document.getElementById(`${side}-barcode-image`);
-    const file = fileInput?.files?.[0];
     const input = side === "left" ? leftInput : rightInput;
+    const file = side === "left" ? leftFileRef.current?.files?.[0] : rightFileRef.current?.files?.[0];
 
     if (!input.trim() && !file) {
       alert("Please enter a barcode or upload a file.");
@@ -38,35 +40,22 @@ const Compare = () => {
     try {
       const data = await fetchBarcodeData(file || input);
       if (data) {
-        if (side === "left") {
-          setLeftData(data);
-        } else {
-          setRightData(data);
-        }
+        if (side === "left") setLeftData(data);
+        else setRightData(data);
       } else {
         alert("Product not found or error fetching data.");
       }
     } catch (err) {
-      console.error("Error fetching barcode information: ", err);
+      console.error("Error fetching barcode data:", err);
     }
   };
 
   const renderNutrition = (data) => {
     if (!data || (data.name && data.name.toLowerCase().includes("unknown"))) {
-      return (
-        <div className="product-not-found">
-          <h1>Product Not Found</h1>
-        </div>
-      );
+      return <div className="product-not-found"><h1>Product Not Found</h1></div>;
     }
 
-    let nutritionData = {};
-    try {
-      nutritionData = JSON.parse(data.nutrition_data || "{}");
-    } catch {
-      nutritionData = {};
-    }
-
+    const nutritionData = JSON.parse(data.nutrition_data || "{}");
     const normalized = {};
     for (const key in nutritionData) {
       if (Object.hasOwn(nutritionData, key)) {
@@ -81,7 +70,7 @@ const Compare = () => {
       `Proteins: ${normalized["proteins"] != null ? `${normalized["proteins"].toFixed(1)} g` : "N/A"}`,
       `Sugars: ${normalized["sugars"] != null ? `${normalized["sugars"].toFixed(1)} g` : "N/A"}`,
       `Fiber: ${normalized["fiber"] != null ? `${normalized["fiber"].toFixed(1)} g` : "N/A"}`,
-      `Salt: ${normalized["salt"] != null ? `${normalized["salt"].toFixed(1)} g` : "N/A"}`
+      `Salt: ${normalized["salt"] != null ? `${normalized["salt"].toFixed(1)} g` : "N/A"}`,
     ];
 
     return (
@@ -122,9 +111,10 @@ const Compare = () => {
             onChange={(e) => setLeftInput(e.target.value)}
           />
           <label htmlFor="left-barcode-image">Upload Barcode Image:</label>
-          <input type="file" id="left-barcode-image" accept="image/*" />
+          <input type="file" ref={leftFileRef} accept="image/*" />
           <button onClick={() => handleScan("left")}>Scan</button>
         </div>
+
         <div className="scanner">
           <h3>Scanner #2</h3>
           <input
@@ -134,10 +124,11 @@ const Compare = () => {
             onChange={(e) => setRightInput(e.target.value)}
           />
           <label htmlFor="right-barcode-image">Upload Barcode Image:</label>
-          <input type="file" id="right-barcode-image" accept="image/*" />
+          <input type="file" ref={rightFileRef} accept="image/*" />
           <button onClick={() => handleScan("right")}>Scan</button>
         </div>
       </div>
+
       <div className="nutrition-section">
         <div className="nutrition">
           <h3>Nutrition #1</h3>

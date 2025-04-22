@@ -1,3 +1,4 @@
+// LiveScanner.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./barcodeScanner.css";
@@ -14,7 +15,6 @@ export default function LiveScanner() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Get available video input devices
   useEffect(() => {
     (async () => {
       try {
@@ -32,11 +32,9 @@ export default function LiveScanner() {
     })();
   }, []);
 
-  // Start scanning on device change
   useEffect(() => {
     if (!selectedDeviceId) return;
 
-    // Cleanup previous instance
     controlsRef.current?.stop();
     if (videoRef.current) videoRef.current.srcObject = null;
 
