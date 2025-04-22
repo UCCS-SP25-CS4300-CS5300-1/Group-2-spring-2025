@@ -2,12 +2,14 @@
 .navbar {
   background-color: #fff;
   border-bottom: 1px solid #ddd;
-  padding: 1rem 2rem;
+  padding: 0 2rem;
   height: 4.5rem;
   position: sticky;
   top: 0;
   z-index: 1000;
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .navbar-container {
@@ -17,6 +19,7 @@
   max-width: 1000px;
   margin: 0 auto;
   box-sizing: border-box;
+  width: 100%;
 }
 
 /* LOGO */
@@ -24,6 +27,7 @@
   font-size: 1.3rem;
   font-weight: bold;
   color: #222;
+  text-decoration: none;
 }
 
 /* TOGGLE BUTTON (HIDDEN ON DESKTOP) */
@@ -54,6 +58,7 @@
 .navbar-links li a {
   color: #444;
   font-weight: 500;
+  text-decoration: none;
   transition: color 0.2s ease;
 }
 
@@ -64,21 +69,34 @@
 /* DROPDOWN */
 .dropdown {
   position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .dropdown-toggle {
-  background: none;
+  background-color: #406C35;
+  color: white;
   border: none;
-  cursor: pointer;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 0.95rem;
   display: flex;
   align-items: center;
-  font-weight: 500;
   gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 100%;
+}
+
+.dropdown-toggle:hover {
+  background-color: #2f5128;
 }
 
 .avatar-icon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./barcodeScanner.css";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
@@ -14,9 +14,7 @@ export const fetchBarcodeData = async (barcode) => {
       const response = await fetch(`${API_URL}/imagescan/`, {
         method: "POST",
         credentials: "include",
-        headers: {
-          "X-CSRFToken": csrfToken,
-        },
+        headers: { "X-CSRFToken": csrfToken },
         body: formData,
       });
       if (!response.ok) throw new Error("Image scan failed");
@@ -67,30 +65,6 @@ const saveScannedItem = async (barcode) => {
 function Scanner() {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    let stream = null;
-    const startCamera = async () => {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.error("Camera access failed:", err);
-      }
-    };
-    startCamera();
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-        console.log("Camera stopped.");
-      }
-    };
-  }, []);
 
   const inputChange = (e) => setInputValue(e.target.value);
 
@@ -149,21 +123,9 @@ function Scanner() {
       </div>
 
       <button className="scan-btn" onClick={clicked}>Scan Barcode</button>
-
       <button className="switch-btn" onClick={handleSwitch}>
         Switch to Camera Scan
       </button>
-
-      <div className="button-group">
-        <button className="account-btn" onClick={() => navigate("/account")}>
-          Account
-        </button>
-      </div>
-
-      <div className="bottom-links">
-        <Link className="faq-btn" to="/contact">FAQ</Link>
-        <Link className="about-btn" to="/about">About</Link>
-      </div>
     </div>
   );
 }
