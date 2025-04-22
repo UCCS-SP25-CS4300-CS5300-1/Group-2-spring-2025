@@ -5,9 +5,6 @@ import { fetchBarcodeData } from "../barcodeScanner/barcodeScanner.jsx";
 import { BrowserMultiFormatReader, BarcodeFormat } from "@zxing/browser";
 import { DecodeHintType } from "@zxing/library";
 
-
-const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
-
 export default function LiveScanner() {
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
@@ -17,7 +14,7 @@ export default function LiveScanner() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Enumerate available cameras once
+  // Get available video input devices
   useEffect(() => {
     (async () => {
       try {
@@ -35,15 +32,14 @@ export default function LiveScanner() {
     })();
   }, []);
 
-  // Start or restart scanning on camera change
+  // Start scanning on device change
   useEffect(() => {
     if (!selectedDeviceId) return;
 
-    // cleanup any previous stream
+    // Cleanup previous instance
     controlsRef.current?.stop();
     if (videoRef.current) videoRef.current.srcObject = null;
 
-    // set up ZXing reader
     const hints = new Map();
     hints.set(DecodeHintType.POSSIBLE_FORMATS, [
       BarcodeFormat.CODE_128,
@@ -51,6 +47,7 @@ export default function LiveScanner() {
       BarcodeFormat.UPC_A,
       BarcodeFormat.QR_CODE,
     ]);
+
     codeReaderRef.current = new BrowserMultiFormatReader(hints, {
       delayBetweenScanAttempts: 300,
     });
@@ -64,27 +61,19 @@ export default function LiveScanner() {
         controlsRef.current = controls;
 
         if (result) {
-          // stop scanning and clear video
           controls.stop();
           if (videoRef.current) videoRef.current.srcObject = null;
 
           const barcode = result.getText();
-          console.log("Barcode scanned:", barcode);
-
-          // ② Delegate to your helper
           const data = await fetchBarcodeData(barcode);
 
-          if (data) {
-            if (data.name && !data.name.toLowerCase().includes("unknown")) {
-              navigate("/nutrition", { state: { barcodeData: data } });
-            } else {
-              alert("Product not found.");
-            }
+          if (data && data.name && !data.name.toLowerCase().includes("unknown")) {
+            navigate("/nutrition", { state: { barcodeData: data } });
           } else {
-            alert("Failed to fetch product info.");
+            alert("Product not found.");
           }
         } else if (err) {
-          console.log("No result yet:", err);
+          console.log("Scanning...", err?.message || err);
         }
       }
     );
@@ -96,7 +85,6 @@ export default function LiveScanner() {
     };
   }, [selectedDeviceId, navigate]);
 
-  // Cycle through devices on button click
   const handleSwitchCamera = () => {
     if (!devices.length) return;
     const idx = devices.findIndex((d) => d.deviceId === selectedDeviceId);
@@ -104,7 +92,6 @@ export default function LiveScanner() {
     setSelectedDeviceId(next.deviceId);
   };
 
-  // Switch to manual entry
   const handleManual = () => {
     controlsRef.current?.stop();
     if (videoRef.current) videoRef.current.srcObject = null;
@@ -114,25 +101,25 @@ export default function LiveScanner() {
   return (
     <div className="barcode-app">
       <h2>Live Barcode Scanner</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* Camera swap button */}
-      {devices.length > 1 && (
-        <button className="switch-btn" onClick={handleSwitchCamera}>
-          Switch Camera
-        </button>
-      )}
+      {error && <p className="error-text">{error}</p>}
 
       <video
         ref={videoRef}
-        style={{ width: "100%", maxWidth: "400px", borderRadius: "8px" }}
+        className="live-video"
         autoPlay
         playsInline
       />
 
-      <button className="switch-btn" onClick={handleManual}>
-        Switch to Manual Entry
-      </button>
+      <div className="scanner-button-group">
+        {devices.length > 1 && (
+          <button className="switch-btn" onClick={handleSwitchCamera}>
+            Switch Camera
+          </button>
+        )}
+        <button className="switch-btn" onClick={handleManual}>
+          Switch to Manual Entry
+        </button>
+      </div>
     </div>
   );
 }
