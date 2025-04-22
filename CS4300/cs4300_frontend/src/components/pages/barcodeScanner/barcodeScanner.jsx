@@ -4,8 +4,8 @@ import "./barcodeScanner.css";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
-// Fetch product data via image or barcode number
-const fetchBarcodeData = async (barcode) => {
+// ✅ Named export for external use
+export const fetchBarcodeData = async (barcode) => {
   const csrfToken = localStorage.getItem("token");
 
   if (typeof barcode !== "string") {
@@ -45,7 +45,7 @@ const fetchBarcodeData = async (barcode) => {
   }
 };
 
-// Save to backend
+// Save scanned item to backend
 const saveScannedItem = async (barcode) => {
   try {
     const csrfToken = localStorage.getItem("token");
