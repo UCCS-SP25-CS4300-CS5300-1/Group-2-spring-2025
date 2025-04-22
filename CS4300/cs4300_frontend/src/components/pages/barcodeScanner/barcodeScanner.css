@@ -48,7 +48,9 @@ body {
 
 /* Buttons */
 .scan-btn,
-.bottom-btn {
+.bottom-btn,
+.account-btn,
+.switch-btn {
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #99CC66;
@@ -61,12 +63,15 @@ body {
 }
 
 .scan-btn:hover,
-.bottom-btn:hover {
+.bottom-btn:hover,
+.account-btn:hover,
+.switch-btn:hover {
   background-color: #406C35;
 }
 
 /* Link + Button group */
-.bottom-actions {
+.bottom-actions,
+.bottom-links {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -74,12 +79,35 @@ body {
   margin-top: 2rem;
 }
 
+.bottom-links a {
+  color: #254222;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.bottom-links a:hover {
+  color: #406C35;
+}
+
+/* Camera Scanner Section */
+.camera-wrapper {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  align-items: center;
+}
+
+/* Responsive Fixes */
 @media (max-width: 600px) {
   .input-group {
     padding: 1.5rem;
   }
 
-  .bottom-actions {
+  .bottom-actions,
+  .bottom-links {
     flex-direction: column;
     align-items: center;
   }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./barcodeHistory.css";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
@@ -14,10 +14,10 @@ const fetchScannedItems = async () => {
         "X-CSRFToken": csrfToken,
       },
     });
-    if (!response.ok) throw new Error("Network response was not ok");
+    if (!response.ok) throw new Error("Failed to fetch");
     return await response.json();
   } catch (error) {
-    console.error("Error fetching scanned items:", error);
+    console.error("fetchScannedItems:", error);
     return [];
   }
 };
@@ -33,7 +33,7 @@ const deleteScannedItem = async (id) => {
       },
     });
   } catch (error) {
-    console.error("Error deleting scanned item:", error);
+    console.error("deleteScannedItem:", error);
   }
 };
 
@@ -49,37 +49,37 @@ const updateScannedItem = async (id, data) => {
       },
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error("Network response was not ok");
+    if (!response.ok) throw new Error("Failed to update");
     return await response.json();
   } catch (error) {
-    console.error("Error updating scanned item:", error);
+    console.error("updateScannedItem:", error);
     return null;
   }
 };
 
-function BarcodeHistory() {
+export default function BarcodeHistory() {
   const [scannedItems, setScannedItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchItems = async () => {
-      const data = await fetchScannedItems();
-      setScannedItems(data);
+    (async () => {
+      const items = await fetchScannedItems();
+      setScannedItems(items);
       setLoading(false);
-    };
-    fetchItems();
+    })();
   }, []);
 
   const handleDelete = async (id) => {
     await deleteScannedItem(id);
-    setScannedItems(scannedItems.filter((item) => item.id !== id));
+    setScannedItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   const handleFavoriteToggle = async (id, favorite) => {
     const updatedItem = await updateScannedItem(id, { favorite: !favorite });
     if (updatedItem) {
-      setScannedItems(
-        scannedItems.map((item) => (item.id === id ? updatedItem : item))
+      setScannedItems((prev) =>
+        prev.map((item) => (item.id === id ? updatedItem : item))
       );
     }
   };
@@ -95,18 +95,27 @@ function BarcodeHistory() {
             <span>{item.name} - {item.barcode}</span>
             <div className="item-actions">
               <button className="favorite-btn" onClick={() => handleFavoriteToggle(item.id, item.favorite)}>
-                {item.favorite ? "Unfavorite" : "Favorite"}
+                {item.favorite ? "★ Unfavorite" : "☆ Favorite"}
               </button>
               <button className="delete-btn" onClick={() => handleDelete(item.id)}>
                 Delete
               </button>
+              {item.barcode && (
+                <Link
+                  to="/compare"
+                  state={{ leftBarcode: item.barcode }}
+                  className="compare-btn"
+                >
+                  Compare
+                </Link>
+              )}
             </div>
           </li>
         ))}
       </ul>
 
       <div className="button-group">
-        <button className="account-btn">Account</button>
+        <button className="account-btn" onClick={() => navigate("/account")}>Account</button>
       </div>
 
       <div className="bottom-links">
@@ -116,5 +125,3 @@ function BarcodeHistory() {
     </div>
   );
 }
-
-export default BarcodeHistory;

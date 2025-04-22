@@ -12,6 +12,7 @@
   color: #254222;
 }
 
+/* List Styling */
 .scanned-items-list {
   list-style: none;
   padding: 0;
@@ -34,24 +35,29 @@
   font-size: 1rem;
 }
 
+/* Action Buttons */
 .item-actions {
   display: flex;
   gap: 0.5rem;
 }
 
-.favorite-btn,
-.delete-btn {
+.scanned-item button,
+.compare-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.3s ease;
+  text-decoration: none;
+  color: #fff;
 }
 
 .favorite-btn {
   background-color: #99CC66;
-  color: #fff;
 }
 
 .favorite-btn:hover {
@@ -60,13 +66,22 @@
 
 .delete-btn {
   background-color: #254222;
-  color: #fff;
 }
 
 .delete-btn:hover {
   background-color: #406C35;
 }
 
+.compare-btn {
+  background-color: #8BAF68;
+  margin-top: 0.5rem;
+}
+
+.compare-btn:hover {
+  background-color: #406C35;
+}
+
+/* Button Group */
 .button-group {
   display: flex;
   justify-content: center;
@@ -88,6 +103,7 @@
   background-color: #406C35;
 }
 
+/* Bottom Links */
 .bottom-links {
   display: flex;
   justify-content: center;
@@ -107,6 +123,7 @@
   color: #406C35;
 }
 
+/* Mobile Optimization */
 @media (max-width: 600px) {
   .scanned-item {
     flex-direction: column;

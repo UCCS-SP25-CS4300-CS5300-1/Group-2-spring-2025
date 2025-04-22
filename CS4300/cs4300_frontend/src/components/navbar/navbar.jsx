@@ -26,7 +26,6 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close menu + dropdown on route change
   useEffect(() => {
     setMenuOpen(false);
     setDropdownOpen(false);
@@ -48,7 +47,8 @@ const Navbar = () => {
         </button>
 
         <ul className={`navbar-links ${menuOpen ? "active" : ""}`}>
-          <li><Link to="/scanner">Scanner</Link></li>
+          <li><Link to="/live-scanner">Scanner</Link></li>
+          <li><Link to="/compare">Compare</Link></li>
           <li><Link to="/about">About</Link></li>
           <li><Link to="/contact">Contact</Link></li>
           <li><Link to="/history">History</Link></li>
@@ -65,7 +65,7 @@ const Navbar = () => {
             </button>
 
             {dropdownOpen && (
-              <div className={`dropdown-menu dropdown-active`}>
+              <div className="dropdown-menu dropdown-active">
                 {isLoggedIn ? (
                   <>
                     <Link to="/account" onClick={() => setDropdownOpen(false)}>Account</Link>

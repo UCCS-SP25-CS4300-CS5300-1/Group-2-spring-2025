@@ -1,22 +1,28 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: #CAE4C5; /* Pastel Mint */
   font-family: 'Roboto', sans-serif;
-  background-color: #CAE4C5;
-  color: #406C35;
+  color: #406C35; /* Kale Green */
 }
 
-.nutrition-container {
+/* Container */
+.food-container {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 2rem;
-  background-color: #ECE2B1;
+  background-color: #ECE2B1; /* Soft Cream */
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  margin-top: 2rem;
+  max-width: 1000px;
+  margin: 2rem auto;
+  box-sizing: border-box;
 }
 
+/* Main Section */
 .main-section {
   flex: 1 1 300px;
   display: flex;
@@ -33,16 +39,18 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Title */
 h1 {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #254222;
+  color: #254222; /* Forest Depth */
   text-align: center;
   margin-bottom: 0.5rem;
 }
 
+/* Score Box */
 .score-box {
-  background: #CAE4C5;
+  background: #CAE4C5; /* Pastel Mint */
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -52,6 +60,7 @@ h1 {
   color: #406C35;
 }
 
+/* Right Section */
 .right-section {
   flex: 1 1 300px;
   display: flex;
@@ -59,27 +68,37 @@ h1 {
   gap: 1.5rem;
 }
 
-.food-alerts, .nutrition-facts {
+/* Info Cards */
+.food-alerts,
+.nutrition-facts,
+.ingredients {
   background: #CAE4C5;
   padding: 1.25rem;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.food-alerts h3, .nutrition-facts h3 {
+/* Card Headers */
+.food-alerts h3,
+.nutrition-facts h3,
+.ingredients h3 {
   font-size: 1.2rem;
   color: #254222;
   margin-bottom: 0.75rem;
 }
 
-.food-alerts p, .nutrition-facts p {
+/* Card Paragraphs */
+.food-alerts p,
+.nutrition-facts p,
+.ingredients p {
   font-size: 0.95rem;
   color: #406C35;
   margin-bottom: 0.5rem;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
-  .nutrition-container {
+  .food-container {
     flex-direction: column;
     padding: 1.5rem;
   }
@@ -92,4 +111,21 @@ h1 {
   h1 {
     font-size: 1.5rem;
   }
+}
+
+/* Button Styling (if any used in this page) */
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #99CC66; /* Leafy Mint */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #406C35;
 }
