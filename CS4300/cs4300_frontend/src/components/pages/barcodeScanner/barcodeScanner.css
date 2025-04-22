@@ -51,9 +51,7 @@
 
 /* Buttons */
 .switch-btn,
-.scan-btn,
-.bottom-btn,
-.account-btn {
+.scan-btn {
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #99CC66;
@@ -67,35 +65,8 @@
 }
 
 .switch-btn:hover,
-.scan-btn:hover,
-.bottom-btn:hover,
-.account-btn:hover {
+.scan-btn:hover {
   background-color: #406C35;
-}
-
-/* Bottom Button Group */
-.button-group {
-  margin-top: 1rem;
-}
-
-/* Links */
-.bottom-links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 1rem;
-}
-
-.bottom-links a {
-  color: #254222;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1rem;
-  transition: color 0.3s ease;
-}
-
-.bottom-links a:hover {
-  color: #406C35;
 }
 
 /* Responsive Adjustments */
@@ -110,21 +81,5 @@
 
   .input-group {
     width: 100%;
-  }
-
-  .bottom-links {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  /* Live Camera Video Styling */
-.live-video {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  margin: 0 auto;
-  display: block;
   }
 }
