@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logout from "../pages/auth/logout/logout";
 import avatarIcon from "../../assets/avatar-icon.png";
-import "./Navbar.css";
+import "./navbar.css";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
