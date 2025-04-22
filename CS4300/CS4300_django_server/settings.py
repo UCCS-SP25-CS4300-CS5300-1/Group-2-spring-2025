@@ -35,7 +35,7 @@ ALLOWED_HOSTS = [
     "*",
     "cs4300-group2.TECH",
     "www.cs4300-group2.tech",
-    "https://cs4300group2.rocks",
+    "cs4300group2.rocks",
         ]
 
 
