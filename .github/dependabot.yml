@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/cs4300/CS4300_frontend"
+    directory: "/CS4300/cs4300_frontend"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 2
