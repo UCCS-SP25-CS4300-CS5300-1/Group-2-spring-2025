@@ -60,7 +60,7 @@ def parseIngredients(product_data):
     returnval = list([])
     ingredients = product_data.get("ingredients", {})
     for ingredient in ingredients:
-        returnval.append(str(ingredient['text']))
+        returnval.append(ingredient.get("text", "Error"))
     return json.dumps(returnval)
 
 class Product:
