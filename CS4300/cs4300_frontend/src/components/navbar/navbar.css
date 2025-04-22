@@ -75,8 +75,8 @@
 }
 
 .dropdown-toggle {
-  background-color: #406C35;
-  color: white;
+  background-color: transparent;
+  color: #254222;
   border: none;
   border-radius: 6px;
   padding: 8px 16px;
@@ -86,12 +86,13 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
   height: 100%;
 }
 
 .dropdown-toggle:hover {
-  background-color: #2f5128;
+  background-color: #406C35;
+  color: white;
 }
 
 .avatar-icon {
