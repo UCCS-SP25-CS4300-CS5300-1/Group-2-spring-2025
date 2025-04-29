@@ -7,9 +7,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 @pytest.fixture
 def api_client():
     return APIClient()
+
 
 @pytest.fixture
 def mock_openai_client():
@@ -20,6 +22,7 @@ def mock_openai_client():
     ]
     mock_client.chat.completions.create.return_value = mock_response
     return mock_client
+
 
 @pytest.mark.django_db
 @patch('CS4300_backend.views.openai.OpenAI')
@@ -44,6 +47,7 @@ def test_health_score_view_success(mock_openai_class, api_client):
     assert response.data["health_score"] == "8.0/10"
     mock_client.chat.completions.create.assert_called_once()
 
+
 @pytest.mark.django_db
 @patch('CS4300_backend.views.openai.OpenAI')
 @patch.dict(os.environ, {'OPENAI_API_KEY': 'fake-key'})
@@ -64,6 +68,7 @@ def test_health_score_view_failure(mock_openai_class, api_client):
     assert "error" in response.data
     assert "API error" in response.data["error"]
 
+
 @pytest.mark.django_db
 @patch('CS4300_backend.views.openai.OpenAI')
 @patch.dict(os.environ, {'OPENAI_API_KEY': 'fake-key'})
@@ -72,7 +77,10 @@ def test_health_summary_view_success(mock_openai_class, api_client):
     mock_openai_class.return_value = mock_client
 
     mock_response = MagicMock()
-    mock_response.choices = [MagicMock(message=MagicMock(content="This is a healthy product with balanced nutrition."))]
+    mock_response.choices = [
+        MagicMock(
+            message=MagicMock(
+                content="This is a healthy product with balanced nutrition."))]
     mock_client.chat.completions.create.return_value = mock_response
 
     url = reverse('health_summary')
@@ -86,6 +94,7 @@ def test_health_summary_view_success(mock_openai_class, api_client):
     assert response.status_code == 200
     assert response.data["health_score_summary"] == "This is a healthy product with balanced nutrition."
     mock_client.chat.completions.create.assert_called_once()
+
 
 @pytest.mark.django_db
 @patch('CS4300_backend.views.openai.OpenAI')

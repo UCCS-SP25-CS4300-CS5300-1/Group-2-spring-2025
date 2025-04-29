@@ -15,6 +15,7 @@ import os
 load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')
 
+
 class imageScan:
     def __init__(self):
         self.barcode = None
@@ -27,12 +28,11 @@ class imageScan:
 
         try:
             image.seek(0)
-        except:
+        except BaseException:
             return None
 
         filebytes = image.read()
         nparray = np.frombuffer(filebytes, np.uint8)
-
 
         img = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
 
@@ -43,10 +43,12 @@ class imageScan:
 
         return barcode if barcode else None
 
+
 def parseAllergens(product_data, custom=False):
     allergens_list = product_data.get("allergens_from_ingredients", {})
-    allergens_list = allergens_list.replace("en:", "").split(", ") # split into a list and remove any en:
-    allergens_list = list(set(allergens_list)) # remove duplicates
+    # split into a list and remove any en:
+    allergens_list = allergens_list.replace("en:", "").split(", ")
+    allergens_list = list(set(allergens_list))  # remove duplicates
     ingredients = json.dumps(product_data.get("ingredients", {}))
     ingredients = "".join(ingredients).lower()
     if custom and isinstance(custom, list):
@@ -56,12 +58,14 @@ def parseAllergens(product_data, custom=False):
     allergens = json.dumps(allergens_list)
     return allergens
 
+
 def parseIngredients(product_data):
     returnval = list([])
     ingredients = product_data.get("ingredients", {})
     for ingredient in ingredients:
         returnval.append(ingredient.get("text", "Error"))
     return json.dumps(returnval)
+
 
 class Product:
     # note for later: "image_front_url" sometimes gives an image for the food
@@ -71,15 +75,18 @@ class Product:
         self.customAllergens = allergens
 
     def fetch_nutrition_data(self, customAllergens=None):
-        url = f"https://world.openfoodfacts.net/api/v2/product/{self.barcode}.json"
+        url = f"https://world.openfoodfacts.net/api/v2/product/{
+            self.barcode}.json"
         response = requests.get(url)
 
         if response.status_code == 200:
             data = response.json()
             product_data = data.get('product', {})
             self.name = product_data.get('product_name', 'Unknown')
-            self.nutrition_data = json.dumps(product_data.get('nutriments', {}))
-            self.alerts = parseAllergens(product_data, (customAllergens or self.customAllergens))
+            self.nutrition_data = json.dumps(
+                product_data.get('nutriments', {}))
+            self.alerts = parseAllergens(
+                product_data, (customAllergens or self.customAllergens))
             self.ingredients = parseIngredients(product_data)
             self.image_url = product_data.get('image_front_url')
         else:
@@ -89,12 +96,14 @@ class Product:
             self.ingredients = "No Data Available"
             self.image_url = "No Data Available"
 
+
 class Allergen(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     allergen = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.allergen}'
+
 
 class ScannedItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

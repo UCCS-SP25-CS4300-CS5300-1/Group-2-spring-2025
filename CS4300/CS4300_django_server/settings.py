@@ -14,7 +14,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
 
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,7 +35,7 @@ ALLOWED_HOSTS = [
     "cs4300-group2.TECH",
     "www.cs4300-group2.tech",
     "cs4300group2.rocks",
-        ]
+]
 
 
 # Application definition

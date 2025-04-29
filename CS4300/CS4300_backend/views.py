@@ -28,13 +28,15 @@ class ImagescanView(APIView):
     def post(self, request, format=None):
         image = request.FILES.get('file')
         if not image:
-            return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'No file uploaded'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         scanner = imageScan()
         upc = scanner.fetch_upc(image)
 
         if not upc:
-            return Response({'error': 'No barcode found'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            return Response({'error': 'No barcode found'},
+                            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         serializer = getProductInfo(upc, request)
 
@@ -54,7 +56,8 @@ class HealthScoreOnlyView(APIView):
         nutrition_data = request.data.get("nutrition_data")
 
         if not name or not nutrition_data:
-            return Response({"error": "Missing product name or nutrition data"}, status=400)
+            return Response(
+                {"error": "Missing product name or nutrition data"}, status=400)
 
         prompt_score = (
             "Generate a health score scaled from 1-10 in the format 'x.x/10' and no summary or extra information "
@@ -84,7 +87,8 @@ class HealthSummaryOnlyView(APIView):
         nutrition_data = request.data.get("nutrition_data")
 
         if not name or not nutrition_data:
-            return Response({"error": "Missing product name, nutrition data, or health score"}, status=400)
+            return Response(
+                {"error": "Missing product name, nutrition data, or health score"}, status=400)
 
         prompt_summary = (
             "Generate a 50-75 word summary about the health factors of the below food product based on a potential"
@@ -133,12 +137,15 @@ def register_view(request):
         email = data.get("email")
 
         if not username or not password or not email:
-            return JsonResponse({"error": "All fields are required"}, status=400)
+            return JsonResponse(
+                {"error": "All fields are required"}, status=400)
 
         if User.objects.filter(username=username).exists():
-            return JsonResponse({"error": "Username already exists"}, status=400)
+            return JsonResponse(
+                {"error": "Username already exists"}, status=400)
 
-        user = User.objects.create_user(username=username, password=password, email=email)
+        user = User.objects.create_user(
+            username=username, password=password, email=email)
         user.save()
         return JsonResponse({"message": "User registered successfully"})
     return JsonResponse({"error": "Invalid request method"}, status=405)
@@ -152,13 +159,15 @@ def login_view(request):
         password = data.get("password")
 
         if not username or not password:
-            return JsonResponse({"error": "Username and password are required"}, status=400)
+            return JsonResponse(
+                {"error": "Username and password are required"}, status=400)
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             token = get_token(request)
-            return JsonResponse({"message": "Login successful", "token": token})
+            return JsonResponse(
+                {"message": "Login successful", "token": token})
         else:
             return JsonResponse({"error": "Invalid credentials"}, status=401)
     return JsonResponse({"error": "Invalid request method"}, status=405)
@@ -170,13 +179,16 @@ class SaveScannedItemView(APIView):
     def post(self, request, format=None):
         barcode = request.data.get('barcode')
         if not barcode:
-            return Response({'error': 'No barcode provided'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'No barcode provided'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-        # Optionally, you can fetch the product data to extract additional info like product name
+        # Optionally, you can fetch the product data to extract additional info
+        # like product name
         product = Product(barcode)
         product.fetch_nutrition_data()
 
-        # Save the scanned item to the user's history, creating one if it doesn't exist
+        # Save the scanned item to the user's history, creating one if it
+        # doesn't exist
         scanned_item = ScannedItem.objects.create(
             user=request.user,
             barcode=barcode,
@@ -223,9 +235,11 @@ class AllergensView(APIView):
     def post(self, request, format=None):
         allergen = request.data.get('allergen')
         if not request.user.is_authenticated:
-            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Not logged in'},
+                            status=status.HTTP_400_BAD_REQUEST)
         if not allergen:
-            return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'No allergen provided'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         AllergyObj = Allergen.objects.create(
             user=request.user,
@@ -237,20 +251,24 @@ class AllergensView(APIView):
 
     def get(self, request, format=None):
         if not request.user.is_authenticated:
-            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Not logged in'},
+                            status=status.HTTP_400_BAD_REQUEST)
         allergens = Allergen.objects.filter(user=request.user)
         serializer = AllergenSerializer(allergens, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, format=None):
         if not request.user.is_authenticated:
-            return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Not logged in'},
+                            status=status.HTTP_400_BAD_REQUEST)
         try:
             todelete = request.data.get('allergen')
             if not todelete:
-                return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'No allergen provided'},
+                                status=status.HTTP_400_BAD_REQUEST)
 
-            allergen = Allergen.objects.get(user=request.user, allergen=str(todelete))
+            allergen = Allergen.objects.get(
+                user=request.user, allergen=str(todelete))
             allergen.delete()
             return Response(status=status.HTTP_200_OK)
         except Allergen.DoesNotExist:

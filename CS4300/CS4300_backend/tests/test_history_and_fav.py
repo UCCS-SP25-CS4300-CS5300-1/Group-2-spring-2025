@@ -11,17 +11,20 @@ from ..models import ScannedItem
 class SaveScannedItemViewTests(APITestCase):
     def setUp(self):
         # Create and authenticate a test user
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = User.objects.create_user(
+            username="testuser", password="password")
         self.client.force_authenticate(user=self.user)
         self.url = reverse('save-scanned-item')
 
     def test_create_scanned_item_success(self):
-        # Patch Product.__init__ to set attributes without calling external API logic
+        # Patch Product.__init__ to set attributes without calling external API
+        # logic
         def fake_init(self, barcode):
             self.barcode = barcode
             self.name = "Test Product"
 
-        # Patch Product.__init__ in the view module so that SaveScannedItemView uses our dummy initializer
+        # Patch Product.__init__ in the view module so that SaveScannedItemView
+        # uses our dummy initializer
         with patch('CS4300_backend.views.Product.__init__', new=fake_init):
             # Also patch fetch_nutrition_data to do nothing
             with patch('CS4300_backend.views.Product.fetch_nutrition_data', return_value=None):
@@ -42,7 +45,8 @@ class SaveScannedItemViewTests(APITestCase):
 class UserScannedItemsViewTests(APITestCase):
     def setUp(self):
         # Create and authenticate a test user
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = User.objects.create_user(
+            username="testuser", password="password")
         self.client.force_authenticate(user=self.user)
         self.list_url = reverse('user-scanned-items')
         # Create two scanned items for the user
@@ -62,7 +66,10 @@ class UserScannedItemsViewTests(APITestCase):
 
     def test_delete_scanned_item(self):
         # Issue a DELETE request to remove the first scanned item
-        detail_url = reverse('scanned-item-detail', kwargs={'pk': self.item1.pk})
+        detail_url = reverse(
+            'scanned-item-detail',
+            kwargs={
+                'pk': self.item1.pk})
         response = self.client.delete(detail_url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         # Ensure the item was deleted from the database
@@ -70,9 +77,13 @@ class UserScannedItemsViewTests(APITestCase):
 
     def test_patch_scanned_item_toggle_favorite(self):
         # Toggle the favorite flag using a PATCH request
-        detail_url = reverse('scanned-item-detail', kwargs={'pk': self.item2.pk})
+        detail_url = reverse(
+            'scanned-item-detail',
+            kwargs={
+                'pk': self.item2.pk})
         # Initially favorite is False; set it to True
-        response = self.client.patch(detail_url, {'favorite': True}, format='json')
+        response = self.client.patch(
+            detail_url, {'favorite': True}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Refresh instance from database to check updated favorite value
         self.item2.refresh_from_db()

@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class ProductSerializer(serializers.Serializer):
     barcode = serializers.CharField(max_length=20)
     name = serializers.CharField(max_length=255, read_only=True)
@@ -41,6 +42,7 @@ class AllergenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Allergen
         fields = ["allergen"]
+
 
 class ScannedItemSerializer(serializers.ModelSerializer):
     class Meta:

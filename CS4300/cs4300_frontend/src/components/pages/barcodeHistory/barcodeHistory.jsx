@@ -4,6 +4,8 @@ import "./barcodeHistory.css";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
+let delDeb = false;
+
 const fetchScannedItems = async () => {
   try {
     const csrfToken = localStorage.getItem("token");
@@ -23,6 +25,8 @@ const fetchScannedItems = async () => {
 };
 
 const deleteScannedItem = async (id) => {
+  if (delDeb) return;
+  delDeb = true;
   try {
     const csrfToken = localStorage.getItem("token");
     await fetch(`${API_URL}/user-scanned-items/${id}/`, {
@@ -32,7 +36,9 @@ const deleteScannedItem = async (id) => {
         "X-CSRFToken": csrfToken,
       },
     });
+    delDeb = false;
   } catch (error) {
+    delDeb = false;
     console.error("deleteScannedItem:", error);
   }
 };

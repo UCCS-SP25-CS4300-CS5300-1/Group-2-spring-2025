@@ -9,7 +9,10 @@ class AuthTests(TestCase):
         self.username = 'testuser'
         self.password = 'testpassword'
         self.email = 'testuser@example.com'
-        self.user = User.objects.create_user(username=self.username, password=self.password, email=self.email)
+        self.user = User.objects.create_user(
+            username=self.username,
+            password=self.password,
+            email=self.email)
 
     def test_register_view(self):
         response = self.client.post(reverse('register'), {
@@ -18,7 +21,9 @@ class AuthTests(TestCase):
             'email': 'newuser@example.com'
         }, content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get('message'), 'User registered successfully')
+        self.assertEqual(
+            response.json().get('message'),
+            'User registered successfully')
 
     def test_register_view_existing_user(self):
         response = self.client.post(reverse('register'), {
@@ -27,7 +32,9 @@ class AuthTests(TestCase):
             'email': self.email
         }, content_type='application/json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json().get('error'), 'Username already exists')
+        self.assertEqual(
+            response.json().get('error'),
+            'Username already exists')
 
     def test_login_view(self):
         response = self.client.post(reverse('login'), {
@@ -49,7 +56,9 @@ class AuthTests(TestCase):
         self.client.login(username=self.username, password=self.password)
         response = self.client.get(reverse('logout'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json().get('message'), 'Logged out successfully')
+        self.assertEqual(
+            response.json().get('message'),
+            'Logged out successfully')
 
     def test_check_auth_view_authenticated(self):
         self.client.login(username=self.username, password=self.password)

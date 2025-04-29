@@ -5,8 +5,12 @@ import {getCSRFToken} from "../../utils/auth_utils.jsx";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
+let saveDeb, delDeb = false;
+
 // sending the token because it seems to be required for the API to work
 const saveAllergen = async (allergen) => {
+    if (saveDeb) return;
+    saveDeb = true;
     try {
         const csrfToken = localStorage.getItem("token");
         const response = await fetch(`${API_URL}/user-allergens/`, {
@@ -23,9 +27,11 @@ const saveAllergen = async (allergen) => {
         }
         const data = await response.json();
         console.log("Saved allergen:", data);
+        saveDeb = false;
         return data;
     } catch (error) {
         console.error("Error saving allergen:", error);
+        saveDeb = false;
         return null;
     }
 };
@@ -51,6 +57,8 @@ const getAllergens = async () => {
 
 // needs the token here as well
 const deleteAllergen = async (id) => {
+    if (delDeb) return;
+    delDeb = true;  
     try {
         const csrfToken = localStorage.getItem("token");
         await fetch(`${API_URL}/user-allergens/`, {
@@ -62,7 +70,9 @@ const deleteAllergen = async (id) => {
             },
             body: JSON.stringify({allergen: id}),
         });
+        delDeb = false;
     } catch (error) {
+        delDeb = false;
         console.error(error);
     }
 };
