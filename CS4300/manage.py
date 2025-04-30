@@ -20,6 +20,7 @@ def main():
             "Couldn't import Django. Are you sure it's installed and "
             "available on your PYTHONPATH environment variable?"
         )
+        print(exc)
     #pylint: enable=wrong-import-position
 
     execute_from_command_line(sys.argv)

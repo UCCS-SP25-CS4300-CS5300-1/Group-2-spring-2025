@@ -10,7 +10,6 @@ import numpy as np
 from django.db import models
 from django.contrib.auth.models import User
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')
