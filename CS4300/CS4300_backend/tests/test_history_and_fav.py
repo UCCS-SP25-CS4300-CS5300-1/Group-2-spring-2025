@@ -1,11 +1,13 @@
 # tests/test_views.py
+from unittest.mock import patch
 from django.urls import reverse
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APITestCase
-from unittest.mock import patch
-
 from ..models import ScannedItem
+
+#pylint: disable=no-member
+#pylint: disable=missing-function-docstring
 
 
 class SaveScannedItemViewTests(APITestCase):

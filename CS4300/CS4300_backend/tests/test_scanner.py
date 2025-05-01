@@ -1,7 +1,7 @@
 import os
 import pytest
 from django.conf import settings
-from ..models import imageScan
+from ..models import ImageScan
 from django.test import TestCase, Client
 from rest_framework import status
 from django.urls import reverse
@@ -19,19 +19,19 @@ def test_scanner():
 
     with open(testimage1, 'rb') as img:
         image_data = img
-        scanner = imageScan()
+        scanner = ImageScan()
         barcode = scanner.fetch_upc(image_data)
         assert barcode == "0096619440047"
         img.close()
 
     with open(testimage2, 'rb') as img:
         image_data = img
-        scanner = imageScan()
+        scanner = ImageScan()
         barcode = scanner.fetch_upc(image_data)
         assert barcode == "0757528029753"
         img.close()
 
-    scanner = imageScan()
+    scanner = ImageScan()
     barcode = scanner.fetch_upc("ERROR")
     assert barcode is None
 

@@ -1,13 +1,15 @@
+import json
 from django.urls import reverse
 from django.contrib.auth.models import User
-from rest_framework import status
 from django.test import TestCase, Client
-from unittest.mock import patch
+from rest_framework import status
 from ..models import Allergen
-import json
 
+#pylint: disable=missing-function-docstring
+#pylint: disable=redefined-outer-name
+#pylint: disable=no-member
 
-class saveAllergen(TestCase):
+class SaveAllergen(TestCase):
     def setUp(self):
         self.client = Client()
         self.username = 'testuser'
@@ -21,7 +23,7 @@ class saveAllergen(TestCase):
         self.client.force_login(self.user)
         self.crsf = self.client.get(reverse("csrf"))
 
-    def test_saveAllergen(self):
+    def test_save(self):
         response = self.client.post(
             self.url, {'allergen': 'test'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -32,11 +34,11 @@ class saveAllergen(TestCase):
             self.url, {'nothing': 'test'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_getAllergens(self):
+    def test_get(self):
         response = self.client.get(self.url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_deleteAllergen(self):
+    def test_delete(self):
         response = self.client.delete(
             self.url,
             data=json.dumps({'allergen': 'test'}),

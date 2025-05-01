@@ -15,7 +15,7 @@ export const fetchBarcodeData = async (barcode) => {
     const formData = new FormData();
     formData.append("file", barcode);
     try {
-      const response = await fetch(`${API_URL}/imagescan/`, {
+      const response = await fetch(`${API_URL}/ImageScan/`, {
         method: "POST",
         credentials: "include",
         headers: { "X-CSRFToken": csrfToken },

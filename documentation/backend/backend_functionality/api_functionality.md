@@ -54,7 +54,7 @@ Simply attach an image to the body of the HTTP request sent to the server:
 ```javascript
 const formData = new FormData();
 formData.append("file", barcode);
-const response = await fetch(`http://127.0.0.1:8000/api/imagescan/`, {
+const response = await fetch(`http://127.0.0.1:8000/api/ImageScan/`, {
       method: "POST",
       body: formData,
 });

@@ -11,7 +11,7 @@ def main():
     os.environ.setdefault(
         'DJANGO_SETTINGS_MODULE',
         'CS4300_django_server.settings')
-    #pylint: disable=wrong-import-position
+    #pylint: disable=import-outside-toplevel
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -19,9 +19,8 @@ def main():
         raise ImportError(
             "Couldn't import Django. Are you sure it's installed and "
             "available on your PYTHONPATH environment variable?"
-        )
-        print(exc)
-    #pylint: enable=wrong-import-position
+        ) from exc
+    #pylint: enable=import-outside-toplevel
 
     execute_from_command_line(sys.argv)
 

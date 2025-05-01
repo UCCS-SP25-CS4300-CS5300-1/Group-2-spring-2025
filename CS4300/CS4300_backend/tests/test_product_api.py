@@ -8,11 +8,13 @@ os.environ.setdefault(
     'DJANGO_SETTINGS_MODULE',
     'CS4300_django_server.settings')
 
+#pylint: disable=missing-function-docstring
+#pylint: disable=redefined-outer-name
 
 @pytest.fixture
 def client():
     client = APIClient()
-    user = User.objects.create_user(
+    User.objects.create_user(
         username='testuser',
         password='testpassword')
     client.login(username='testuser', password='testpassword')

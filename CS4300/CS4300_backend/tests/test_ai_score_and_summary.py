@@ -1,13 +1,14 @@
 import os
-import pytest
 from unittest.mock import patch, MagicMock
+import pytest
 from rest_framework.test import APIClient
 from django.urls import reverse
 from dotenv import load_dotenv
 
 load_dotenv()
 
-
+#pylint: disable=missing-function-docstring
+#pylint: disable=redefined-outer-name
 @pytest.fixture
 def api_client():
     return APIClient()
@@ -92,7 +93,8 @@ def test_health_summary_view_success(mock_openai_class, api_client):
     response = api_client.post(url, data, format='json')
 
     assert response.status_code == 200
-    assert response.data["health_score_summary"] == "This is a healthy product with balanced nutrition."
+    assert response.data["health_score_summary"] == """This is a healthy product with
+     balanced nutrition."""
     mock_client.chat.completions.create.assert_called_once()
 
 
