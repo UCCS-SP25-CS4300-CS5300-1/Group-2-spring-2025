@@ -96,8 +96,9 @@ def test_health_summary_view_success(mock_openai_class, api_client):
     response = api_client.post(url, data, format='json')
 
     assert response.status_code == 200
-    assert response.data["health_score_summary"] == """This is a healthy product with
-     balanced nutrition."""
+    #pylint: disable=line-too-long
+    #shut up, it is 4 characters too long
+    assert response.data["health_score_summary"] == "This is a healthy product with balanced nutrition."
     mock_client.chat.completions.create.assert_called_once()
 
 
