@@ -107,8 +107,7 @@ class Product:
         """
         gets nutrition data such as ingredients
         """
-        url = f"https://world.openfoodfacts.net/api/v2/product/{
-            self.barcode}.json"
+        url = f"https://world.openfoodfacts.net/api/v2/product/{self.barcode}.json"
         response = requests.get(url, timeout=5)
 
         if response.status_code == 200:
