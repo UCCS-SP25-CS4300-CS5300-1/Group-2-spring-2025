@@ -1,3 +1,7 @@
+"""
+module docstring
+"""
+
 import json
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -10,11 +14,14 @@ from ..models import Allergen
 #pylint: disable=no-member
 
 class SaveAllergen(TestCase):
+    """
+    test the allergen save API
+    """
     def setUp(self):
         self.client = Client()
-        self.username = 'testuser'
-        self.password = 'testpassword'
-        self.email = 'testuser@example.com'
+        self.username = 'testing'
+        self.password = 'SuperSafe'
+        self.email = 'user@user.user'
         self.user = User.objects.create_user(
             username=self.username,
             password=self.password,

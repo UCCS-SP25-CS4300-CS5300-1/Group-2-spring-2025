@@ -1,9 +1,15 @@
+"""
+module for testing serializers
+"""
 from unittest.mock import patch, MagicMock
 from django.test import TestCase
 from ..serializers import ProductSerializer
 
 #pylint: disable=missing-function-docstring
 class ProductSerializerTest(TestCase):
+    """
+    serializer test case
+    """
     @patch("CS4300_backend.serializers.Product")
     def test_create_product_serializer(self, mock_product):
         mock_product = MagicMock()

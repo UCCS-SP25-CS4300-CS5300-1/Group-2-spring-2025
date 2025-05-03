@@ -1,11 +1,13 @@
+"""
+test the scanner API
+"""
+
 import os
-import pytest
-from django.conf import settings
-from ..models import ImageScan
-from django.test import TestCase, Client
 from rest_framework import status
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
+from ..models import ImageScan
 
 os.environ.setdefault(
     'DJANGO_SETTINGS_MODULE',
@@ -14,8 +16,10 @@ os.environ.setdefault(
 testimage1 = os.path.dirname(os.path.realpath(__file__)) + "/testChips.jpg"
 testimage2 = os.path.dirname(os.path.realpath(__file__)) + "/testTakis.jpeg"
 
-
 def test_scanner():
+    """
+    tests scanner API
+    """
 
     with open(testimage1, 'rb') as img:
         image_data = img
@@ -42,12 +46,21 @@ def test_scanner():
     assert barcode is None
 
 
-class api(TestCase):
+class Api(TestCase):
+    """
+    API class for ease of testing
+    """
     def setUp(self):
+        """
+        sets up the test
+        """
         self.client = Client()
         self.url = reverse("image-scanner")
 
     def test_api(self):
+        """
+        Actually tests the API
+        """
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         with open(testimage1, 'rb') as img:

@@ -1,3 +1,7 @@
+"""
+views.py for django
+"""
+
 # tests/test_views.py
 from unittest.mock import patch
 from django.urls import reverse
@@ -11,6 +15,9 @@ from ..models import ScannedItem
 
 
 class SaveScannedItemViewTests(APITestCase):
+    """
+    test that a saved item saved correctly
+    """
     def setUp(self):
         # Create and authenticate a test user
         self.user = User.objects.create_user(
@@ -45,6 +52,9 @@ class SaveScannedItemViewTests(APITestCase):
 
 
 class UserScannedItemsViewTests(APITestCase):
+    """
+    Make sure the API is working correctly.
+    """
     def setUp(self):
         # Create and authenticate a test user
         self.user = User.objects.create_user(

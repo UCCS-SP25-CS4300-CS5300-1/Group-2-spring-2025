@@ -1,9 +1,16 @@
+"""
+Module docstring test authentication
+"""
+
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-
+#pylint: disable=missing-function-docstring
 class AuthTests(TestCase):
+    """
+    test the authentication
+    """
     def setUp(self):
         self.client = Client()
         self.username = 'testuser'
