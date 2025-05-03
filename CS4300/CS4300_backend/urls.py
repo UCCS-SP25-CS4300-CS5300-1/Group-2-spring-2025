@@ -1,10 +1,17 @@
+"""
+main URLS for django
+"""
+
 from django.urls import path
 from . import views
 
 urlpatterns = [
     # Barcode URLs
-    path('product/<str:barcode>/', views.ProductView.as_view(), name='product-detail'),
-    path('imagescan/', views.ImagescanView.as_view(), name="image-scanner"),
+    path(
+        'product/<str:barcode>/',
+        views.ProductView.as_view(),
+        name='product-detail'),
+    path('ImageScan/', views.ImageScanView.as_view(), name="image-scanner"),
 
     # Authentication URLs
     path('csrf/', views.csrf_token_view, name='csrf'),
@@ -14,16 +21,30 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
 
     # Allergen update URLs
-    path('user-allergens/', views.AllergensView.as_view(), name="user-allergens"),
+    path(
+        'user-allergens/',
+        views.AllergensView.as_view(),
+        name="user-allergens"),
 
     # Scanned Item URLs
-    path('save-scanned-item/', views.SaveScannedItemView.as_view(), name='save-scanned-item'),
-    path('user-scanned-items/', views.UserScannedItemsView.as_view(), name='user-scanned-items'),
+    path(
+        'save-scanned-item/',
+        views.SaveScannedItemView.as_view(),
+        name='save-scanned-item'),
+    path(
+        'user-scanned-items/',
+        views.UserScannedItemsView.as_view(),
+        name='user-scanned-items'),
 
-    # allowing scanned items to be marked as favorite or delete them from their history
-    # payload: {"favorite": true} would set the item as favorite to the user-scanned-items/<pk> endpoint
+    # allowing scanned items to be marked as favorite or
+    #   delete them from their history
+    # payload: {"favorite": true} would set the item as
+    #   favorite to the user-scanned-items/<pk> endpoint
     # delete request would delete the item from the history
-    path('user-scanned-items/<int:pk>/', views.UserScannedItemsView.as_view(), name='scanned-item-detail'),
+    path('user-scanned-items/<int:pk>/',
+         views.UserScannedItemsView.as_view(),
+         name='scanned-item-detail'
+    ),
 
     path("health-score/", views.HealthScoreOnlyView.as_view(), name="health_score"),
     path("health-summary/", views.HealthSummaryOnlyView.as_view(), name="health_summary"),

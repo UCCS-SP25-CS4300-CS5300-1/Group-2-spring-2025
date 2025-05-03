@@ -4,23 +4,29 @@ import "./barcodeScanner.css";
 
 const API_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
+let fetchDeb = false;
+
 export const fetchBarcodeData = async (barcode) => {
+  if (fetchDeb) return;
+  fetchDeb = true;
   const csrfToken = localStorage.getItem("token");
 
   if (typeof barcode !== "string") {
     const formData = new FormData();
     formData.append("file", barcode);
     try {
-      const response = await fetch(`${API_URL}/imagescan/`, {
+      const response = await fetch(`${API_URL}/ImageScan/`, {
         method: "POST",
         credentials: "include",
         headers: { "X-CSRFToken": csrfToken },
         body: formData,
       });
       if (!response.ok) throw new Error("Image scan failed");
+      fetchDeb = false;
       return await response.json();
     } catch (error) {
       console.error("Image scan error:", error);
+      fetchDeb = false;
       return null;
     }
   } else {
@@ -34,9 +40,11 @@ export const fetchBarcodeData = async (barcode) => {
         },
       });
       if (!response.ok) throw new Error("Product fetch failed");
+      fetchDeb = false;
       return await response.json();
     } catch (error) {
       console.error("Text scan error:", error);
+      fetchDeb = false;
       return null;
     }
   }
