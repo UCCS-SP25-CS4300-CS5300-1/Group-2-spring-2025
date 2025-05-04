@@ -93,7 +93,7 @@ class HealthScoreOnlyView(APIView):
         try:
             client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
             score_response = client.chat.completions.create(
-                model="o3-mini",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "You are a nutrition expert."},
                     {"role": "user", "content": prompt_score}
@@ -131,7 +131,7 @@ class HealthSummaryOnlyView(APIView):
         try:
             client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
             summary_response = client.chat.completions.create(
-                model="o3-mini",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "You are a nutrition expert."},
                     {"role": "user", "content": prompt_summary}
