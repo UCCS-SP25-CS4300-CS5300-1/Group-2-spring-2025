@@ -48,7 +48,7 @@ def fetch_files_from_pr(pr):
 def request_code_review(diff, client):
     try:
         response = client.chat.completions.create(
-            model="o3-mini",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a helpful code reviewer."},
                 {"role": "user", "content": (
