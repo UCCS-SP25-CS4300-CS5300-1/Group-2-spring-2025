@@ -11,8 +11,9 @@ class ProductSerializer(serializers.Serializer):
     barcode = serializers.CharField(max_length=20)
     name = serializers.CharField(max_length=255, read_only=True)
     nutrition_data = serializers.JSONField(read_only=True)
-    alerts = serializers.CharField(max_length=255, read_only=True)
+    alerts = serializers.CharField(read_only=True)
     image_url = serializers.CharField(max_length=255, read_only=True)
+    ingredients = serializers.CharField(read_only=True)
 
     def create(self, validated_data):
         # Create product instance from given barcode
@@ -21,19 +22,19 @@ class ProductSerializer(serializers.Serializer):
 
         # Get necessary info about product
         product.fetch_nutrition_data()
-
         return {
             'barcode': product.barcode,
             'name': product.name,
             'nutrition_data': product.nutrition_data,
             'alerts': product.alerts,
+            'ingredients': product.ingredients,
             'image_url': product.image_url,
         }
-
-    def update(self, instance, validated_data):
-        instance.barcode = validated_data.get('barcode', instance.barcode)
-        instance.fetch_nutrition_data()
-        return instance
+    # removed update from the product serializer as it doesn't seem to be used.
+    # def update(self, instance, validated_data):
+    #     instance.barcode = validated_data.get('barcode', instance.barcode)
+    #     instance.fetch_nutrition_data()
+    #     return instance
 
 
 class AllergenSerializer(serializers.ModelSerializer):

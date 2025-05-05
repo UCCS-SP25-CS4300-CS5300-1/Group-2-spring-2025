@@ -17,7 +17,7 @@ import os
 
 def getProductInfo(barcode, request):
     allergens = None
-    if request.user != "AnonymousUser":
+    if request.user.is_authenticated:
         allergens = list(Allergen.objects.filter(user=request.user))
     product = Product(barcode, allergens=allergens)
     product.fetch_nutrition_data()
@@ -222,7 +222,7 @@ class AllergensView(APIView):
 
     def post(self, request, format=None):
         allergen = request.data.get('allergen')
-        if request.user == "AnonymousUser":
+        if not request.user.is_authenticated:
             return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
         if not allergen:
             return Response({'error': 'No allergen provided'}, status=status.HTTP_400_BAD_REQUEST)
@@ -236,14 +236,14 @@ class AllergensView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get(self, request, format=None):
-        if request.user == "AnonymousUser":
+        if not request.user.is_authenticated:
             return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
         allergens = Allergen.objects.filter(user=request.user)
         serializer = AllergenSerializer(allergens, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, format=None):
-        if request.user == "AnonymousUser":
+        if not request.user.is_authenticated:
             return Response({'error': 'Not logged in'}, status=status.HTTP_400_BAD_REQUEST)
         try:
             todelete = request.data.get('allergen')

@@ -39,29 +39,29 @@ class imageScan:
         if img is None:
             return None
 
-            # 🖼 Save the image for debugging
-        cv2.imwrite("debug_capture.jpg", img)
-
         barcode = decode(img)
-
-        # this ended up being an issue with a perfect barcode image, grabbing pictures of real barcodes works better than a machine generated one.
-        # OCR worked great for my testing images but terrible with real images, this does not work with testing images but works great with real images.
-        # Who woulda thought...
 
         return barcode if barcode else None
 
-def parseAllergens(product_data, custom):
+def parseAllergens(product_data, custom=False):
     allergens_list = product_data.get("allergens_from_ingredients", {})
     allergens_list = allergens_list.replace("en:", "").split(", ") # split into a list and remove any en:
     allergens_list = list(set(allergens_list)) # remove duplicates
     ingredients = json.dumps(product_data.get("ingredients", {}))
     ingredients = "".join(ingredients).lower()
-    if custom and type(custom) == list:
+    if custom and isinstance(custom, list):
         for allergen in custom:
             if str(allergen).lower() in ingredients:
                 allergens_list.append(str(allergen))
     allergens = json.dumps(allergens_list)
     return allergens
+
+def parseIngredients(product_data):
+    returnval = list([])
+    ingredients = product_data.get("ingredients", {})
+    for ingredient in ingredients:
+        returnval.append(ingredient.get("text", "Error"))
+    return json.dumps(returnval)
 
 class Product:
     # note for later: "image_front_url" sometimes gives an image for the food
@@ -80,11 +80,14 @@ class Product:
             self.name = product_data.get('product_name', 'Unknown')
             self.nutrition_data = json.dumps(product_data.get('nutriments', {}))
             self.alerts = parseAllergens(product_data, (customAllergens or self.customAllergens))
+            self.ingredients = parseIngredients(product_data)
             self.image_url = product_data.get('image_front_url')
         else:
             self.name = "Unknown Product"
             self.nutrition_data = "No Data Available"
             self.alerts = "No Data Available"
+            self.ingredients = "No Data Available"
+            self.image_url = "No Data Available"
 
 class Allergen(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
