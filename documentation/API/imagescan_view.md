@@ -8,7 +8,7 @@ Accepts an uploaded image, scans it for a barcode, and returns product nutrition
 ---
 
 ## How it works?
-A POST request with a file is processed using the `imageScan` class. The barcode is extracted and used to fetch product info.
+A POST request with a file is processed using the `ImageScan` class. The barcode is extracted and used to fetch product info.
 
 ---
 
@@ -16,11 +16,11 @@ A POST request with a file is processed using the `imageScan` class. The barcode
 
 1. Send a `POST` request to the endpoint with a form-data image:
 ```
-POST /imagescan/
+POST /ImageScan/
 ```
 
 Example using `curl`:
 ```bash
-curl -F "file=@barcode.jpg" http://localhost:8000/imagescan/
+curl -F "file=@barcode.jpg" http://localhost:8000/ImageScan/
 ```
 

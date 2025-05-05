@@ -1,3 +1,6 @@
+"""
+returns url patterns for django
+"""
 # File: CS4300/CS4300_django_server/urls.py
 
 from django.urls import path, include

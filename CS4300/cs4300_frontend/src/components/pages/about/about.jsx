@@ -39,12 +39,12 @@ const About = () => {
   const [activeDev, setActiveDev] = useState(null);
 
   return (
-    <div className="about-page">
+    <div className="page-container about-page">
       <section className="page-section">
         <h1>About Our Project</h1>
         <p>
           Welcome to our CS 4300 Spring 2025 project! We’re a team of five passionate developers building a full-stack
-          web application using React, Django, and other modern deployment tools. We are all students at the University of Colorado Colorado Springs and are looking to make eating healthy a convenient and viable option to all!
+          web application using React, Django, and modern deployment tools. We are all students at the University of Colorado Colorado Springs and want to make eating healthy a convenient and viable option for everyone!
         </p>
       </section>
 
@@ -59,7 +59,6 @@ const About = () => {
         ))}
       </div>
 
-      {/* Fullscreen Modal */}
       {activeDev && (
         <div className="dev-modal" onClick={() => setActiveDev(null)}>
           <div className="dev-modal-content" onClick={(e) => e.stopPropagation()}>

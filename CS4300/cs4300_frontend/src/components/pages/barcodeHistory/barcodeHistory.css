@@ -1,113 +1,137 @@
 .scanned-items-app {
-    font-family: 'Roboto', sans-serif;
-    background-color: #CAE4C5;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  background-color: #ffffff;
+  padding: 2rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .scanned-items-app h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #254222;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #254222;
 }
 
+/* List Styling */
 .scanned-items-list {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .scanned-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 10px;
-    border-bottom: 1px solid #8BAF68;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 15px 10px;
+  border-bottom: 1px solid #8BAF68;
+  gap: 0.5rem;
 }
 
 .scanned-item span {
-    flex: 1;
-    color: #406C35;
-    font-size: 1rem;
+  flex: 1 1 200px;
+  color: #406C35;
+  font-size: 1rem;
+}
+
+/* Action Buttons */
+.item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .scanned-item button,
-.scanned-item .compare-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 8px 12px;
-    margin-left: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none;   /* for the link */
-    color: #fff;
+.compare-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  color: #fff;
 }
 
 .favorite-btn {
-    background-color: #99CC66;
+  background-color: #99CC66;
 }
+
 .favorite-btn:hover {
-    background-color: #406C35;
+  background-color: #406C35;
 }
 
 .delete-btn {
-    background-color: #254222;
+  background-color: #254222;
 }
+
 .delete-btn:hover {
-    background-color: #406C35;
+  background-color: #406C35;
 }
 
 .compare-btn {
-    margin-top: 2.25vh;
-    background-color: #8BAF68;
-}
-.compare-btn:hover {
-    background-color: #406C35;
+  background-color: #8BAF68;
 }
 
+.compare-btn:hover {
+  background-color: #406C35;
+}
+
+/* Button Group */
 .button-group {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-    padding-right: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 1.5rem;
 }
 
 .button-group button {
-    padding: 10px 20px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 25px;
-    background-color: #99CC66;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  background-color: #99CC66;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .button-group button:hover {
-    background-color: #406C35;
+  background-color: #406C35;
 }
 
+/* Bottom Links */
 .bottom-links {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 10px;
-    padding-right: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 1rem;
 }
 
 .bottom-links a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 16px;
-    transition: color 0.3s ease;
+  color: #254222;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
 }
 
 .bottom-links a:hover {
-    color: #406C35;
+  color: #406C35;
+}
+
+/* Mobile Optimization */
+@media (max-width: 600px) {
+  .scanned-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .item-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
