@@ -26,7 +26,12 @@ export default function LiveScanner() {
           setError("No camera devices found.");
         } else {
           setDevices(cams);
-          setSelectedDeviceId(cams[0].deviceId);
+          //check for environment-facing cameras
+          const envCam = cams.find(c =>
+            /back|rear|environment/i.test(c.label)
+          );
+          //use environment-facing cameras if they exist
+          setSelectedDeviceId(envCam?.deviceId || cams[0].deviceId);
         }
       } catch (e) {
         console.error("Camera permission / enumeration error:", e);
