@@ -72,7 +72,7 @@ const Navbar = () => {
               <span>{isLoggedIn ? "My Account ▾" : "Account ▾"}</span>
             </button>
 
-            {/* Dropdown Menu */}
+            {/* Dropdown Menu! */}
             <div className={`dropdown-menu ${dropdownOpen ? "dropdown-active" : ""}`}>
               {isLoggedIn ? (
                 <>
