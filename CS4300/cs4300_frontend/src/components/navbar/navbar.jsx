@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import Logout from "../pages/auth/logout/logout";
 import avatarIcon from "../../assets/avatar-icon.png";
 import "./navbar.css";
 
@@ -9,15 +10,9 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const isLoggedIn = localStorage.getItem("token") !== null;
   const location = useLocation();
-  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
   };
 
   useEffect(() => {
@@ -53,7 +48,7 @@ const Navbar = () => {
         </button>
 
         {/* Navigation Links */}
-        <ul className={`navbar-links ${menuOpen ? "active" : ""}`}>
+        <ul className={navbar-links ${menuOpen ? "active" : ""}}>
           <li><Link to="/live-scanner">Scanner</Link></li>
           <li><Link to="/compare">Compare</Link></li>
           <li><Link to="/about">About</Link></li>
@@ -72,25 +67,19 @@ const Navbar = () => {
               <span>{isLoggedIn ? "My Account ▾" : "Account ▾"}</span>
             </button>
 
-            {/* Dropdown Menu! */}
-            <div className={`dropdown-menu ${dropdownOpen ? "dropdown-active" : ""}`}>
+            {/* Dropdown Menu */}
+            <div className={dropdown-menu ${dropdownOpen ? "dropdown-active" : ""}}>
               {isLoggedIn ? (
                 <>
-                  <Link to="/account" className="dropdown-link" onClick={() => setDropdownOpen(false)}>
-                    Account
-                  </Link>
-                  <button onClick={handleLogout} className="dropdown-link">
-                    Logout
-                  </button>
+                  <Link to="/account" onClick={() => setDropdownOpen(false)}>Account</Link>
+                  <div className="dropdown-link">
+                      <Logout />
+                  </div>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="dropdown-link" onClick={() => setDropdownOpen(false)}>
-                    Login
-                  </Link>
-                  <Link to="/register" className="dropdown-link" onClick={() => setDropdownOpen(false)}>
-                    Register
-                  </Link>
+                  <Link to="/login" onClick={() => setDropdownOpen(false)}>Login</Link>
+                  <Link to="/register" onClick={() => setDropdownOpen(false)}>Register</Link>
                 </>
               )}
             </div>
