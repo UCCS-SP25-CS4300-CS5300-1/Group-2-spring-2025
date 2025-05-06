@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
-import Logout from "../pages/auth/logout/logout";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import avatarIcon from "../../assets/avatar-icon.png";
 import "./navbar.css";
 
@@ -10,9 +9,15 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const isLoggedIn = localStorage.getItem("token") !== null;
   const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -71,13 +76,21 @@ const Navbar = () => {
             <div className={`dropdown-menu ${dropdownOpen ? "dropdown-active" : ""}`}>
               {isLoggedIn ? (
                 <>
-                  <Link to="/account" onClick={() => setDropdownOpen(false)}>Account</Link>
-                  <Logout />
+                  <Link to="/account" className="dropdown-link" onClick={() => setDropdownOpen(false)}>
+                    Account
+                  </Link>
+                  <button onClick={handleLogout} className="dropdown-link">
+                    Logout
+                  </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" onClick={() => setDropdownOpen(false)}>Login</Link>
-                  <Link to="/register" onClick={() => setDropdownOpen(false)}>Register</Link>
+                  <Link to="/login" className="dropdown-link" onClick={() => setDropdownOpen(false)}>
+                    Login
+                  </Link>
+                  <Link to="/register" className="dropdown-link" onClick={() => setDropdownOpen(false)}>
+                    Register
+                  </Link>
                 </>
               )}
             </div>
