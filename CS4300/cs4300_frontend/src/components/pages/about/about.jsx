@@ -7,7 +7,7 @@ import dev3 from '../../../assets/dev3.png';
 import dev4 from '../../../assets/dev4.png';
 import dev5 from '../../../assets/dev5.png';
 
-// Test
+// Test 1
 const developers = [
   {
     name: 'Jimmy',
