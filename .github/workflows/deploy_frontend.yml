@@ -34,6 +34,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Add custom CNAME file
+        run: echo "cs4300group2.rocks" > public/CNAME
+
       - name: Configure Git identity
         run: |
           git config --global user.email "actions@github.com"
