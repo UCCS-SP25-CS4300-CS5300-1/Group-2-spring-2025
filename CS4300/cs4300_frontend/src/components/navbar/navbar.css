@@ -15,7 +15,7 @@
 .navbar-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; /* Ensures vertical centering */
   max-width: 1000px;
   margin: 0 auto;
   box-sizing: border-box;
@@ -71,7 +71,6 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: 100%;
 }
 
 .dropdown-toggle {
@@ -79,15 +78,17 @@
   color: #254222;
   border: none;
   border-radius: 6px;
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   font-weight: 500;
   font-size: 0.95rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
-  height: 100%;
+  height: auto;
+  line-height: 1.5;
 }
 
 .dropdown-toggle:hover {
@@ -126,6 +127,27 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+/* DROPDOWN LINK STYLING */
+.dropdown-link {
+  background: transparent;
+  color: #254222;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left; /* Change to center if you prefer */
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  width: 100%;
+}
+
+.dropdown-link:hover {
+  background-color: #f0f0f0;
+  color: #000;
+  border-radius: 4px;
 }
 
 /* MOBILE STYLES */
