@@ -48,7 +48,7 @@ const Navbar = () => {
         </button>
 
         {/* Navigation Links */}
-        <ul className={navbar-links ${menuOpen ? "active" : ""}}>
+        <ul className={`navbar-links ${menuOpen ? "active" : ""}`}>
           <li><Link to="/live-scanner">Scanner</Link></li>
           <li><Link to="/compare">Compare</Link></li>
           <li><Link to="/about">About</Link></li>
