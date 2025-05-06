@@ -1,0 +1,9 @@
+.idea/
+./CS4300/.idea/
+./CS4300/node_modules/
+__pycache__/
+*.pyc
+*.sql
+db.sqlite3
+*.env
+0001_initial.py
