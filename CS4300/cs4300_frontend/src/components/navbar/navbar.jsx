@@ -68,12 +68,12 @@ const Navbar = () => {
             </button>
 
             {/* Dropdown Menu */}
-            <div className={dropdown-menu ${dropdownOpen ? "dropdown-active" : ""}}>
+            <div className={`dropdown-menu ${dropdownOpen ? "dropdown-active" : ""}`}>
               {isLoggedIn ? (
                 <>
                   <Link to="/account" onClick={() => setDropdownOpen(false)}>Account</Link>
                   <div className="dropdown-link">
-                      <Logout />
+                    <Logout />
                   </div>
                 </>
               ) : (
