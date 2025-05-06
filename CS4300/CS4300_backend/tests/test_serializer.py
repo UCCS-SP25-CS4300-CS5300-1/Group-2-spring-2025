@@ -6,6 +6,7 @@ from django.test import TestCase
 from ..serializers import ProductSerializer
 
 #pylint: disable=missing-function-docstring
+#pylint: disable=missing-class-docstring
 
 class ProductSerializerTest(TestCase):
     @patch("CS4300_backend.serializers.Product")
